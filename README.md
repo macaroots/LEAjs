@@ -10,23 +10,23 @@ Os Ceeds do cliente conseguem perguntar ao usuário diretamente através do DOM.
 
 ## Iniciando o servidor
 Importando e iniciando o agente.
-...
+```
 import {Ceed} from './public/_js/ceed/ceed.js';
 import {} from './lib/lea.js';
 
 const lea = await Ceed('LEA');
-...
+```
 
 Iniciando o servidor apenas com a biblioteca local.
-...
+```
 lea.see('listen', {
 	hostname: '127.0.0.1', 
 	port: 3000
 });
-...
+```
 
 Iniciando o servidor com biblioteca em MySQL.
-...
+```
 lea.see('initBrain', {
 	host: 'localhost',
 	database: 'mind',
@@ -38,10 +38,10 @@ lea.see('initBrain', {
 		port: 3000
 	});
 });
-...
+```
 
 Iniciando o servidor com biblioteca HTTP
-...
+```
 lea.see('initHttpBrain', {
 	host: 'http://localhost/brain/',
 	protocol: 'http'
@@ -51,4 +51,4 @@ lea.see('initHttpBrain', {
 		port: 3000
 	});
 });
-...
+```
