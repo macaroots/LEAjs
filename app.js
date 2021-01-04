@@ -17,7 +17,7 @@ lea.see('initHttpBrain', {
 /*/
 lea.see('initBrain', {
 	host: process.env.DB_HOST || 'localhost',
-	database: process.env.DB || 'test_mind',
+	database: process.env.DB || 'mind',
 	user: process.env.DB_USER || 'root',
 	password: process.env.DB_PASSWORD || ''
 }).then(() => {
