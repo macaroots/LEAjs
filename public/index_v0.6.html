@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LEA - Live Environment for Agents</title>
+	<meta charset="utf-8" />
+	<script src="_js/lib/jquery-1.8.3.min.js"></script>
+    <script src="_js/lib/socket.io.js"></script>
+	<script type="module">
+	import {Ceed} from  './_js/ceed/ceed.js';
+	window.Ceed = Ceed;
+	$(function() {
+		Ceed('Joe').then(agent => {
+			agent.see('hello', 'world');
+			window.agent = agent;
+		});
+	});
+	</script>
+</head>
+<body>
+</body>
+</html>

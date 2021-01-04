@@ -1,0 +1,79 @@
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>LEA - Live Environment for Agents</title>
+    <script src="http://127.0.0.1:3000/_js/lib/jquery-1.8.3.min.js"></script>
+    <script type="module" src="http://127.0.0.1:3000/_js/ceed/brain.js"></script>
+    <script type="module" src="http://127.0.0.1:3000/_js/ceed/jsbrain.js"></script>
+    <script type="module" src="http://127.0.0.1:3000/_js/ceed/ajaxbrain.js"></script>
+    <script type="module" src="http://127.0.0.1:3000/_js/ceed/mind.js"></script>
+    <script type="module" src="http://127.0.0.1:3000/_js/ceed/agent.js"></script>
+    <script type="module" src="http://127.0.0.1:3000/_js/ceed/ceed.js"></script>
+    <script type="module" src="http://127.0.0.1:3000/_js/ceed/lea.js"></script>
+    <script type="module">
+	import {LEA} from './_js/ceed/lea.js';
+    $(function () {
+        var baseUrl = 'https://tiia.com.br/LEA/'
+        var controllerUrl = 'https://tiia.com.br/LEA/ce/lenz/';
+        window['baseUrl'] = baseUrl;
+        window['controllerUrl'] = controllerUrl;
+        var pathname = window.location.pathname.split('/');
+        var agentName = pathname.slice(3).join('/');
+    	//var agentName = controllerUrl.split('/').slice(-2, -1)[0];
+        window['page'] = LEA.getAgent(agentName + ' Template Page');
+        page.see('live', 'body', function () {
+    	    page.see('getAgent', 'Ceed', function (ceed) {
+            	window['ceed'] = ceed;
+        	    ceed.see('set', ['parent', ceed], function () {
+                	ceed.see('live', 'body', function (ok) {
+                    	ceed.see('refreshAgents');
+                	    page.see('set', ['parent', ceed], function () {
+                    	    page.see('study', 'ask', function () {
+                	            page.see('edit');
+                	        });
+                	    });
+            	    });
+            	});
+                var controller = new HTTPAgent(controllerUrl);
+                window['controller'] = controller;
+        	});
+        });
+    });
+	</script>
+	<style>
+	#auth {
+        position: sticky;
+        top: 0;
+        text-align: right;
+    }
+    
+    #license {
+        position: fixed;
+        bottom: 8px;
+        right: 8px;
+        text-align: right;
+        width: 420px;
+    }
+    body {
+        padding-bottom: 75px;
+    }
+	</style>
+</head>
+<body>
+    <div id="auth">
+
+        Welcome, <span>macaroots</span>!
+        <a href="https://tiia.com.br/LEA/ce/auth/logout">Logout</a>
+
+    </div>
+    <div id="license">
+        <b><a target="_blank" href="https://tiia.com.br/">LEA - Live Environment for Agents</a></b> by <a href="mailto: macaroots@gmail.com">Renato Lenz Costalima</a><br />
+        This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at <a rel="license" href="https://mozilla.org/MPL/2.0/">https://mozilla.org/MPL/2.0/</a>.
+    </div>
+</body>
+</html>

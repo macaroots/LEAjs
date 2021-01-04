@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LEA - Live Environment for Agents</title>
+	<meta charset="utf-8" />
+	<script src="_js/lib/jquery-1.8.3.min.js"></script>
+    <script src="_js/lib/socket.io.js"></script>
+	<script type="module">
+	const baseUrl = '/';
+	window.baseUrl = baseUrl;
+	import {Ceed} from  './_js/ceed.js';
+	import {AskScript} from  './_js/agents/script.js';
+	import {script} from  './_js/live/script.js';
+	window.Ceed = Ceed;
+	window.script = script;
+
+	//Ceed.getInstance().skills['ask'] = new AskScript();	
+	$(function() {
+
+		script.see('live', 'body', function () {
+			window.script = script;
+			window.AskScript = AskScript;
+		});
+		
+		let agent = Ceed.getAgent('Joe');
+		agent.see('hello', 'world');
+		window.agent = agent;
+	});
+	</script>
+</head>
+<body>
+</body>
+</html>
