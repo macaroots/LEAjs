@@ -7,20 +7,20 @@
  
 function live () {
 	this.act = function (target, callback) {
-		const baseUrl = '/';
+		const baseUrl = 'https://pagecdn.io/lib/ace/1.4.12/';
 		var agent = this.agent;
 		agent.see('addName', 'Script', function () {
 		    agent.see('addName', 'Element:Script', function () {
 				agent.see('study', 'askFor');
 		        $.ajax({
                     type: "GET",
-                    url: baseUrl + '_js/ace/ace.js',
+                    url: baseUrl + 'ace.js',
                     dataType: "script",
                     cache: true,
                     success: function () { 
-            			ace.config.set("modePath", baseUrl + "_js/ace");
-                        ace.config.set("workerPath", baseUrl + "_js/ace");
-                        ace.config.set("themePath", baseUrl + "_js/ace");
+            			ace.config.set("modePath", baseUrl);
+                        ace.config.set("workerPath", baseUrl);
+                        ace.config.set("themePath", baseUrl);
         		        
                         agent.see('Element.live', target, function (body) {
                     		/* adicionar barra de ferramentas

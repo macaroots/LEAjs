@@ -1,29 +1,29 @@
 version: '3'
 
 services:
-  # lea-js:
-    # image: lea-jsbrain
-    # container_name: lea-js
-    # ports:
-      # - "3000:3000"
-    # volumes:
-      # - .:/home/lea/app
-      # - node_modules:/home/node/app/node_modules
-  # lea:
-    # image: lea-httpbrain
-    # container_name: lea-http
-    # environment:
-      # - BRAIN_HOST=http://brain:3000/brain/
-      # - BRAIN_PROTOCOL=http
-    # ports:
-      # - "80:3000"
-    # volumes:
-      # - .:/home/lea/app
-      # - node_modules:/home/node/app/node_modules
-    # links:
-      # - brain
-    # depends_on:
-      # - brain
+  lea-js:
+    image: lea-jsbrain
+    container_name: lea-js
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/lea/app
+      - node_modules:/home/node/app/node_modules
+  lea:
+    image: lea-httpbrain
+    container_name: lea-http
+    environment:
+      - BRAIN_HOST=http://brain:3000/brain/
+      - BRAIN_PROTOCOL=http
+    ports:
+      - "80:3000"
+    volumes:
+      - .:/home/lea/app
+      - node_modules:/home/node/app/node_modules
+    links:
+      - brain
+    depends_on:
+      - brain
   brain:
     image: lea-mysqlbrain
     container_name: lea-brain

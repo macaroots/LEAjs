@@ -586,20 +586,19 @@ export class CeedAgent {
 	}
 }
 export const Ceed = function (names) {
-	const ceed = CeedAgent.getInstance();
-	let agent;
+	let promise;
 	if (!names) {
-		agent = ceed;
+		promise = CeedAgent.getInstance();
 	}
 	else {
-		agent = Ceed().see('getAgent', names);
+		promise = Ceed().see('getAgent', names);
 	}	
-	agent.see = function (action, args, resolve, reject) {
-		return agent.then(a => {
-			return a.see(action, args, resolve, reject);
+	promise.see = function (action, args, resolve, reject) {
+		return promise.then(agent => {
+			return agent.see(action, args, resolve, reject);
 		});
 	};
-	return agent;
+	return promise;
 };
 
 export function AskAgent(helperName) {
