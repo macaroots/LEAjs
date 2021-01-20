@@ -361,7 +361,7 @@ function Act(mind) {
 		}
 		catch (e) {
 			// TODO acho que é algo como o de baixo, mas tem que evitar repetição
-			// mind.act(mind.errorBehavior, [args, e], resolve, reject);
+			// agent.see('error', [args, e], resolve, reject);
 			mind.errorBehavior.act([args, e], resolve, reject);
 		}
 	};

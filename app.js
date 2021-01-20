@@ -26,4 +26,6 @@ lea.see('initBrain', {
 		hostname: process.env.HOSTNAME || '127.0.0.1', 
 		port: process.env.PORT || 3000
 	});
+}).catch(e => {
+	console.error('ERROR LEA APP', e);
 });

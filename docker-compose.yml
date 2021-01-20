@@ -5,7 +5,7 @@ services:
     image: lea-jsbrain
     container_name: lea-js
     ports:
-      - "3000:3000"
+      - "3003:3000"
     volumes:
       - .:/home/lea/app
       - node_modules:/home/node/app/node_modules
@@ -16,7 +16,7 @@ services:
       - BRAIN_HOST=http://brain:3000/brain/
       - BRAIN_PROTOCOL=http
     ports:
-      - "80:3000"
+      - "3001:3000"
     volumes:
       - .:/home/lea/app
       - node_modules:/home/node/app/node_modules
@@ -34,7 +34,7 @@ services:
       - DB_HOST=db
       - DB=$DB
     ports:
-      - "8080:3000"
+      - "3002:3000"
     volumes:
       - .:/home/brain/app
       - node_modules:/home/node/app/node_modules

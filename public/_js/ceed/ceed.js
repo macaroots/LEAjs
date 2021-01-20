@@ -607,10 +607,8 @@ export function AskAgent(helperName) {
 		var agent = this.agent;
 		Ceed(helperName).then(helper => {
 			helper.see('askFor', [agent, key], callback);
-			if (!agent.hearObservers) {
-				agent.hearObservers = [];
-			}
-			agent.hearObservers.push(helper);
+			
+			agent.see('addListener', ['answer', helper]);
 		});
 	}
 }
@@ -623,9 +621,7 @@ export function HearAnswerNotify() {
 		agent.see('write', args);
 		agent.see('understand', args).then((learned) => {
 			if (learned) {
-				for (let observer of agent.hearObservers) {
-					observer.see('heared', [agent, args]);
-				}
+				agent.see('notify', ['answer', [agent, args]]);
 			}
 			callback(learned);
 		});

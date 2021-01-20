@@ -10,6 +10,7 @@
 export function SocketAgent(name, socket) {
 	//var socket = io();
 	//socket.join(name);
+	this.socket = socket;
 	
 	this.see = function (action, args, callback, reject) {
 		let r = {response: null};
@@ -29,7 +30,7 @@ export function SocketAgent(name, socket) {
 		}
 
 		console.log(name, action, args);
-		socket.emit('see', name, action, args, callback);
+		this.socket.emit('see', name, action, args, callback);
 
 		return r.response;
 	};
@@ -41,13 +42,13 @@ function connect() {
 		var agent = this.agent;
 		agent.socket = socket;
 		socket.on('question', function (data) {
-		  agent.see('question', data);
+		  agent.see('onQuestion', data);
 		});
 		callback(true);
 	};
 };
 
-function question() {
+function onQuestion() {
 	this.act = async function (data, callback) {
 		console.log(data);
 		let socket = this.agent.socket;
@@ -69,7 +70,7 @@ function question() {
 function live() {
 	this.act = function (data, callback) {
 		console.log('LEAClient LIVE', this.agent.toString());
-		this.agent.see('study', 'question', callback);
+		this.agent.see('study', 'onQuestion', callback);
 	}
 }
 
@@ -79,7 +80,7 @@ import {Symbol} from './../ceed/brain.js';
 Ceed().then(ceed => {
 	ceed.see('write', ['LEAClient.live', new Symbol(0, 'js', 'new (' + live.toString() + ')();')]);
 	ceed.see('write', ['LEAClient.connect', new Symbol(0, 'js', 'new (' + connect.toString() + ')();')]);
-	ceed.see('write', ['LEAClient.question', new Symbol(0, 'js', 'new (' + question.toString() + ')();')]);
+	ceed.see('write', ['LEAClient.onQuestion', new Symbol(0, 'js', 'new (' + onQuestion.toString() + ')();')]);
 });
 
 
