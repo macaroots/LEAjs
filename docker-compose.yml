@@ -7,24 +7,24 @@ services:
     ports:
       - "3003:3000"
     volumes:
-      - .:/home/lea/app
+      - js_app:/home/node/app
       - node_modules:/home/node/app/node_modules
-  lea:
+  lea-http:
     image: lea-httpbrain
     container_name: lea-http
     environment:
-      - BRAIN_HOST=http://brain:3000/brain/
+      - BRAIN_HOST=http://lea:3001/brain/
       - BRAIN_PROTOCOL=http
     ports:
-      - "3001:3000"
+      - "3002:3000"
     volumes:
-      - .:/home/lea/app
+      - http_app:/home/node/app
       - node_modules:/home/node/app/node_modules
     links:
-      - brain
+      - lea
     depends_on:
-      - brain
-  brain:
+      - lea
+  lea:
     image: lea-mysqlbrain
     container_name: lea-brain
     env_file: .env
@@ -34,9 +34,9 @@ services:
       - DB_HOST=db
       - DB=$DB
     ports:
-      - "3002:3000"
+      - "3001:3000"
     volumes:
-      - .:/home/brain/app
+      - .:/home/node/app
       - node_modules:/home/node/app/node_modules
     links:
       - db
@@ -61,3 +61,5 @@ services:
 volumes:
   db_data:
   node_modules:
+  js_app:
+  http_app:
