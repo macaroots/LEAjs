@@ -561,6 +561,7 @@ export class CeedAgent {
 		if (!CeedAgent.ceed) {
 			let agent = new NaiveMind('Ceed').body;
 			CeedAgent.ceed = agent;
+			agent.agents = {Ceed: [new Promise ((res, rej) => { res(agent); })]};
 			
 			agent.see('set', ['live', new Live()]);
 			await agent.see('live');
