@@ -56,6 +56,7 @@ services:
       - MYSQL_HOST=db
     volumes:
       - db_data:/data/db
+      - ./leajs.sql:/docker-entrypoint-initdb.d/dump.sql
 
 volumes:
   db_data:
