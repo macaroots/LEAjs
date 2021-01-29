@@ -14,6 +14,9 @@ export function AjaxBrain(endereco) {
 	}
 
 	this.agent = new HTTPAgent(this.endereco);
+	let responses = {};
+	this.responses = responses;
+	
 	this.get = function (symbol, callback) {
 		if (symbol == null) {
 			symbol = {};
@@ -23,6 +26,12 @@ export function AjaxBrain(endereco) {
 				info: symbol
 			};
 		}
+		let text = JSON.stringify(symbol);
+		let oldResponse = responses[text];
+		if (oldResponse) {
+			callback(oldResponse);
+			return;
+		}
 		$.post(this.endereco + "gets", {
 			impl: symbol.impl,
 			id: symbol.id,
@@ -30,7 +39,10 @@ export function AjaxBrain(endereco) {
 			info: symbol.info,
 			busca: symbol.busca,
 			ordem: symbol.ordem
-	    }, callback);
+	    }, function (response) {
+			responses[text] = response;
+			callback(response);
+		});
 	};
 	this.set = function (symbol, callback) {
 		$.post(this.endereco + "sets", {
@@ -59,8 +71,17 @@ export function AjaxBrain(endereco) {
 		}, callback);
 	};
 	this.reason = function (no, callback) {
+		let text = JSON.stringify(no);
+		let oldResponse = responses[text];
+		if (oldResponse) {
+			callback(oldResponse);
+			return;
+		}
 		no = this.getClearLink(no);
-		$.get(this.endereco + "reason", no, callback);
+		$.get(this.endereco + "reason", no, function (response) {
+			responses[text] = response;
+			callback(response);
+		});
 	};
 	this.getClearLink = function (no) {
 		var n = {};
