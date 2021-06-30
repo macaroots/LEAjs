@@ -16,10 +16,10 @@ lea.see('initHttpBrain', {
 }).then(() => {
 /*/
 lea.see('initBrain', {
-	host: process.env.DB_HOST || 'localhost',
-	database: process.env.DB || 'mind',
-	user: process.env.DB_USER || 'root',
-	password: process.env.DB_PASSWORD || ''
+	host: process.env.MYSQL_HOST || 'localhost',
+	database: process.env.MYSQL_DATABASE || 'mind',
+	user: process.env.MYSQL_USER || 'root',
+	password: process.env.MYSQL_PASSWORD || ''
 }).then(() => {
 /**/
 	lea.see('listen', {
