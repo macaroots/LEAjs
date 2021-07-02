@@ -239,7 +239,7 @@ export function MySQLBrain(options) {
 		let sql = "select " + select + " from symbols where 1=1";
 		let values = [];
 		if (s != null) {
-			if (s.id != 0) {
+			if (s.id != 0 && s.id != null) {
 				sql += " and id = ?";
 				values.push(s.id);
 			}
@@ -278,7 +278,7 @@ export function MySQLBrain(options) {
 		let sql = "";
 		let values = [];
 		if (s != null) {
-			if (s.id != 0) {
+			if (s.id != 0 && s.id != null) {
 				sql += " and " + role + ".id = ?";
 				values.push(s.id);
 			}

@@ -19,7 +19,8 @@ lea.see('initBrain', {
 	host: process.env.MYSQL_HOST || 'localhost',
 	database: process.env.MYSQL_DATABASE || 'mind',
 	user: process.env.MYSQL_USER || 'root',
-	password: process.env.MYSQL_PASSWORD || ''
+	password: process.env.MYSQL_PASSWORD || '',
+    // debug: true
 }).then(() => {
 /**/
 	lea.see('listen', {
