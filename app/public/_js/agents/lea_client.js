@@ -4,7 +4,7 @@
  * Copyright Renato Lenz Costalima
  * Released under the AGPL-3.0 License
  * https://github.com/macaroots/LEAjs/blob/main/LICENSE
-*/
+ */
 export function SocketAgent(name, socket) {
 	//var socket = io();
 	//socket.join(name);

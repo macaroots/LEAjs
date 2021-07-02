@@ -5,7 +5,7 @@
  * Released under the AGPL-3.0 License
  * https://github.com/macaroots/LEAjs/blob/main/LICENSE
  */
-import {SocketAgent} from './../agents/lea_client.js';
+import {SocketAgent} from './../agents/agent.js';
 export function SocketBrain(io, name='brain') {
     this.agent = new SocketAgent(name, io);
 

@@ -1,3 +1,10 @@
+/** 
+ * LEA - Live Environment for Agents
+ * 
+ * Copyright Renato Lenz Costalima
+ * Released under the AGPL-3.0 License
+ * https://github.com/macaroots/LEAjs/blob/main/LICENSE
+ */
 import {HTTPAgentFactory} from './../public/_js/ceed/agent.js';
 import assert from 'assert';
 

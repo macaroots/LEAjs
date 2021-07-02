@@ -1,3 +1,10 @@
+/** 
+ * LEA - Live Environment for Agents
+ * 
+ * Copyright Renato Lenz Costalima
+ * Released under the AGPL-3.0 License
+ * https://github.com/macaroots/LEAjs/blob/main/LICENSE
+ */
 import {Symbol, Link} from './../public/_js/ceed/brain.js';
 import {JSBrain} from './../public/_js/ceed/jsbrain.js';
 import {MySQLBrain} from './../public/_js/ceed/mysql_brain.js';
