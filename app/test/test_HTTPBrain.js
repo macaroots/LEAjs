@@ -1,3 +1,10 @@
+/** 
+ * LEA - Live Environment for Agents
+ * 
+ * Copyright Renato Lenz Costalima
+ * Released under the AGPL-3.0 License
+ * https://github.com/macaroots/LEAjs/blob/main/LICENSE
+ */
 import {HTTPBrain} from './../public/_js/ceed/http_brain.js';
 import {Symbol, Link} from './../public/_js/ceed/brain.js';
 import assert from 'assert';

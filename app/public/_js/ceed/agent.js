@@ -4,7 +4,7 @@
  * Copyright Renato Lenz Costalima
  * Released under the AGPL-3.0 License
  * https://github.com/macaroots/LEAjs/blob/main/LICENSE
-*/
+ */
 export function HTTPAgent(endereco) {
 	if (endereco == null) {
 		endereco = 'Agent';
@@ -19,6 +19,36 @@ export function HTTPAgent(endereco) {
 		$.post(endereco + type, info, callback, answerType);
 	};
 }
+
+export function SocketAgent(name, socket) {
+	//var socket = io();
+	//socket.join(name);
+	this.socket = socket;
+	
+	this.see = function (action, args, callback, reject) {
+		let r = {response: null};
+		r.response = new Promise((resolve, reject) => {
+			r.resolve = resolve;
+			r.reject = reject;
+		});
+		if (!callback) {
+			callback = (response) => {
+				r.resolve(response);
+			};			
+		}
+		if (!reject) {
+			reject = (response) => {
+				r.reject(response);
+			};
+		}
+
+		console.log(name, action, args);
+		this.socket.emit('see', name, action, args, callback);
+
+		return r.response;
+	};
+}
+
 export function FetchAgent(endereco) {
 	if (endereco == null) {
 		endereco = 'Agent';

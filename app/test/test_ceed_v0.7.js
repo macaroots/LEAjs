@@ -1,3 +1,10 @@
+/** 
+ * LEA - Live Environment for Agents
+ * 
+ * Copyright Renato Lenz Costalima
+ * Released under the AGPL-3.0 License
+ * https://github.com/macaroots/LEAjs/blob/main/LICENSE
+ */
 import {Ceed, InitAgentSameLibrary} from './../public/_js/ceed/ceed2.js';
 import {Symbol} from './../public/_js/ceed/brain.js';
 import assert from 'assert';

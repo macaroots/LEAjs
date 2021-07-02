@@ -4,7 +4,7 @@
  * Copyright Renato Lenz Costalima
  * Released under the AGPL-3.0 License
  * https://github.com/macaroots/LEAjs/blob/main/LICENSE
-*/
+ */
 new (function addName () {
 	this.act = function (args, callback) {
 	    var agent = this.agent;
