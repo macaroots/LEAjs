@@ -1,25 +1,10 @@
 /** 
- * Ceed - Clever Editing
- * by Renato Lenz Costalima
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- 
- Agente responsável por ensinar o ciclo básico Clever Editing
- Também funciona como centralizador de outros agentes. Seria o agente raiz.
-	Quando outros agentes pedissem getAgent, chamaria ceed.getAgent(nomePai/agente). Continua centralizando.
-	
+ * LEA - Live Environment for Agents
+ * 
+ * Copyright Renato Lenz Costalima
+ * Released under the AGPL-3.0 License
+ * https://github.com/macaroots/LEAjs/blob/main/LICENSE
  */
-/*
-TODO
-	getInstance deveria ser async.
-	então, os agentes vão conseguir encontrar "Naive.live"
-	vai ser possível perguntar e definir "agent.live"
-	
-	se der certo, tem que fazer o LEA com o mínimo de função em arquivo e colocar o resto no banco.
-	
-	Os singletons não tão funcionando. O Ceed tá sendo importado em vários momentos, e tá criando agentes novos o tempo todo.
-*/
 
 import {NaiveMind} from './mind.js';
 import {Symbol} from './brain.js';

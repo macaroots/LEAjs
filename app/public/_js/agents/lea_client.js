@@ -1,11 +1,9 @@
 /** 
  * LEA - Live Environment for Agents
- * by Renato Lenz Costalima
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- *
- * Outra opção de corpo.
+ * 
+ * Copyright Renato Lenz Costalima
+ * Released under the AGPL-3.0 License
+ * https://github.com/macaroots/LEAjs/blob/main/LICENSE
 */
 export function SocketAgent(name, socket) {
 	//var socket = io();
