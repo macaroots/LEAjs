@@ -201,10 +201,10 @@ function OnSocketSee() {
 			agent = await Ceed(agentName);
 			lea.agents[agentName] = agent;
 		}
-		console.log('socketSee', agentName, action, target);
+		//console.log('socketSee', agentName, action, target);
 		agent.see(action, target, callback).catch(e => {
-				console.log('ERRO SOCKET', e);
-			});
+            console.log('ERRO SOCKET', e);
+        });
 	}
 }
 
