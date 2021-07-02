@@ -11,45 +11,18 @@ export function SocketBrain(io, name='brain') {
 
 	let responses = {};
 	this.responses = responses;
-	/*
+	
 	this.get = function (symbol, callback) {
-		if (symbol == null) {
-			symbol = {};
-		}
-		if (typeof symbol == 'string') {
-			symbol = {
-				info: symbol
-			};
-		}
-		let text = JSON.stringify(symbol);
-		let oldResponse = responses[text];
-		if (oldResponse) {
-			callback(oldResponse);
-			return;
-		}
-		$.post(this.endereco + "gets", {
-			impl: symbol.impl,
-			id: symbol.id,
-			type: symbol.type,
-			info: symbol.info,
-			busca: symbol.busca,
-			ordem: symbol.ordem
-	    }, function (response) {
-			responses[text] = response;
-			callback(response);
-		});
+		let s = this.getClearSymbol(symbol);
+		this.agent.see('brainGet', s).then(callback);
 	};
 	this.set = function (symbol, callback) {
-		$.post(this.endereco + "sets", {
-			impl: symbol.impl,
-			id: symbol.id,
-			type: symbol.type,
-			info: symbol.info
-		}, function (s) {
+		let s = this.getClearSymbol(symbol);
+		this.agent.see('brainGet', s).then(function (s) {
 			symbol.id = s.id;
 			callback(s);
 		});
-	};*/
+	};
 	this.tie = function (no, callback) {
 		this.agent.see('tie', {
 			a: no.a,
@@ -66,16 +39,9 @@ export function SocketBrain(io, name='brain') {
 		}).then(callback);
 	};
 	this.reason = function (no, callback) {
-		let text = JSON.stringify(no);
-		let oldResponse = responses[text];
-		if (oldResponse) {
-			callback(oldResponse);
-			return;
-		}
-		no = this.getClearLink(no);
+		let l = this.getClearLink(no);
         
-		this.agent.see('reason', no).then(function (response) {
-			responses[text] = response;
+		this.agent.see('reason', l).then(function (response) {
 			callback(response);
 		});
 	};

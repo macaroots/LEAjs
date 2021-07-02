@@ -72,7 +72,7 @@ npm test
 
 Pelo Docker:
 ```
-docker-compose run npm test
+docker-compose run --rm lea npm test
 ```
 
 ## Acessar
