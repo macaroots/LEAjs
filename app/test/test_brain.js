@@ -2,13 +2,10 @@ import {Symbol, Link} from './../public/_js/ceed/brain.js';
 import {JSBrain} from './../public/_js/ceed/jsbrain.js';
 import {MySQLBrain} from './../public/_js/ceed/mysql_brain.js';
 import {AjaxBrain} from './../public/_js/ceed/ajaxbrain.js';
-import {Ceed} from './../public/_js/ceed/ceed.js';
+import {Ceed, AskAgent} from './../public/_js/ceed/ceed.js';
 import {AgentBrain} from './../public/_js/ceed/agent_brain.js';
 import {DummyBrain} from './dummy_brain.js';
 import assert from 'assert';
-
-
-import {AskAgent} from './../public/_js/agents/lea_client.js';
 
 describe('Brain', async function () {
 	//const brain = new AjaxBrain();
@@ -34,14 +31,14 @@ describe('Brain', async function () {
 		context('if callback is null', function () {
 			it('should return the Symbol with an id', async function () {
 				let s = new Symbol(0, 'oi', 'mundo');
-				let s2 = brain.set(s);
+				let s2 = await brain.set(s);
 				assertSymbol(s, s2);
 			});
 		});
 		context('if callback is not null', function () {
 			it('should callback the Symbol with an id', function (done) {
 				let s = new Symbol(0, 'oi', 'mundo');
-				brain.set(s, function (s2) {
+				brain.set(s).then(function (s2) {
 					assertSymbol(s, s2);
 					done();
 				});
@@ -108,25 +105,25 @@ describe('Brain', async function () {
 		/**/
 		context('if callback is not null', function () {
 			it('should search for a.type', function (done) {
-				brain.reason(new Link(new Symbol(0, 't0', null), null, null), function(links) {
+				brain.reason(new Link(new Symbol(0, 't0', null), null, null)).then(function(links) {
 					assertSearchA(links);
 					done();
 				});
 			});
 			it('should search for a.type and b.info', function (done) {
-				brain.reason(new Link(new Symbol(0, 't0', null), null, new Symbol(0, null, 'i0')), function(links) {
+				brain.reason(new Link(new Symbol(0, 't0', null), null, new Symbol(0, null, 'i0'))).then(function(links) {
 					assertSearchAB(links);
 					done();
 				});
 			});
 			it('should search for r.info', function (done) {
-				brain.reason(new Link(null, new Symbol(0, null, 'i0'), null, null), function(links) {
+				brain.reason(new Link(null, new Symbol(0, null, 'i0'), null, null)).then(function(links) {
 					assertSearchR(links);
 					done();
 				});
 			});
 			it('should search for r.type and r.info', function (done) {
-				brain.reason(new Link(null, new Symbol(0, 't0', 'i0'), null, null), function(links) {
+				brain.reason(new Link(null, new Symbol(0, 't0', 'i0'), null, null)).then(function(links) {
 					assertSearchRR(links);
 					done();
 				});

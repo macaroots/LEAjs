@@ -52,3 +52,31 @@ lea.see('initHttpBrain', {
 	});
 });
 ```
+
+## Executar
+No próprio computador:
+```
+node app.js
+```
+
+Pelo Docker:
+```
+docker-compose up
+```
+
+## Testar
+No próprio computador:
+```
+npm test
+```
+
+Pelo Docker:
+```
+docker-compose run npm test
+```
+
+## Acessar
+
+```
+http://localhost
+```

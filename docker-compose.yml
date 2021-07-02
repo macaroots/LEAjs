@@ -3,14 +3,13 @@ version: '3'
 services:
   lea:
     build: .
-    container_name: leajs-brain
     env_file: .env
     environment:
       - MYSQL_HOST=db
     ports:
-      - "3000:3000"
+      - "80:3000"
     volumes:
-      - lea_app:/home/node/app
+      - ./app:/home/node/app
       - node_modules:/home/node/app/node_modules
     links:
       - db
@@ -20,7 +19,6 @@ services:
   db:
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password
-    container_name: db
     env_file: .env
     environment:
       - MYSQL_HOST=db
@@ -30,4 +28,5 @@ services:
 
 volumes:
   node_modules:
-  lea_app:
+  #app:
+  #db_data:
