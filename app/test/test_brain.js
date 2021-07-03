@@ -42,10 +42,19 @@ describe('Brain', async function () {
 				assertSymbol(s, s2);
 			});
 		});
-		context('if callback is not null', function () {
+		context('if callback is null - Promise', function () {
 			it('should callback the Symbol with an id', function (done) {
 				let s = new Symbol(0, 'oi', 'mundo');
 				brain.set(s).then(function (s2) {
+					assertSymbol(s, s2);
+					done();
+				});
+			});
+		});
+		context('if callback is not null', function () {
+			it('should callback the Symbol with an id', function (done) {
+				let s = new Symbol(0, 'oi', 'mundo');
+				brain.set(s, function (s2) {
 					assertSymbol(s, s2);
 					done();
 				});
@@ -112,25 +121,25 @@ describe('Brain', async function () {
 		/**/
 		context('if callback is not null', function () {
 			it('should search for a.type', function (done) {
-				brain.reason(new Link(new Symbol(0, 't0', null), null, null)).then(function(links) {
+				brain.reason(new Link(new Symbol(0, 't0', null), null, null), function(links) {
 					assertSearchA(links);
 					done();
 				});
 			});
 			it('should search for a.type and b.info', function (done) {
-				brain.reason(new Link(new Symbol(0, 't0', null), null, new Symbol(0, null, 'i0'))).then(function(links) {
+				brain.reason(new Link(new Symbol(0, 't0', null), null, new Symbol(0, null, 'i0')), function(links) {
 					assertSearchAB(links);
 					done();
 				});
 			});
 			it('should search for r.info', function (done) {
-				brain.reason(new Link(null, new Symbol(0, null, 'i0'), null, null)).then(function(links) {
+				brain.reason(new Link(null, new Symbol(0, null, 'i0'), null, null), function(links) {
 					assertSearchR(links);
 					done();
 				});
 			});
 			it('should search for r.type and r.info', function (done) {
-				brain.reason(new Link(null, new Symbol(0, 't0', 'i0'), null, null)).then(function(links) {
+				brain.reason(new Link(null, new Symbol(0, 't0', 'i0'), null, null), function(links) {
 					assertSearchRR(links);
 					done();
 				});
