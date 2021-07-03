@@ -47,21 +47,24 @@ export function SocketBrain(io, name='brain') {
 	};
 	this.getClearLink = function (no) {
 		var n = {};
-		let a = this.getClearSymbol(no.a);
-		let r = this.getClearSymbol(no.r);
-		let b = this.getClearSymbol(no.b);
-        if (Object.keys(a).length !== 0) {
-            n.a = a;
-        }
-        if (Object.keys(r).length !== 0) {
-            n.r = r;
-        }
-        if (Object.keys(b).length !== 0) {
-            n.b = b;
-        }
-		if (no.ordem != null) {
-			n.ordem = no.ordem;
-		}
+        try {
+            let a = this.getClearSymbol(no.a);
+            if (Object.keys(a).length !== 0) {
+                n.a = a;
+            }
+        } catch {}
+        try {
+            let r = this.getClearSymbol(no.r);
+            if (Object.keys(r).length !== 0) {
+                n.r = r;
+            }
+        } catch {}
+        try {
+            let b = this.getClearSymbol(no.b);
+            if (Object.keys(b).length !== 0) {
+                n.b = b;
+            }
+        } catch {}
 		return n;
 	};
 	this.getClearSymbol = function (s) {
