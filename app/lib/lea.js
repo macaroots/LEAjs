@@ -31,6 +31,124 @@ export const LEA = function (name) {
 	return agent;
 }
 
+/*
+Muda o comportamento que o Ceed deve ensinar aos agentes;
+ */
+function Live() {
+	this.act = async function(args, resolve, reject) {
+		console.log('LEA.live', this.agent.toString());
+		
+		// estuda enquanto tem o Ceed.JSBrain
+		let lea = this.agent;
+		// servidor HTTP
+		await Promise.all([
+            lea.see('study', 'listen'),
+            lea.see('study', 'http'),
+            // servidor Socket
+            lea.see('study', 'OnSocketConnection'),
+            lea.see('study', 'OnSocketSee'),
+            // concentra perguntas
+            lea.see('study', 'askFor'),
+            lea.see('study', 'onAnswer')
+        ]);
+		
+		// todos os agentes a partir de agora perguntam pro LEA
+		// TODO efeito colateral! talvez, all over the place.
+		let ceed = await Ceed();
+		ceed.skills['ask'] = new AskAgent('LEA');
+		ceed.skills['hearAnswer'] = new HearAnswerNotify();
+		resolve(true);
+	};
+}
+
+function InitHttpBrain() {
+	this.act = async function(options, resolve, reject) {
+		let lea = this.agent;
+		
+		try {
+			const HTTPBrain = (await import('./http_brain.js')).HTTPBrain;
+			let brain = new HTTPBrain(options.host, options.protocol);
+			(await Ceed()).see('setLibrary', brain);
+			await lea.see('setLibrary', brain);
+		}
+		catch (e) {
+			reject(e);
+		}
+		
+		resolve(true);
+	}
+}
+
+function ConfigMySQLBrain() {
+	this.act = async function(options, resolve, reject) {
+        const mysql = (await import('mysql'));
+		const MySQLBrain = (await import('./mysql_brain.js')).MySQLBrain;
+		const AgentBrain = (await import('./agent_brain.js')).AgentBrain;
+
+		const lea = this.agent;
+		
+		// configura o agente brain
+		try {
+console.log('Initializing server...');
+            
+            const pool = mysql.createPool(options);
+			const mysqlBrain = new MySQLBrain(pool);
+			await mysqlBrain.createTables();
+            await lea.see('set', ['onServerInitialized', new (function () {
+                this.act = function () {
+                    lea.server.on('close', function() {
+                        console.log('Ending server...');
+                        pool.end(function (err) {
+                            if (err) throw err;
+
+                            console.log('Pool ended');
+                        });
+                    });
+                }
+            })()]);
+            lea.see('addListener', ['serverInitialized', lea]);
+            
+			/*/
+            const brain = await Ceed('Brain');
+            await brain.see('setLibrary', mysqlBrain);
+			await brain.see('study', 'reason');
+			const library = new AgentBrain(brain);
+			/*/
+            const library = mysqlBrain;
+            /**/
+            
+			(await Ceed()).see('addLibrary', library);
+			await lea.see('addLibrary', library);
+		}
+		catch (e) {
+			reject(e);
+		}
+		
+		resolve(true);
+	};
+}
+
+function InitBrain() {
+	this.act = async function(options, resolve, reject) {
+		const lea = this.agent;
+		
+		let ok;
+		do {
+			try {
+				await lea.see('configMySQLBrain', options);
+				ok = true;
+			} catch (e) {
+				ok = false;
+				console.log('InitBrain Error on Connect to DB', e);
+				console.log('Trying again in 1s');
+				await new Promise(resolve => setTimeout(resolve, 1000));
+			}
+		} while (!ok);		
+		
+		resolve(true);
+	};
+}
+
 function Heared() {
 	this.act = function (args, callback) {
 		let lea = this.agent;
@@ -186,6 +304,7 @@ function OnSocketConnection() {
 		callback(true);
 	};
 }
+
 function OnSocketSee() {
 	this.act = async function(args, callback) {
 		let agentName = args[0];
@@ -205,159 +324,6 @@ function OnSocketSee() {
             console.log('ERRO SOCKET', e);
         });
 	}
-}
-
-
-
-/*
-Muda o comportamento que o Ceed deve ensinar aos agentes;
- */
-
-function Live() {
-	this.act = async function(args, resolve, reject) {
-		console.log('LEA.live', this.agent.toString());
-		
-		// estuda enquanto tem o Ceed.JSBrain
-		let lea = this.agent;
-		// servidor HTTP
-		await Promise.all([
-            lea.see('study', 'listen'),
-            lea.see('study', 'http'),
-            // servidor Socket
-            lea.see('study', 'OnSocketConnection'),
-            lea.see('study', 'OnSocketSee'),
-            // concentra perguntas
-            lea.see('study', 'askFor'),
-            lea.see('study', 'onAnswer')
-        ]);
-		
-		// todos os agentes a partir de agora perguntam pro LEA
-		// TODO efeito colateral! talvez, all over the place.
-		let ceed = await Ceed();
-		ceed.skills['ask'] = new AskAgent('LEA');
-		ceed.skills['hearAnswer'] = new HearAnswerNotify();
-		resolve(true);
-	};
-}
-
-function InitHttpBrain() {
-	this.act = async function(options, resolve, reject) {
-		let lea = this.agent;
-		
-		try {
-			const HTTPBrain = (await import('./http_brain.js')).HTTPBrain;
-			let brain = new HTTPBrain(options.host, options.protocol);
-			(await Ceed()).see('setLibrary', brain);
-			await lea.see('setLibrary', brain);
-		}
-		catch (e) {
-			reject(e);
-		}
-		
-		resolve(true);
-	}
-}
-function ConfigMySQLBrain() {
-	this.act = async function(options, resolve, reject) {
-        const mysql = (await import('mysql'));
-		const MySQLBrain = (await import('./mysql_brain.js')).MySQLBrain;
-		const AgentBrain = (await import('./agent_brain.js')).AgentBrain;
-
-		const lea = this.agent;
-		
-		// configura o agente brain
-		try {
-console.log('Initializing server...');
-            
-            const pool = mysql.createPool(options);
-			const mysqlBrain = new MySQLBrain(pool);
-			await mysqlBrain.createTables();
-            await lea.see('set', ['onServerInitialized', new (function () {
-                this.act = function () {
-                    lea.server.on('close', function() {
-                        console.log('Ending server...');
-                        pool.end(function (err) {
-                            if (err) throw err;
-
-                            console.log('Pool ended');
-                        });
-                    });
-                }
-            })()]);
-            lea.see('addListener', ['serverInitialized', lea]);
-            
-			/*/
-            const brain = await Ceed('Brain');
-            await brain.see('setLibrary', mysqlBrain);
-			await brain.see('study', 'reason');
-			const library = new AgentBrain(brain);
-			/*/
-            const library = mysqlBrain;
-            /**/
-            
-			(await Ceed()).see('addLibrary', library);
-			await lea.see('addLibrary', library);
-		}
-		catch (e) {
-			reject(e);
-		}
-		
-		resolve(true);
-	};
-}
-function InitBrain() {
-	this.act = async function(options, resolve, reject) {
-		const lea = this.agent;
-		
-		let ok;
-		do {
-			try {
-				await lea.see('configMySQLBrain', options);
-				ok = true;
-			} catch (e) {
-				ok = false;
-				console.log('InitBrain Error on Connect to DB', e);
-				console.log('Trying again in 1s');
-				await new Promise(resolve => setTimeout(resolve, 1000));
-			}
-		} while (!ok);		
-		
-		lea.see('read', 'Naive.EmptyAction').then(function (meanings) {
-			if (meanings.length == 0) {
-				lea.see('write', [
-					'Naive.EmptyAction', 
-					new Symbol(0, 'js', 'new (function EmptyAction() {\n\tthis.act = function (args, resolve, reject) {\n\t\t// your code here\n\t\tresolve();\n\t};\n})();')
-				]);
-			}
-		});
-		lea.see('read', 'Controller.EmptyAction').then(function (meanings) {
-			if (meanings.length == 0) {
-				lea.see('write', [
-					'Controller.EmptyAction', 
-					new Symbol(0, 'js', 'new (function EmptyAction() {\n\tthis.act = function (args, resolve, reject) {\n\t\tlet req = args[0];\n\t\tlet res = args[1];\n\t\t// your code here\n\t\tresolve();\n\t};\n})();')
-				]);
-			}
-		});
-
-		lea.see('read', 'Controller.preDispatch').then(function (meanings) {
-			if (meanings.length == 0) {
-				lea.see('write', [
-					'Controller.preDispatch', 
-					new Symbol(0, 'js', 'new (function PreDispatch() {\n\tthis.act = function (args, resolve, reject) {\n\t\tlet req = args[0];\n\t\tlet res = args[1];\n\t\t// your code here\n\t\tresolve(true);\n\t};\n})();')
-				]);
-			}
-		});
-		lea.see('read', 'Controller.postDispatch').then(function (meanings) {
-			if (meanings.length == 0) {
-				lea.see('write', [
-					'Controller.postDispatch', 
-					new Symbol(0, 'js', 'new (function PostDispatch() {\n\tthis.act = function (args, resolve, reject) {\n\t\tlet req = args[0];\n\t\tlet res = args[1];\n\t\t// your code here\n\t\tresolve(true);\n\t};\n})();')
-				]);
-			}
-		});
-		
-		resolve(true);
-	};
 }
 
 export function EmptyAction() {

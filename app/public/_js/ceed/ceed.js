@@ -610,8 +610,8 @@ export function EmptyAction() {
 export class CeedAgent {
 	constructor(mind) {
 		this.mind = mind;
-		this.see = function (type, info) {
-			return this.mind.see(new Symbol(0, type, info));
+		this.see = function (type, info, callback, fallback) {
+			return this.mind.see(new Symbol(0, type, info), callback, fallback);
 		}
 	};
 	toString() {

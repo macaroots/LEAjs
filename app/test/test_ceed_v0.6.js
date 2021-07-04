@@ -69,15 +69,16 @@ describe('Ceed', function () {
 describe('Ceed behaviors', function () {
 	context('*getName', async function () {
 		let agent = await Ceed('Joe');
-        /** @deprecated
-		context('when callback is not null', function () {
+/** @deprecated */
+		context('when using callback', function () {
 			it('should callback the name', function (done) {
 				agent.see('getName', 0, (name) => {
 					assert.equal(name, 'Joe');
 					done();
 				});
 			});
-		});*/
+		});
+        /**/
 		describe('when using then', function () {
 			it('should resolve the name', function () {
 				agent.see('getName', 0).then((name) => {
@@ -123,9 +124,9 @@ describe('Ceed behaviors', function () {
 		await writer.see('write', ['Naive.bye', new Symbol(0, 'js', 'new (' + Bye.toString() + ')();')]);
 		await writer.see('write', ['Naive.timeout', new Symbol(0, 'js', 'new (' + HelloTimeout.toString() + ')();')]);
 			
-		/*agent.see('getLibraries').then(l => {
-			console.log(l[0].toString());
-		});*/
+/*agent.see('getLibraries').then(l => {
+    console.log(l[0].toString());
+});*/
 		// TODO testar pedir várias vezes a mesma ação, enquanto ainda tá estudando
 		describe('*study (read key from brain)', function () {
 			it('should work with Promise', function (done) {
@@ -141,7 +142,7 @@ describe('Ceed behaviors', function () {
 				let r = await agent.see('hello', 'world');
 				assert.equal(r, 'Hello, world! Bye!');
 			});
-            /** @deprecated * /
+/** @deprecated */
 			it('should work with callback', function (done) {
 				Ceed('Noe').then(agent => {
 					agent.see('hello', 'world', r => {
