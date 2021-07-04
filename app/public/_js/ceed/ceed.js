@@ -70,9 +70,9 @@ function Study() {
 			}
 		}
 
-console.log('STUDY', concept);
+//console.log('STUDY', concept);
 		agent.see('read', concept).then(function (representations) {
-console.log('STUDY2', concept);
+//console.log('STUDY2', concept);
 			if (representations != null && representations.length > 0) {
 				let representation = representations[representations.length - 1];
 				representation.id = 0;
@@ -400,7 +400,7 @@ function Help() {
 		};
 		{
     		const brain = agent.mind.getBrain();
-    		const links = brain.reason();
+    		const links = await brain.reason(null);
   		
     		for (let i in links) {
     		    let link = links[i];
@@ -417,8 +417,9 @@ function Help() {
 		}
 		
 		const brains = await agent.see('getLibraries');
+        agents.libraries = brains;
 		for (let brain of brains) {
-    		const links = brain.reason();
+    		const links = await brain.reason();
     		
     		for (let i in links) {
     		    let link = links[i];
@@ -495,7 +496,11 @@ export function InitAgentSameLibrary() {
 		/*/
 		
 		ceed.see('getLibraries').then(libraries => {
-			agent.see('setLibrary', libraries[0]).then(() => {
+            let promises = [];
+            for (let library of libraries) {
+                promises.push(agent.see('addLibrary', library));
+            }
+            Promise.all(promises).then(() => {
 				//callback(agent);
 				agent.see('live').then(() => {
 					callback(true);

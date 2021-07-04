@@ -201,7 +201,7 @@ function OnSocketSee() {
 			lea.agents[agentName] = agent;
 		}
 		//console.log('socketSee', agentName, action, target);
-		agent.see(action, target, callback).catch(e => {
+		agent.see(action, target).then(callback).catch(e => {
             console.log('ERRO SOCKET', e);
         });
 	}
@@ -268,7 +268,7 @@ function ConfigMySQLBrain() {
 		// configura o agente brain
 		try {
 console.log('Initializing server...');
-            /*
+            
             const pool = mysql.createPool(options);
 			const mysqlBrain = new MySQLBrain(pool);
 			await mysqlBrain.createTables();
@@ -284,7 +284,7 @@ console.log('Initializing server...');
                     });
                 }
             })()]);
-            lea.see('addListener', ['serverInitialized', lea]);*/
+            lea.see('addListener', ['serverInitialized', lea]);
             
 			/*/
             const brain = await Ceed('Brain');
@@ -292,11 +292,11 @@ console.log('Initializing server...');
 			await brain.see('study', 'reason');
 			const library = new AgentBrain(brain);
 			/*/
-            const library = new JSBrain();
+            const library = mysqlBrain;
             /**/
             
-			(await Ceed()).see('setLibrary', library);
-			await lea.see('setLibrary', library);
+			(await Ceed()).see('addLibrary', library);
+			await lea.see('addLibrary', library);
 		}
 		catch (e) {
 			reject(e);
@@ -371,7 +371,7 @@ export function EmptyAction() {
 /**/
 let ceed = await Ceed();
 await Promise.all([
-	ceed.see('write', ['Naive.live', new Symbol(0, 'js', 'new (' + Live.toString() + ')();')]),
+	ceed.see('write', ['LEA.live', new Symbol(0, 'js', 'new (' + Live.toString() + ')();')]),
 	ceed.see('write', ['LEA.configMySQLBrain', new Symbol(0, 'js', 'new (' + ConfigMySQLBrain.toString() + ')();')]),
 	ceed.see('write', ['LEA.initBrain', new Symbol(0, 'js', 'new (' + InitBrain.toString() + ')();')]),
 	ceed.see('write', ['LEA.initHttpBrain', new Symbol(0, 'js', 'new (' + InitHttpBrain.toString() + ')();')]),
@@ -382,7 +382,6 @@ await Promise.all([
 	ceed.see('write', ['LEA.askFor', new Symbol(0, 'js', 'new (' + AskFor.toString() + ')();')]),
 	ceed.see('write', ['LEA.onAnswer', new Symbol(0, 'js', 'new (' + Heared.toString() + ')();')]),
 	// Controller
-	ceed.see('write', ['Controller.index', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')]),
 	ceed.see('write', ['Controller.EmptyAction', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')]),
 	ceed.see('write', ['Controller.preDispatch', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')]),
 	ceed.see('write', ['Controller.postDispatch', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')])
