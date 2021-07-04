@@ -18,9 +18,9 @@ lea.see('initHttpBrain', {
 /*/
 lea.see('initBrain', {
 	host: process.env.MYSQL_HOST || 'localhost',
-	database: process.env.MYSQL_DATABASE || 'mind',
+	database: process.env.MYSQL_DATABASE || 'leajs',
 	user: process.env.MYSQL_USER || 'root',
-	password: process.env.MYSQL_PASSWORD || '',
+	password: process.env.MYSQL_PASSWORD || 'admin',
     // debug: true
 }).then(() => {
 /**/
