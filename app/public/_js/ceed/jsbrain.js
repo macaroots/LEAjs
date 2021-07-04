@@ -17,111 +17,114 @@ export function JSBrain(symbols, links) {
     if (links == null) {
         links = [];
     }
+    const self = this;
     this.symbols = symbols;
     this.links = links;
     
-    this.set = function(s, callback) {
-        if (s.id == 0) {
-        	s.id = Object.keys(this.symbols).length + 1;
-        }
-    	while (s.id in this.symbols) {
-    		s.id++;
-    	}
-        this.symbols[s.id] = s;
-		
-		if (callback != null) {
-			return callback(s);
-		}
-		else {
-			return s;
-		}
-    };
-    this.forget = function(s, callback) {
-    	let esquecidos = this.get(s);
-    	for (let e in esquecidos) {
-    		delete(this.symbols[esquecidos[e].id]);
-    	}
-		if (callback != null) {
-			return callback(esquecidos);
-		}
-		else {
-			return esquecidos;
-		}
-    };
-    this.get = function(s, callback) { 
-        let lembrados = [];
-        if (s != null && s.id != 0) {
-            lembrados.push(this.symbols[s.id]);
-        }
-        else {
-            for (let i in this.symbols) {
-                let symbol = this.symbols[i];
-                if (this.__symbolsMatch(symbol, s)) {
-                    lembrados.push(symbol);
-            	}
-        	}
-        }
-		if (callback != null) {
-			return callback(lembrados);
-		}
-		else {
-			return lembrados;
-		}
-    };
-    this.tie = function(n, callback) {
-    	let aS = this.get(n.a);
-        if (aS.length != 0) {
-        	n.a = aS[0];
-        }
-        else {
-            this.set(n.a);
-        }
-    	let rS = this.get(n.r);
-        if (rS.length != 0) {
-        	n.r = rS[0];
-        }
-        else {
-            this.set(n.r);
-        }
-    	let bS = this.get(n.b);
-        if (bS.length != 0) {
-        	n.b = bS[0];
-        }
-        else {
-            this.set(n.b);
-        }
-        this.links.push(n);
-		
-		if (callback != null) {
-			return callback(n);
-		}
-    };
-    this.untie = function(n, callback) {
-        let esquecidos = this.reason(n);
-        for (let e in esquecidos) {
-            //this.links.remove(e);
-        }
-		if (callback != null) {
-			return callback(esquecidos);
-		}
-		else {
-			return esquecidos;
-		}
-    };
-    this.reason = function(n, callback) {
-        let links = [];
-        for (let i in this.links) {
-        	let link = this.links[i];
-            if (this.__linksMatch(link, n)) {
-                links.push(link);
+    this.set = function(s) {
+        const promise = new Promise((resolve, reject) => {
+            if (s.id == 0) {
+                s.id = Object.keys(self.symbols).length + 1;
             }
-        }
-		if (callback != null) {
-			return callback(links);
-		}
-		else {
-			return links;
-		}
+            while (s.id in self.symbols) {
+                s.id++;
+            }
+            self.symbols[s.id] = s;
+            
+// console.debug('JsBrain.set', s);
+            resolve(s);
+        });
+        return promise;
+    };
+    this.forget = function(s) {
+        const promise = new Promise((resolve, reject) => {
+            let esquecidos = self.get(s);
+            for (let e in esquecidos) {
+                delete(self.symbols[esquecidos[e].id]);
+            }
+            resolve(esquecidos);
+        });
+        return promise;
+    };
+    this.get = function(s) { 
+        const promise = new Promise((resolve, reject) => {
+            let lembrados = [];
+            if (s != null && s.id != 0) {
+                lembrados.push(self.symbols[s.id]);
+            }
+            else {
+                for (let i in self.symbols) {
+                    let symbol = self.symbols[i];
+                    if (self.__symbolsMatch(symbol, s)) {
+                        lembrados.push(symbol);
+                    }
+                }
+            }
+//console.debug('JsBrain.get', s, lembrados);
+            resolve(lembrados);
+        });
+        return promise;
+    };
+    this.tie = function(link) {
+        const promise = new Promise(async (resolve, reject) => {
+            await self.get(link.a).then(async symbols => {
+//console.debug('JsBrain.tie(a)', link.a, symbols);
+                if (symbols.length != 0) {
+                    link.a = symbols[0];
+                }
+                else {
+                    return await self.set(link.a);
+                }
+            });
+            await self.get(link.r).then(async symbols => {
+//console.debug('JsBrain.tie(r)', link.r, symbols);
+                if (symbols.length != 0) {
+                    link.r = symbols[0];
+                }
+                else {
+                    return await self.set(link.r);
+                }
+            });
+            await self.get(link.b).then(async symbols => {
+// console.debug('JsBrain.tie(b)', link.b, symbols);
+                if (symbols.length != 0) {
+                    link.b = symbols[0];
+                }
+                else {
+                    return await self.set(link.b);
+                }
+            });
+            self.links.push(link);
+            resolve(link);
+            
+// console.debug('JsBrain.tie', link);
+        });
+        return promise;
+    };
+    this.untie = function(link) {
+        const promise = new Promise((resolve, reject) => {
+            let esquecidos = self.reason(link);
+            for (let e in esquecidos) {
+                //self.links.remove(e);
+            }
+            
+            resolve(esquecidos);
+        });
+        return promise;
+    };
+    this.reason = function(link) {
+        const promise = new Promise((resolve, reject) => {
+            let links = [];
+            for (let l of self.links) {
+                if (self.__linksMatch(l, link)) {
+                    links.push(l);
+                }
+            }
+            
+//console.debug('JsBrain.reason', link, links);
+            resolve(links);
+        });
+        return promise;
     };
     this.__linksMatch = function (local, search) {
     	let equals = false;
@@ -129,9 +132,9 @@ export function JSBrain(symbols, links) {
     		equals = true;
     	}
     	else if (
-            (search.a == null || this.__symbolsMatch(local.a, search.a)) &&
-            (search.r == null || this.__symbolsMatch(local.r, search.r)) &&
-            (search.b == null || this.__symbolsMatch(local.b, search.b))
+            (search.a == null || self.__symbolsMatch(local.a, search.a)) &&
+            (search.r == null || self.__symbolsMatch(local.r, search.r)) &&
+            (search.b == null || self.__symbolsMatch(local.b, search.b))
         ) {
             equals = true;
         }

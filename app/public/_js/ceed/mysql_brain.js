@@ -10,7 +10,6 @@
  * Created on 02/10/2020
  */
 import {Symbol, Link} from './brain.js';
-import mysql from 'mysql';
 /*/
 // mysql mock
 let mysql = {createConnection: (options) => {
@@ -25,11 +24,11 @@ let mysql = {createConnection: (options) => {
 }};
 /**/
 
-export function MySQLBrain(options) {
+export function MySQLBrain(pool) {
 	this.debug = false;
-	const pool = mysql.createPool(options);
+    const self = this;
     this.connect = function () {
-		let p = new Promise((resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			pool.getConnection((err, con) => {
 				if (err) {
 					return reject(err);
@@ -37,12 +36,10 @@ export function MySQLBrain(options) {
 				resolve(con);
 			});
 		});
-
-		return p;
 	}
 	
 	this.createTables = function() {
-		let p = new Promise((resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			let sqlSymbols = "CREATE TABLE IF NOT EXISTS `symbols` ("
 				+ "`id` int(11) NOT NULL AUTO_INCREMENT,"
 				+ "`type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,"
@@ -60,178 +57,201 @@ export function MySQLBrain(options) {
 				+ "KEY `idx_nodes_a` (`a`),"
 				+ "KEY `idx_nodes_r` (`r`),"
 				+ "KEY `idx_nodes_b` (`b`))";
-			let connection = this.connect();
+			let connection = self.connect();
 			connection.then(c => {c.query(sqlSymbols, function (error, results, fields) {
 				if (error)
 					return reject(error);
 				c.query(sqlLinks, function (error, results, fields) {
 					if (error)
 						return reject(error);
-					resolve(true);
 					c.release();
+					resolve(true);
 				});
 			})}).catch(reject);
 		});
-		return p;
+	}
+	this.clear = function() {
+		return new Promise((resolve, reject) => {
+			let sqlSymbols = "TRUNCATE symbols";
+
+			let sqlLinks = "TRUNCATE links";
+			let connection = self.connect();
+			connection.then(c => {c.query(sqlLinks, function (error, results, fields) {
+				if (error)
+					return reject(error);
+				c.query(sqlSymbols, function (error, results, fields) {
+					if (error)
+						return reject(error);
+					c.release();
+					resolve(true);
+				});
+			})}).catch(reject);
+		});
 	}
 	
-    this.set = function(s, callback) {
-		let connection = this.connect();
-		
-		let json = {};
-		if (s.id != 0 && s.id != null) {
-			json.id = s.id;
-		}
-		if (s.type != null) {
-			json.type = s.type;
-		}
-		if (s.info != null) {
-			json.info = s.info;
-		}
 	
-		if (s.id == 0) {
-			let sql = "insert into symbols set ?";
-			
-			connection.then(c => {c.query(sql, json, function (error, results, fields) {
-				if (error) throw error;
-				s.id = results.insertId;
-				c.commit();
-				c.release();
-				
-				if (callback != null) {
-					return callback(s);
-				}
-			})});
-		}
-		else {
-			let sql = "update symbols set ? where id = ?";
-			if (this.debug) {
-				console.log(sql);
-			}
-			connection.then(c => {c.query(sql, [json, s.id], function (error, results, fields) {
-				if (error) throw error;
-				c.commit();
-				c.release();
-						
-				if (callback != null) {
-					return callback(s);
-				}
-			})});
-		}
-		
-		return s;
+    this.set = function(s) {
+        return new Promise((resolve, reject) => {
+            let connection = self.connect();
+            
+            let json = {};
+            if (s.id != 0 && s.id != null) {
+                json.id = s.id;
+            }
+            if (s.type != null) {
+                json.type = s.type;
+            }
+            if (s.info != null) {
+                json.info = s.info;
+            }
+        
+            if (s.id == 0) {
+                let sql = "insert into symbols set ?";
+                
+                connection.then(c => {c.query(sql, json, function (error, results, fields) {
+                    if (error) return reject(error);
+                    s.id = results.insertId;
+                    c.commit();
+                    c.release();
+                    
+                    resolve(s);
+                })}).catch(console.error);
+            }
+            else {
+                let sql = "update symbols set ? where id = ?";
+                if (self.debug) {
+                    console.log(sql);
+                }
+                connection.then(c => {c.query(sql, [json, s.id], function (error, results, fields) {
+                    if (error) return reject(error);
+                    c.commit();
+                    c.release();
+                            
+                    resolve(s);
+                })}).catch(console.error);
+            }
+        });
     };
-    this.forget = function(s, callback) {
-    	let esquecidos = this.get(s);
-    	for (let e in esquecidos) {
-    		//delete(this.symbols[esquecidos[e].id]);
-    	}
-		if (callback != null) {
-			return callback(esquecidos);
-		}
-		else {
-			return esquecidos;
-		}
+    this.forget = function(s) {
+        return new Promise(async (resolve, reject) => {
+            let sql = "DELETE FROM symbols WHERE id=?";
+            let connection = self.connect();
+            connection.then(c => {c.query(sql, [s.id], function (error, results, fields) {
+                if (error) return reject(error);
+                c.commit();
+                c.release();
+                            
+                resolve();
+            })}).catch(console.error);
+        });
     };
-    this.get = function(s, callback) {
-		let symbols = [];
-		let brain = this;
+    this.get = function(s) {
+        return new Promise((resolve, reject) => {
+            let symbols = [];
 
-		let connection = this.connect();
-		
-		let args = this.__symbolToSql(s);
-		let sql = args[0];
-		let values = args[1];
-		
-		connection.then(c => {c.query(sql, values, function (error, results, fields) {
-			if (error) throw error;
-			for (let rs of results) {
-				let symbol = brain.__getSymbolFromRS(rs);
-				symbols.push(symbol);
-			}
-			c.release();
-			
-			if (callback != null) {
-				return callback(symbols);
-			}
-		})});
-		
-		return symbols;
+            let connection = self.connect();
+            
+            let args = self.__symbolToSql(s);
+            let sql = args[0];
+            let values = args[1];
+            
+            connection.then(c => {c.query(sql, values, function (error, results, fields) {
+                if (error) return reject(error);
+                for (let rs of results) {
+                    let symbol = self.__getSymbolFromRS(rs);
+                    symbols.push(symbol);
+                }
+                c.release();
+                
+                resolve(symbols);
+            })}).catch(console.error);
+        });
     };
-    this.tie = function(l, callback) {
-		let brain = this;
-		let sent = false;
-		function sendQuery() {
-			if (sent || l.a.id == 0 || l.r.id == 0 || l.b.id == 0) {
-				return;
-			}
-			sent = true;
-			let sql = "insert into links (a, r, b) values (?, ?, ?)";
-			let connection = brain.connect();
-			connection.then(c => {c.query(sql, [l.a.id, l.r.id, l.b.id], function (error, results, fields) {
-				if (error) throw error;
-				c.commit();
-				c.release();
-							
-				if (callback != null) {
-					return callback(l);
-				}
+    this.tie = function(l) {
+        return new Promise(async (resolve, reject) => {
+            await self.get(l.a).then(async symbols => {
+//console.debug('JsBrain.tie(a)', l.a, symbols);
+                if (symbols.length != 0) {
+                    l.a = symbols[0];
+                }
+                else {
+                    return await self.set(l.a);
+                }
+            }).catch(reject);
+            await self.get(l.r).then(async symbols => {
+//console.debug('JsBrain.tie(r)', l.r, symbols);
+                if (symbols.length != 0) {
+                    l.r = symbols[0];
+                }
+                else {
+                    return await self.set(l.r);
+                }
+            }).catch(reject);
+            await self.get(l.b).then(async symbols => {
+// console.debug('JsBrain.tie(b)', l.b, symbols);
+                if (symbols.length != 0) {
+                    l.b = symbols[0];
+                }
+                else {
+                    return await self.set(l.b);
+                }
+            }).catch(reject);            
+            
+            let sql = "insert into links (a, r, b) values (?, ?, ?)";
+            let connection = self.connect();
+            connection.then(c => {c.query(sql, [l.a.id, l.r.id, l.b.id], function (error, results, fields) {
+                if (error) return reject(error);
+                c.commit();
+                c.release();
+                            
+                resolve(l);
+            })}).catch(console.error);
+            
+        });
+    };
+    this.untie = function(l) {
+        return new Promise(async (resolve, reject) => {
+            let sql = "DELETE FROM links WHERE id=? AND a=? AND r=? AND b=?";
+            let connection = self.connect();
+            connection.then(c => {c.query(sql, [l.id, l.a.id, l.r.id, l.b.id], function (error, results, fields) {
+                if (error) return reject(error);
+                c.commit();
+                c.release();
+                            
+                resolve();
+            })}).catch(console.error); 
+        });
+    };
+    this.reason = function(l) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let links = [];
 
-			})});
-			//connection.commit();
-			//connection.end();
-		}
-		
-		if (l.a.id == 0) {
-			this.set(l.a, sendQuery);
-		}
-		if (l.r.id == 0) {
-			this.set(l.r, sendQuery);
-		}
-		if (l.b.id == 0) {
-			this.set(l.b, sendQuery);
-		}
-		sendQuery();
-		return l;
-    };
-    this.untie = function(n, callback) {
-        let esquecidos = this.reason(n);
-        for (let e in esquecidos) {
-            //this.links.remove(e);
-        }
-		if (callback != null) {
-			return callback(esquecidos);
-		}
-		else {
-			return esquecidos;
-		}
-    };
-    this.reason = function(l, callback) {
-		let brain = this;
-        let links = [];
-
-		let args = this.__linkToSql(l);
-		let sql = args[0];
-		let values = args[1];
-		
-		let connection = this.connect();
-		connection.then(c => {c.query(sql, values, function (error, results, fields) {
-			if (error) throw error;
-			for (let rs of results) {
-				let link = new Link();
-				link.a = brain.__getSymbolFromRS(rs, "a");
-				link.r = brain.__getSymbolFromRS(rs, "r");
-				link.b = brain.__getSymbolFromRS(rs, "b");
-				links.push(link);
-			}
-			c.release();
-			
-			if (callback != null) {
-				return callback(links);
-			}
-		})});
-		//connection.end();
-		return links;
+                let args = self.__linkToSql(l);
+                let sql = args[0];
+                let values = args[1];
+                
+                let connection = self.connect();
+                connection.then(c => {c.query(sql, values, function (error, results, fields) {
+                    try {
+                        if (error) return reject(error);
+                        for (let rs of results) {
+                            let link = new Link();
+                            link.a = self.__getSymbolFromRS(rs, "a");
+                            link.r = self.__getSymbolFromRS(rs, "r");
+                            link.b = self.__getSymbolFromRS(rs, "b");
+                            links.push(link);
+                        }
+                    } finally {
+                        c.release();
+                    }
+                    
+                    resolve(links);
+                })}).catch(console.error);
+            } catch (e) {
+                reject(e);
+            }
+        });
     };
 	this.__symbolToSql = function (s, select) {
 		if (!select) {
@@ -268,7 +288,7 @@ export function MySQLBrain(options) {
 		let values = [];
 		if (l != null) {
 			for (let p of ['a', 'r', 'b']) {
-				let args = this.__symbolToReasonSql(l[p], p);
+				let args = self.__symbolToReasonSql(l[p], p);
 				sql += args[0];
 				values = values.concat(args[1]);
 			}
@@ -310,8 +330,8 @@ export function MySQLBrain(options) {
 }
 MySQLBrain.prototype.toString = function dogToString() {
 	let string = '';
-        for (let i in this.links) {
-        	let link = this.links[i];
+        for (let i in self.links) {
+        	let link = self.links[i];
 		string += link;
 	}
 	return string;

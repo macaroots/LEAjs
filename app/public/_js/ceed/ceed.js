@@ -30,27 +30,28 @@ function DontKnow() {
 				return callback(); 
 			}
 			console.log(fullname + ' - Don\'t know "' + concept + '"! Searching');
-			mind.set('unkowns', concept);
+			mind.set('unkowns', concept).then(function () {
 
-			// search in books
-			agent.see('study', concept).then(function (learned) {
-				console.log(fullname + ' - Studied "' + concept + '": ' + learned);
-				if (learned) {
-					mind.see(perception).then(callback).catch(reject);
-				}
-				else {
-				// ask programmer
-					agent.see('ask', concept).then(function (learned) {
-						console.log(fullname + ' - Asked "' + concept + '": ' + learned);
-						if (learned) {
-							mind.see(perception).then(callback).catch(reject);
-						}
-						else {
-							callback();
-						}
-					});
-				}
-			});
+                // search in books
+                agent.see('study', concept).then(function (learned) {
+                    console.log(fullname + ' - Studied "' + concept + '": ' + learned);
+                    if (learned) {
+                        mind.see(perception).then(callback).catch(reject);
+                    }
+                    else {
+                    // ask programmer
+                        agent.see('ask', concept).then(function (learned) {
+                            console.log(fullname + ' - Asked "' + concept + '": ' + learned);
+                            if (learned) {
+                                mind.see(perception).then(callback).catch(reject);
+                            }
+                            else {
+                                callback();
+                            }
+                        });
+                    }
+                });
+            });
 		});
 	};
 }
@@ -69,7 +70,9 @@ function Study() {
 			}
 		}
 
+console.log('STUDY', concept);
 		agent.see('read', concept).then(function (representations) {
+console.log('STUDY2', concept);
 			if (representations != null && representations.length > 0) {
 				let representation = representations[representations.length - 1];
 				representation.id = 0;
@@ -100,7 +103,7 @@ function Study() {
 function GetLibraries0() {
 	this.act = function(args, callback) {
 		let mind = this.mind;
-		mind.get('library', function (library) {
+		mind.get('library').then(function (library) {
 			if (library == null) {
 				//library = new AjaxBrain();
 				library = new JSBrain();
@@ -140,13 +143,15 @@ function SetLibrary() {
 	};
 }
 function CERead() {
-	this.act = function(concept, callback, reject) {
-		let representations;
+	this.act = function(concept, resolve, reject) {
+//console.log('CEREAD', concept);
+		let representations = [];
 		
 		let agent = this.agent;
 		let mind = this.mind;
 		
 		agent.see("getLibraries").then(function (brains) {
+//console.log('CEREAD2', concept);
 			let booknames;
 			if (concept.indexOf('.') == -1) {	
 				booknames = mind.getNames();
@@ -163,10 +168,10 @@ function CERead() {
 				concept = type[1];
 			}
 			
-			representations = {};
 			let totalBooks = brains.length * booknames.length;
 			let booksRead = 0;
-			for (let j in brains) {
+            /*/
+            for (let j in brains) {
 				let brain = brains[j];
 				for (let i = totalBooks - 1; i >= 0; i--) {
 				//for (let i in booknames) {
@@ -180,11 +185,33 @@ function CERead() {
 							for (let i in representations) {
 								r = r.concat(representations[i]);
 							}
-							callback(r);
+							resolve(r);
 						}
 					}})(totalBooks - i - 1), reject);
 				}
 			}
+            /*/
+			for (let j in brains) {
+				let brain = brains[j];
+				for (let i = totalBooks - 1; i >= 0; i--) {
+				//for (let i in booknames) {
+					let bookname = booknames[i];
+					let argsRead = [brain, bookname, concept];
+                    
+                    representations.push(mind.read(argsRead));
+                }
+            }
+//console.log('CEREAD3');// brains, representations);
+            Promise.all(representations).then(meanings => {
+//console.log('CEREAD4', meanings);
+                let r = [];
+                for (let i in meanings) {
+                    r = r.concat(meanings[i]);
+                }
+//console.log('CEREAD5', r);
+                resolve(r);
+			});
+        /**/
 		});
 	};
 }
@@ -196,7 +223,7 @@ function CEWrite() {
 	/**
 	 * args = [concept: String, answer: Symbol]
 	 */
-	this.act = function(args, callback) {	
+	this.act = function(args, resolve) {	
 		let concept = args[0];
 		
 		let agent = this.agent;
@@ -214,7 +241,7 @@ function CEWrite() {
 			}
 			
 			for (let brain of brains) {
-				mind.writeBehavior.act([brain, bookname, args], callback);
+				mind.write([brain, bookname, args]).then(resolve);
 			}
 		});
 	};
@@ -318,9 +345,10 @@ function Understand() {
 				learned = false;
 			}
 			
-			agent.see('set', [concept, interpretedMeaning]);
+			agent.see('set', [concept, interpretedMeaning]).then(function () {
 // console.log('UNDER', concept, interpretedMeaning.act.toString());
-			callback(learned);
+                callback(learned);
+            });
 		});
 	};
 }
@@ -345,24 +373,34 @@ function JS() {
 function Teach() {
 	this.act = function (agent, callback) {	
 		const skills = this.agent.skills;
+        let promises = []
 		for (let name in skills) {
 			let skill = skills[name];
-			agent.see('set', [name, skill]);
+//console.log('TEACH', name);
+			promises.push(agent.see('set', [name, skill]));
 		}
 		
-		callback(true);
+		Promise.all(promises).then(callback);
 	};
 }
 
 function NaiveLive() {
 	this.act = function (args, callback) {
-		console.log('Naive.live', this.agent.toString());
+//console.log('Naive.live', this.agent.toString());
+		callback(this.agent);
+	}
+}
+
+function Help() {
+	this.act = function (args, callback) {
+//console.log('Naive.live', this.agent.toString());
 		callback(this.agent);
 	}
 }
 
 function Live() {
-	this.act = function (args, callback) {
+	this.act = function (args, resolve, reject) {
+//console.log('LIVE');
 		const skills = {};
 		let agent = this.agent;
 		agent.skills = skills;
@@ -391,14 +429,17 @@ function Live() {
 		skills['initAgent'] = new InitAgentSameLibrary();
 		skills['addListener'] = new AddListener();
 		skills['notify'] = new Notify();
+        
+		skills['help'] = new Help();
 		
-		agent.see('set', ['teach', new Teach()]);
-		agent.see('teach', agent);
-
+		agent.see('set', ['teach', new Teach()]).then(() => {
+            agent.see('teach', agent).then(() => {
 agent.see('getNames').then(name => {
-	console.log('Ceed.live', name);
+    console.log('Ceed.live', name);
 });
-		callback(agent);
+                resolve(agent);
+            });
+        });
 	}
 }
 
@@ -450,24 +491,19 @@ function Notify() {
 				observer.see('on' + capitalized, args[1]);
 			}
 		} catch {}
+		resolve();
 	};
 }
 function NewAgent() {
-	this.act = async function (fullname, callback) {
+	this.act = function (fullname, callback) {
 		let ceed = this.agent;
 		let agent = new NaiveMind(fullname).body;
-		ceed.see('teach', agent);
-		/*/
-		ceed.see('initAgent', agent);
-		
-		callback(agent);
-		/*/
-		
-		ceed.see('initAgent', agent).then(function () {
-			callback(agent);
-		});
-		ceed.see('notify', ['newAgent', agent]);
-		/**/
+        ceed.see('teach', agent).then(function () {
+            ceed.see('initAgent', agent).then(function () {
+                callback(agent);
+                ceed.see('notify', ['newAgent', agent]);
+            });
+        });
 	}
 }
 function NewChildAgent() {
@@ -528,8 +564,8 @@ export function EmptyAction() {
 export class CeedAgent {
 	constructor(mind) {
 		this.mind = mind;
-		this.see = function (type, info, callback, reject) {
-			return this.mind.see(new Symbol(0, type, info)).then(callback).catch(reject);
+		this.see = function (type, info) {
+			return this.mind.see(new Symbol(0, type, info));
 		}
 	};
 	toString() {
@@ -543,22 +579,25 @@ export class CeedAgent {
 			CeedAgent.ceed = agent;
 			agent.agents = {Ceed: [new Promise ((res, rej) => { res(agent); })]};
 			
-			agent.see('set', ['live', new Live()]);
+			await agent.see('set', ['live', new Live()]);
 			await agent.see('live');
+//console.log('GET_INSTANCE0', CeedAgent.ceed.mind.getBrain().toString());
 			await agent.see('set', ['newAgent', new NewAgent()]);
 			
 			/**/
-			agent.see('read', 'Naive.EmptyAction').then(function (meanings) {
+			await agent.see('read', 'Naive.EmptyAction').then(async function (meanings) {
+//console.log('GET_INSTANCE', meanings);
 				if (meanings.length == 0) {
-					agent.see('write', [
+					await agent.see('write', [
 						'Naive.EmptyAction', 
 						new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')
 					]);
 				}
 			});
-			await agent.see('read', 'Naive.live').then(function (meanings) {
+			await agent.see('read', 'Naive.live').then(async function (meanings) {
+//console.log('GET_INSTANCE2', meanings);
 				if (meanings.length == 0) {
-					agent.see('write', [
+					await agent.see('write', [
 						'Naive.live', 
 						new Symbol(0, 'js', 'new (' + NaiveLive.toString() + ')();')
 					]);
@@ -587,7 +626,7 @@ export function AskAgent(helperName) {
 		console.log(this.agent.mind.getName() + ' - Asking: ' + key);
 		var agent = this.agent;
 		Ceed(helperName).then(helper => {
-			helper.see('askFor', [agent, key], callback);
+			helper.see('askFor', [agent, key]).then(callback);
 			
 			agent.see('addListener', ['answer', helper]);
 		});
