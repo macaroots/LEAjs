@@ -10,7 +10,7 @@ services:
       - "80:3000"
     volumes:
       - ./app:/home/node/app
-      #- node_modules:/home/node/app/node_modules
+      - node_modules:/home/node/app/node_modules
     links:
       - db
     depends_on:
@@ -42,7 +42,7 @@ services:
       - ./mind_v2.sql:/docker-entrypoint-initdb.d/dump.sql
 
 volumes:
-  #node_modules:
+  node_modules:
   #app:
   #db_data:
   test_db_data:
