@@ -89,25 +89,22 @@ function Listen() {
 		
 		let http = await import('http');
 		let express = (await import('express')).default;
-		let io = (await import('socket.io')).default;
-		
-		let bodyParser = (await import('body-parser')).default;
-
-		
 		const app = express();
 		const server = http.createServer(app);
-		let sio = io(server);
 		agent.app = app;
 		agent.server = server;
-		agent.io = sio;
-		
+        
 		// Setting up the public directory
 		app.use(express.static(options.dir));
 		
 		// Setting up POST parser
+		let bodyParser = (await import('body-parser')).default;
 		app.use(bodyParser.json());
 		app.use(bodyParser.urlencoded({ extended: true }));
 		
+		let io = (await import('socket.io')).default;
+		let sio = io(server);
+		agent.io = sio;
 		sio.on('connection', (socket) => {
 			agent.see('OnSocketConnection', socket);
 		});
@@ -126,6 +123,8 @@ function Listen() {
 		server.listen(options.port, options.hostname, () => {
 		  console.log(`Server running at http://${options.hostname}:${options.port}/`);
 		});
+        
+        agent.see('notify', 'serverInitialized');
 		
 		callback();
 	}
@@ -171,7 +170,7 @@ function OnSocketConnection() {
 		let lea = this.agent;
 		
 		socket.on('see', (agent, action, args, callback) => {
-			lea.see('OnSocketSee', [agent, action, args], callback);
+			lea.see('OnSocketSee', [agent, action, args]).then(callback);
 		});
 		
 		//socket.join('/lea')
@@ -221,14 +220,16 @@ function Live() {
 		// estuda enquanto tem o Ceed.JSBrain
 		let lea = this.agent;
 		// servidor HTTP
-		lea.see('study', 'listen');
-		lea.see('study', 'http');
-		// servidor Socket
-		lea.see('study', 'OnSocketConnection');
-		lea.see('study', 'OnSocketSee');
-		// concentra perguntas
-		lea.see('study', 'askFor');
-		lea.see('study', 'onAnswer');
+		await Promise.all([
+            lea.see('study', 'listen'),
+            lea.see('study', 'http'),
+            // servidor Socket
+            lea.see('study', 'OnSocketConnection'),
+            lea.see('study', 'OnSocketSee'),
+            // concentra perguntas
+            lea.see('study', 'askFor'),
+            lea.see('study', 'onAnswer')
+        ]);
 		
 		// todos os agentes a partir de agora perguntam pro LEA
 		// TODO efeito colateral! talvez, all over the place.
@@ -247,7 +248,7 @@ function InitHttpBrain() {
 			const HTTPBrain = (await import('./http_brain.js')).HTTPBrain;
 			let brain = new HTTPBrain(options.host, options.protocol);
 			(await Ceed()).see('setLibrary', brain);
-			lea.see('setLibrary', brain);
+			await lea.see('setLibrary', brain);
 		}
 		catch (e) {
 			reject(e);
@@ -258,20 +259,42 @@ function InitHttpBrain() {
 }
 function ConfigMySQLBrain() {
 	this.act = async function(options, resolve, reject) {
+        const mysql = (await import('mysql'));
 		const MySQLBrain = (await import('./mysql_brain.js')).MySQLBrain;
 		const AgentBrain = (await import('./agent_brain.js')).AgentBrain;
 
-		let lea = this.agent;
+		const lea = this.agent;
 		
 		// configura o agente brain
-		let brain = await Ceed('Brain');
 		try {
-			let mysqlBrain = new MySQLBrain(options);
+console.log('Initializing server...');
+            /*
+            const pool = mysql.createPool(options);
+			const mysqlBrain = new MySQLBrain(pool);
 			await mysqlBrain.createTables();
-			await brain.see('setLibrary', mysqlBrain);
-			await brain.see('study', 'reason');
+            await lea.see('set', ['onServerInitialized', new (function () {
+                this.act = function () {
+                    lea.server.on('close', function() {
+                        console.log('Ending server...');
+                        pool.end(function (err) {
+                            if (err) throw err;
 
-			let library = new AgentBrain(brain);
+                            console.log('Pool ended');
+                        });
+                    });
+                }
+            })()]);
+            lea.see('addListener', ['serverInitialized', lea]);*/
+            
+			/*/
+            const brain = await Ceed('Brain');
+            await brain.see('setLibrary', mysqlBrain);
+			await brain.see('study', 'reason');
+			const library = new AgentBrain(brain);
+			/*/
+            const library = new JSBrain();
+            /**/
+            
 			(await Ceed()).see('setLibrary', library);
 			await lea.see('setLibrary', library);
 		}
@@ -348,7 +371,7 @@ export function EmptyAction() {
 /**/
 let ceed = await Ceed();
 await Promise.all([
-	ceed.see('write', ['LEA.live', new Symbol(0, 'js', 'new (' + Live.toString() + ')();')]),
+	ceed.see('write', ['Naive.live', new Symbol(0, 'js', 'new (' + Live.toString() + ')();')]),
 	ceed.see('write', ['LEA.configMySQLBrain', new Symbol(0, 'js', 'new (' + ConfigMySQLBrain.toString() + ')();')]),
 	ceed.see('write', ['LEA.initBrain', new Symbol(0, 'js', 'new (' + InitBrain.toString() + ')();')]),
 	ceed.see('write', ['LEA.initHttpBrain', new Symbol(0, 'js', 'new (' + InitHttpBrain.toString() + ')();')]),
@@ -359,10 +382,12 @@ await Promise.all([
 	ceed.see('write', ['LEA.askFor', new Symbol(0, 'js', 'new (' + AskFor.toString() + ')();')]),
 	ceed.see('write', ['LEA.onAnswer', new Symbol(0, 'js', 'new (' + Heared.toString() + ')();')]),
 	// Controller
+	ceed.see('write', ['Controller.index', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')]),
 	ceed.see('write', ['Controller.EmptyAction', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')]),
 	ceed.see('write', ['Controller.preDispatch', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')]),
 	ceed.see('write', ['Controller.postDispatch', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')])
 ]);
+console.log('Writing server...');
 //console.log((await ceed.see('getLibraries'))[0].toString());
 /**/
 //lea.see('set', ['live', new Live()]);

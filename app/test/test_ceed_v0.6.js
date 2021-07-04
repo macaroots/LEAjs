@@ -69,6 +69,7 @@ describe('Ceed', function () {
 describe('Ceed behaviors', function () {
 	context('*getName', async function () {
 		let agent = await Ceed('Joe');
+        /** @deprecated
 		context('when callback is not null', function () {
 			it('should callback the name', function (done) {
 				agent.see('getName', 0, (name) => {
@@ -76,7 +77,7 @@ describe('Ceed behaviors', function () {
 					done();
 				});
 			});
-		});
+		});*/
 		describe('when using then', function () {
 			it('should resolve the name', function () {
 				agent.see('getName', 0).then((name) => {
@@ -105,22 +106,22 @@ describe('Ceed behaviors', function () {
 		}
 		function Hello() {
 			this.act = function (args, resolve, reject) {
-				this.agent.see('bye', 'Hello, ' + args + '!', resolve, reject);
+				this.agent.see('bye', 'Hello, ' + args + '!').then(resolve).catch(reject);
 			};
 		}
 		function HelloTimeout() {
 			this.act = function (args, resolve, reject) {
 				setTimeout(() => {
-					this.agent.see('bye', 'Hello, ' + args + '!', resolve, reject);
+					this.agent.see('bye', 'Hello, ' + args + '!').then(resolve).catch(reject);
 				}, 300);
 			};
 		}
 		
 		let writer = await Ceed('Writer');
 		
-		writer.see('write', ['Naive.hello', new Symbol(0, 'js', 'new (' + Hello.toString() + ')();')]);
-		writer.see('write', ['Naive.bye', new Symbol(0, 'js', 'new (' + Bye.toString() + ')();')]);
-		writer.see('write', ['Naive.timeout', new Symbol(0, 'js', 'new (' + HelloTimeout.toString() + ')();')]);
+		await writer.see('write', ['Naive.hello', new Symbol(0, 'js', 'new (' + Hello.toString() + ')();')]);
+		await writer.see('write', ['Naive.bye', new Symbol(0, 'js', 'new (' + Bye.toString() + ')();')]);
+		await writer.see('write', ['Naive.timeout', new Symbol(0, 'js', 'new (' + HelloTimeout.toString() + ')();')]);
 			
 		/*agent.see('getLibraries').then(l => {
 			console.log(l[0].toString());
@@ -140,6 +141,7 @@ describe('Ceed behaviors', function () {
 				let r = await agent.see('hello', 'world');
 				assert.equal(r, 'Hello, world! Bye!');
 			});
+            /** @deprecated
 			it('should work with callback', function (done) {
 				Ceed('Noe').then(agent => {
 					agent.see('hello', 'world', r => {
@@ -147,7 +149,7 @@ describe('Ceed behaviors', function () {
 						done();
 					});
 				});
-			});
+			});*/
 			it('should work with timeout', function (done) {
 				Ceed('Poe').then(agent => {
 					agent.see('timeout', 'world').then(r => {
