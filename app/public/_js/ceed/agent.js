@@ -25,27 +25,25 @@ export function SocketAgent(name, socket) {
 	//socket.join(name);
 	this.socket = socket;
 	
-	this.see = function (action, args, callback, reject) {
-		let r = {response: null};
-		r.response = new Promise((resolve, reject) => {
-			r.resolve = resolve;
-			r.reject = reject;
+	this.see = function (action, args) {
+		return new Promise((resolve, reject) => {
+            /*/
+            if (!callback) {
+                callback = (response) => {
+                    resolve(response);
+                };			
+            }
+            if (!fallback) {
+                fallback = (response) => {
+                    reject(response);
+                };
+            }
+            /**/
+
+            console.log(name, action, args);
+            this.socket.emit('see', name, action, args, resolve);
+
 		});
-		if (!callback) {
-			callback = (response) => {
-				r.resolve(response);
-			};			
-		}
-		if (!reject) {
-			reject = (response) => {
-				r.reject(response);
-			};
-		}
-
-		console.log(name, action, args);
-		this.socket.emit('see', name, action, args, callback);
-
-		return r.response;
 	};
 }
 

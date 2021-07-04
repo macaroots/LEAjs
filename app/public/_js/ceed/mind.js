@@ -84,8 +84,28 @@ export function NaiveMind(name, brain) {
 
 	this.errorBehavior = new Error(this);
 
-	this.see = function(perception) {
+	this.see = function(perception, callback, fallback) {
 		return new Promise((resolve, reject) => {
+            /**/
+            if (!callback) {
+				callback = resolve;
+			}
+			else {
+console.trace('@Deprecated see() should use Promise');
+				callback = ((call) => { return (response) => {
+					resolve(call(response));
+				}})(callback);
+			}
+			if (!fallback) {
+				fallback = reject;
+			}
+			else {
+console.trace('@Deprecated see() should use Promise');
+				fallback = ((call) => { return (response) => {
+					reject(call(response));
+				}})(fallback);
+			}
+			/**/
             self.seeBehavior.act(perception, resolve, reject);
         });
 	};
