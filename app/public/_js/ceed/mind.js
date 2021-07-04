@@ -106,7 +106,7 @@ console.trace('@Deprecated see() should use Promise');
 				}})(fallback);
 			}
 			/**/
-            self.seeBehavior.act(perception, resolve, reject);
+            self.seeBehavior.act(perception, callback, fallback);
         });
 	};
 	this.set = function(name, concept) {
