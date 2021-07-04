@@ -141,7 +141,7 @@ describe('Ceed behaviors', function () {
 				let r = await agent.see('hello', 'world');
 				assert.equal(r, 'Hello, world! Bye!');
 			});
-            /** @deprecated
+            /** @deprecated * /
 			it('should work with callback', function (done) {
 				Ceed('Noe').then(agent => {
 					agent.see('hello', 'world', r => {
@@ -149,7 +149,8 @@ describe('Ceed behaviors', function () {
 						done();
 					});
 				});
-			});*/
+			});
+            /**/
 			it('should work with timeout', function (done) {
 				Ceed('Poe').then(agent => {
 					agent.see('timeout', 'world').then(r => {
