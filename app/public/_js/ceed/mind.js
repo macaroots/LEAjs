@@ -164,8 +164,9 @@ console.trace('@Deprecated see() should use Promise');
 	
 	this.context = {};
 	
+    this.id = new Date().getTime();
 	this.toString = function() {
-		return this.getNames();
+		return this.getFullName() + '@' + this.id;
 	};
 }
 
