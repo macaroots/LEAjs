@@ -51,8 +51,6 @@ describe('Ceed', function () {
 		});
     });
   });
-});
-describe('Ceed', function () {
   describe('#getInstance(names) - Singleton', function () {
     it('should Promise the same agent Ceed', function (done) {
 		const name = 'Ceed';
@@ -67,7 +65,7 @@ describe('Ceed', function () {
 });
 
 describe('Ceed behaviors', function () {
-	context('*getName', async function () {
+	describe('*getName', async function () {
 		let agent = await Ceed('Joe');
 /** @deprecated */
 		context('when using callback', function () {
@@ -152,7 +150,7 @@ describe('Ceed behaviors', function () {
 				});
 			});
             /**/
-			it('should work with timeout', function (done) {
+			it('should work if action delays', function (done) {
 				Ceed('Poe').then(agent => {
 					agent.see('timeout', 'world').then(r => {
 						assert.equal(r, 'Hello, world! Bye!');
@@ -177,5 +175,18 @@ describe('Ceed behaviors', function () {
 				assert.equal(r.key, 'hello2');
 			});
 		});
+		describe('*study from multiple libraries', function() {
+            it('should');
+        });
+		describe('*extend super behaviors', function() {
+            it('should');
+            /*
+            a.see('set', ['print', (() => {
+                a.see('super.print')
+                ...
+            })()]);
+             * */
+        });
 	});
+    
 });

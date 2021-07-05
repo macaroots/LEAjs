@@ -20,12 +20,12 @@ function DontKnow() {
 		let agent = this.agent;
 		let mind = this.mind;
 		let learned = false;
-		let fullname = mind.getFullName();
+		let fullname = mind.toString();
 		
 		// check for infinite loops
 		mind.getAllBehavior.act('unkowns', function (dontKnow) {
 			if (dontKnow.indexOf(concept) != -1) {
-				console.log(mind.getFullName() + ' - Don\'t know "' + concept + '"! Ignoring');
+				console.debug(mind.toString() + ' - Don\'t know "' + concept + '"! Ignoring');
 				// Acho que tem que callback para destravar
 				return callback(); 
 			}
@@ -615,7 +615,7 @@ export class CeedAgent {
 		}
 	};
 	toString() {
-		return this.mind.getFullName();
+		return this.mind.toString();
 	};
 	
 	static ceed;
@@ -669,7 +669,7 @@ export const Ceed = (function () {
 
 export function AskAgent(helperName) {
 	this.act = async function (key, callback) {
-		console.log(this.agent.mind.getName() + ' - Asking: ' + key);
+		console.log(this.agent.mind.toString() + ' - Asking: ' + key);
 		var agent = this.agent;
 		Ceed(helperName).then(helper => {
 			helper.see('askFor', [agent, key]).then(callback);
