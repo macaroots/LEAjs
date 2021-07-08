@@ -12,7 +12,50 @@
 import {NaiveMind} from './mind.js';
 import {Symbol} from './brain.js';
 import {JSBrain} from './jsbrain.js';
-import {AjaxBrain} from './ajaxbrain.js';
+
+function Live() {
+	this.act = function (args, resolve, reject) {
+//console.log('LIVE');
+		const skills = {};
+		let agent = this.agent;
+		agent.skills = skills;
+		
+		// habilidades básicas para o ciclo Clever Editing
+		skills['dontKnow'] = new DontKnow();
+		skills['study'] = new Study();
+		skills['getLibraries'] = new GetLibraries();
+		skills['addLibrary'] = new AddLibrary();
+		skills['setLibrary'] = new SetLibrary();
+		skills['getLibrary'] = new GetLibrary();
+		skills['read'] = new CERead();
+		skills['ask'] = new Ask();
+		skills['askFor'] = new AskFor();
+		skills['hearAnswer'] = new HearAnswer();
+		skills['write'] = new CEWrite();
+		skills['understand'] = new Understand();
+		
+		// linguagens para interpretação de Symbols
+		skills['js'] = new JS();
+		
+		// não essenciais para o ciclo Clever Editing
+		// skills['live'] = new NaiveLive();
+		
+		skills['getAgent'] = new GetAgent();
+		skills['newAgent'] = new NewChildAgent();
+		skills['initAgent'] = new InitAgentSameLibrary();
+		skills['addListener'] = new AddListener();
+		skills['notify'] = new Notify();
+        
+		skills['help'] = new Help();
+		
+		agent.see('set', ['teach', new Teach()]).then(() => {
+            agent.see('teach', agent).then(() => {
+console.log(agent + ' - Ceed().live');
+                resolve(agent);
+            });
+        });
+	}
+}
 
 function DontKnow() {
 	this.act = function(perception, callback, reject) {
@@ -25,7 +68,7 @@ function DontKnow() {
 		// check for infinite loops
 		mind.getAllBehavior.act('unkowns', function (dontKnow) {
 			if (dontKnow.indexOf(concept) != -1) {
-				console.debug(mind.toString() + ' - Don\'t know "' + concept + '"! Ignoring');
+				console.debug(fullname + ' - Don\'t know "' + concept + '"! Ignoring');
 				// Acho que tem que callback para destravar
 				return callback(); 
 			}
@@ -34,7 +77,6 @@ function DontKnow() {
 
                 // search in books
                 agent.see('study', concept).then(function (learned) {
-                    console.log(fullname + ' - Studied "' + concept + '": ' + learned);
                     if (learned) {
                         mind.see(perception).then(callback).catch(reject);
                     }
@@ -89,6 +131,7 @@ function Study() {
 					console.log('after', concept);
 				}
 
+                console.debug(agent + ' - Studied "' + concept + '": ' + (representations.length > 0));
 				agent.see('understand', [concept, representation]).then(callback); /*, function (learned) {
 					callback(learned);
 				});*/
@@ -100,39 +143,32 @@ function Study() {
 		
 	};
 }
-function GetLibraries0() {
-	this.act = function(args, callback) {
-		let mind = this.mind;
-		mind.get('library').then(function (library) {
-			if (library == null) {
-				//library = new AjaxBrain();
-				library = new JSBrain();
-				mind.set('library', library);
-			}
-			callback([library]);
-		});
-	};
-}
 function GetLibraries() {
-	this.act = function(args, callback) {
+	this.act = function(args, resolve, reject) {
 		let agent = this.agent;
 		let libraries = agent.libraries;
-		if (!libraries || libraries.length == 0) {
-			let library = new JSBrain();
-			agent.see('addLibrary', library).then(callback);
+		if (!this.agent.libraries) {
+            libraries = [new JSBrain()];
+			this.agent.libraries = libraries;
 		}
-		else {
-			callback(libraries);
-		}
+        resolve(libraries);
 	};
 }
+function GetLibrary() {
+	this.act = function(args, resolve, reject) {
+		this.agent.see('getLibraries').then(libraries => {
+		    let library = libraries[libraries.length - 1];
+            resolve(library);
+        });
+	};
+}
+
 function AddLibrary() {
-	this.act = function (library, callback) {
-		if (!this.agent.libraries) {
-			this.agent.libraries = [];
-		}
-		this.agent.libraries.push(library);
-		callback(this.agent.libraries);
+	this.act = function (library, resolve, reject) {
+		this.agent.see('getLibraries').then(libraries => {
+            libraries.push(library);
+            resolve(libraries);
+        });
 	};
 }
 function SetLibrary() {
@@ -151,7 +187,7 @@ function CERead() {
 		let mind = this.mind;
 		
 		agent.see("getLibraries").then(function (brains) {
-//console.log('CEREAD2', concept);
+//console.log('CEREAD2', agent.toString(), concept, brains);
 			let booknames;
 			if (concept.indexOf('.') == -1) {	
 				booknames = mind.getNames();
@@ -168,9 +204,9 @@ function CERead() {
 				concept = type[1];
 			}
 			
+            /*/
 			let totalBooks = brains.length * booknames.length;
 			let booksRead = 0;
-            /*/
             for (let j in brains) {
 				let brain = brains[j];
 				for (let i = totalBooks - 1; i >= 0; i--) {
@@ -191,10 +227,9 @@ function CERead() {
 				}
 			}
             /*/
-			for (let j in brains) {
-				let brain = brains[j];
-				for (let i = totalBooks - 1; i >= 0; i--) {
-				//for (let i in booknames) {
+            for (let i = booknames.length - 1; i >= 0; i--) {
+                for (let j in brains) {
+                    let brain = brains[j];
 					let bookname = booknames[i];
 					let argsRead = [brain, bookname, concept];
                     
@@ -204,10 +239,7 @@ function CERead() {
 //console.log('CEREAD3');// brains, representations);
             Promise.all(representations).then(meanings => {
 //console.log('CEREAD4', meanings);
-                let r = [];
-                for (let i in meanings) {
-                    r = r.concat(meanings[i]);
-                }
+                let r = meanings.flat();
 //console.log('CEREAD5', r);
                 resolve(r);
 			});
@@ -228,8 +260,8 @@ function CEWrite() {
 		
 		let agent = this.agent;
 		let mind = this.mind;
-		agent.see("getLibraries").then(function (brains) {
-			//let brain = brains[0];
+		agent.see("getLibrary").then(function (brain) {
+			let brains = [brain];
 			let bookname;
 			if (concept.indexOf('.') == -1) {	
 				bookname = mind.getName();
@@ -322,6 +354,7 @@ function HearAnswer() {
 	 */
 	this.act = function(args, callback) {
 		let agent = this.agent;
+console.log(agent + ' - HEAR', args);
 		agent.see('write', args);
 		agent.see('understand', args).then(callback);
 	};
@@ -386,7 +419,7 @@ function Teach() {
 
 function NaiveLive() {
 	this.act = function (args, callback) {
-//console.log('Naive.live', this.agent.toString());
+console.log(this.agent + ' - Ceed.live');
 		callback(this.agent);
 	}
 }
@@ -440,51 +473,6 @@ function Help() {
 	};
 }
 
-function Live() {
-	this.act = function (args, resolve, reject) {
-//console.log('LIVE');
-		const skills = {};
-		let agent = this.agent;
-		agent.skills = skills;
-		
-		// habilidades básicas para o ciclo Clever Editing
-		skills['dontKnow'] = new DontKnow();
-		skills['study'] = new Study();
-		skills['getLibraries'] = new GetLibraries();
-		skills['addLibrary'] = new AddLibrary();
-		skills['setLibrary'] = new SetLibrary();
-		skills['read'] = new CERead();
-		skills['ask'] = new Ask();
-		skills['askFor'] = new AskFor();
-		skills['hearAnswer'] = new HearAnswer();
-		skills['write'] = new CEWrite();
-		skills['understand'] = new Understand();
-		
-		// linguagens para interpretação de Symbols
-		skills['js'] = new JS();
-		
-		// não essenciais para o ciclo Clever Editing
-		// skills['live'] = new NaiveLive();
-		
-		skills['getAgent'] = new GetAgent();
-		skills['newAgent'] = new NewChildAgent();
-		skills['initAgent'] = new InitAgentSameLibrary();
-		skills['addListener'] = new AddListener();
-		skills['notify'] = new Notify();
-        
-		skills['help'] = new Help();
-		
-		agent.see('set', ['teach', new Teach()]).then(() => {
-            agent.see('teach', agent).then(() => {
-agent.see('getNames').then(name => {
-    console.log('Ceed.live', name);
-});
-                resolve(agent);
-            });
-        });
-	}
-}
-
 export function InitAgentSameLibrary() {
 	this.act = async function (agent, callback) {
 		let ceed = this.agent;
@@ -502,6 +490,7 @@ export function InitAgentSameLibrary() {
             }
             Promise.all(promises).then(() => {
 				//callback(agent);
+                // TODO acho que não deve chamar logo o live!
 				agent.see('live').then(() => {
 					callback(true);
 				});
@@ -611,6 +600,9 @@ export class CeedAgent {
 	constructor(mind) {
 		this.mind = mind;
 		this.see = function (type, info, callback, fallback) {
+            if (callback) {
+console.trace('@Deprecated CEED', this + '.see(' + type + ') should use Promise');
+			}
 			return this.mind.see(new Symbol(0, type, info), callback, fallback);
 		}
 	};
@@ -667,16 +659,26 @@ export const Ceed = (function () {
 	};
 })();
 
+export function AskListeners(helperName) {
+    this.act = function (key, resolve, reject) {
+		console.log(this.agent + ' - Asking: ' + key);
+		var agent = this.agent;
+		Ceed(helperName).then(helper => {
+            helper.see('notify', ['question', [agent, key]]);
+        });
+    };
+}
+
 export function AskAgent(helperName) {
 	this.act = async function (key, callback) {
-		console.log(this.agent.mind.toString() + ' - Asking: ' + key);
+		console.log(this.agent + ' - Asking: ' + key);
 		var agent = this.agent;
 		Ceed(helperName).then(helper => {
 			helper.see('askFor', [agent, key]).then(callback);
 			
 			agent.see('addListener', ['answer', helper]);
 		});
-	}
+	};
 }
 export function HearAnswerNotify() {
 	/**
@@ -684,6 +686,7 @@ export function HearAnswerNotify() {
 	 */
 	this.act = function(args, callback) {
 		let agent = this.agent;
+console.log(agent + ' - HEAR_NOTIFY', args);
 		agent.see('write', args);
 		agent.see('understand', args).then((learned) => {
 			if (learned) {

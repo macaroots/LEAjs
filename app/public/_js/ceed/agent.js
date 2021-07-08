@@ -23,6 +23,7 @@ export function HTTPAgent(endereco) {
 export function SocketAgent(name, socket) {
 	//var socket = io();
 	//socket.join(name);
+    const self = this;
 	this.socket = socket;
 	
 	this.see = function (action, args) {
@@ -41,7 +42,12 @@ export function SocketAgent(name, socket) {
             /**/
 
             console.log(name, action, args);
-            this.socket.emit('see', name, action, args, resolve);
+            if (!self.socket) {
+                console.error('Socket missing!');
+            }
+            else {
+                self.socket.emit('see', name, action, args, resolve);
+            }
 
 		});
 	};

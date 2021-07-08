@@ -36,7 +36,7 @@ Muda o comportamento que o Ceed deve ensinar aos agentes;
  */
 function Live() {
 	this.act = async function(args, resolve, reject) {
-		console.log('LEA.live', this.agent.toString());
+		console.log(this.agent + '- LEA.live');
 		
 		// estuda enquanto tem o Ceed.JSBrain
 		let lea = this.agent;
@@ -45,18 +45,23 @@ function Live() {
             lea.see('study', 'listen'),
             lea.see('study', 'http'),
             // servidor Socket
-            lea.see('study', 'OnSocketConnection'),
-            lea.see('study', 'OnSocketSee'),
+            lea.see('study', 'onSocketConnection'),
+            lea.see('study', 'onSocketSee'),
             // concentra perguntas
             lea.see('study', 'askFor'),
             lea.see('study', 'onAnswer')
         ]);
 		
 		// todos os agentes a partir de agora perguntam pro LEA
-		// TODO efeito colateral! talvez, all over the place.
+		// TODO efeito colateral!? talvez, all over the place.
 		let ceed = await Ceed();
+        /*/
+        // não mudaria o que tem dentro. mas adiciona burocracia.
+        //ceed.see('addListener', ['question', lea]);
+        /**/
 		ceed.skills['ask'] = new AskAgent('LEA');
 		ceed.skills['hearAnswer'] = new HearAnswerNotify();
+        /**/
 		resolve(true);
 	};
 }
@@ -108,7 +113,7 @@ console.log('Initializing server...');
             })()]);
             lea.see('addListener', ['serverInitialized', lea]);
             
-			/*/
+			/**/
             const brain = await Ceed('Brain');
             await brain.see('setLibrary', mysqlBrain);
 			await brain.see('study', 'reason');
@@ -160,8 +165,8 @@ function Heared() {
 		callback();
 	}
 }
-function AskFor() {
-	this.act = function(args, callback) {
+function OnQuestion() {
+	this.act = function([agent, key], callback) {
 		let lea = this.agent;
 		if (!lea.agents) {
 			lea.agents = {};
@@ -169,8 +174,6 @@ function AskFor() {
 		if (!lea.questions) {
 			lea.questions = {};
 		}
-		let agent = args[0];
-		let key = args[1];
 		agent.see('getFullName').then(function (name) {
 			if (!lea.agents[name]) {
 				lea.agents[name] = agent;
@@ -180,7 +183,7 @@ function AskFor() {
 			}
 			lea.questions[name].push(key);
 			
-			console.log(lea.toString() + ' asking for ' + agent.toString() + ' "' + args[1] + '"');
+			console.log(lea.toString() + ' asking for ' + agent.toString() + ' "' + key + '"');
 			if (lea.io) {
 				lea.io.emit('question', [name, key]);
 			}
@@ -209,6 +212,7 @@ function Listen() {
 		let express = (await import('express')).default;
 		const app = express();
 		const server = http.createServer(app);
+        // TODO não deixa ligar vários servidores
 		agent.app = app;
 		agent.server = server;
         
@@ -224,10 +228,11 @@ function Listen() {
 		let sio = io(server);
 		agent.io = sio;
 		sio.on('connection', (socket) => {
-			agent.see('OnSocketConnection', socket);
+			agent.see('onSocketConnection', socket);
 		});
 
 		// Rotas
+        // TODO colocar numa ação
 		/**/
 		app.get('/*', (req, res) => {
 			agent.see('http', [req, res]);
@@ -269,7 +274,7 @@ function Http() {
 		}
 		Ceed(agentName + 'Controller Controller').then(async agent => {
 			try {
-				await agent.see('live');
+				//await agent.see('live');
 				await agent.see('preDispatch', args);
 				await agent.see(actionName, args);
 				await agent.see('postDispatch', args);
@@ -288,7 +293,7 @@ function OnSocketConnection() {
 		let lea = this.agent;
 		
 		socket.on('see', (agent, action, args, callback) => {
-			lea.see('OnSocketSee', [agent, action, args]).then(callback);
+			lea.see('onSocketSee', [agent, action, args]).then(callback);
 		});
 		
 		//socket.join('/lea')
@@ -343,9 +348,9 @@ await Promise.all([
 	ceed.see('write', ['LEA.initHttpBrain', new Symbol(0, 'js', 'new (' + InitHttpBrain.toString() + ')();')]),
 	ceed.see('write', ['LEA.http', new Symbol(0, 'js', 'new (' + Http.toString() + ')();')]),
 	ceed.see('write', ['LEA.listen', new Symbol(0, 'js', 'new (' + Listen.toString() + ')();')]),
-	ceed.see('write', ['LEA.OnSocketConnection', new Symbol(0, 'js', 'new (' + OnSocketConnection.toString() + ')();')]),
-	ceed.see('write', ['LEA.OnSocketSee', new Symbol(0, 'js', 'new (' + OnSocketSee.toString() + ')();')]),
-	ceed.see('write', ['LEA.askFor', new Symbol(0, 'js', 'new (' + AskFor.toString() + ')();')]),
+	ceed.see('write', ['LEA.onSocketConnection', new Symbol(0, 'js', 'new (' + OnSocketConnection.toString() + ')();')]),
+	ceed.see('write', ['LEA.onSocketSee', new Symbol(0, 'js', 'new (' + OnSocketSee.toString() + ')();')]),
+	ceed.see('write', ['LEA.askFor', new Symbol(0, 'js', 'new (' + OnQuestion.toString() + ')();')]),
 	ceed.see('write', ['LEA.onAnswer', new Symbol(0, 'js', 'new (' + Heared.toString() + ')();')]),
 	// Controller
 	ceed.see('write', ['Controller.EmptyAction', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')]),
