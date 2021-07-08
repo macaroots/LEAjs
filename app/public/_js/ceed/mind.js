@@ -31,6 +31,7 @@ import {CeedAgent} from './ceed.js';
 import {Symbol, Link} from './brain.js';
 import {JSBrain} from './jsbrain.js';
 export function NaiveMind(name, brain) {
+    const self = this;
 	this.setName = function(name) {
 		let names = name.split(' ');
 		names.push('Naive');
@@ -83,8 +84,30 @@ export function NaiveMind(name, brain) {
 
 	this.errorBehavior = new Error(this);
 
-	this.see = function(perception, resolve, reject) {
-		return this.seeBehavior.act(perception, resolve, reject);
+	this.see = function(perception, callback, fallback) {
+		return new Promise((resolve, reject) => {
+            /**/
+            if (!callback) {
+				callback = resolve;
+			}
+			else {
+console.trace('@Deprecated MIND', self.toString() + '.see(' + perception + ') should use Promise');
+				callback = ((call) => { return (response) => {
+					resolve(call(response));
+				}})(callback);
+			}
+			if (!fallback) {
+				fallback = reject;
+			}
+			else {
+//console.trace('@Deprecated see() should use Promise');
+				fallback = ((call) => { return (response) => {
+					reject(call(response));
+				}})(fallback);
+			}
+			/**/
+            self.seeBehavior.act(perception, callback, fallback);
+        });
 	};
 	this.set = function(name, concept) {
 		return new Promise((resolve, reject) => {
@@ -92,14 +115,30 @@ export function NaiveMind(name, brain) {
 				concept = name;
 				name = typeof(concept);
 			}
-			this.setBehavior.act([name, concept], resolve, reject);
+			self.setBehavior.act([name, concept], resolve, reject);
 		});
 	};
-	this.get = function(concept, resolve, reject) {
-		this.getBehavior.act(concept, resolve, reject);
+	this.get = function(concept) {
+		return new Promise((resolve, reject) => {
+            self.getBehavior.act(concept, resolve, reject);
+        });
 	};
-	this.act = function(action, object, resolve, reject) {
-		this.actBehavior.act([action, object], resolve, reject);
+	this.act = function(action, object) {
+		return new Promise((resolve, reject) => {
+            self.actBehavior.act([action, object], resolve, reject);
+        });
+	};
+    
+    
+	this.read = function(args) {
+		return new Promise((resolve, reject) => {
+            self.readBehavior.act(args, resolve, reject);
+        });
+	};
+	this.write = function(args) {
+		return new Promise((resolve, reject) => {
+            self.writeBehavior.act(args, resolve, reject);
+        });
 	};
 
 	let body = new CeedAgent(this);
@@ -125,8 +164,9 @@ export function NaiveMind(name, brain) {
 	
 	this.context = {};
 	
+    this.id = new Date().getTime();
 	this.toString = function() {
-		return this.getNames();
+		return this.getName() + '@' + this.id;
 	};
 }
 
@@ -147,63 +187,38 @@ function GetFullName(mind) {
 }
 function See(mind) {
 	this.mind = mind;
-	this.act = function(perception, callback, fallback) {
-		let promise = new Promise((resolve, reject) => {
-			if (!callback) {
-				callback = resolve;
-			}
-			else {
-				callback = ((call) => { return (response) => {
-					resolve(call(response));
-				}})(callback);
-			}
-			if (!fallback) {
-				fallback = reject;
-			}
-			else {
-				fallback = ((call) => { return (response) => {
-					reject(call(response));
-				}})(fallback);
-			}
-			
-			let mind = this.mind;
-			
-			let type = perception.type;
-			
-			
-			/*
-			TODO atualizar Promise
-				com cuidado pra não quebrar a Interface
-					ou talvez possa mudar a Interface. O Mind é implementação interna.
-			*/
-			// procura uma acao
-			mind.get(type, function (action) {
-				if (action != null) {
-					// act() já lida com os erros
-					// try {
-						mind.act(action, perception.info, callback, fallback);
-					/*}
-					catch (e) {
-						if (type != null && type != 'notAction' && type != 'dontKnow') {
-							mind.see(new Symbol(0, 'notAction', [action, perception]), callback, reject);
-						}
-					}*/
-				}
-				else {
-					/*
-					   se nao, procura o que fazer quando nao sabe, que deve
-					   de alguma forma tentar aprender.
-					   Bem, isso pode ser decidido depois.
-					   That's the hook!
-					*/
-					if (type != null && type != 'dontKnow') {
-						mind.see(new Symbol(0, "dontKnow", perception)).then(callback).catch(fallback);
-					}
-				}
-			});
-		
-		});
-		return promise;
+	this.act = function(perception, resolve, reject) {
+        let mind = this.mind;
+        
+        try {
+            let type = perception.type;
+            
+            // procura uma acao
+            mind.get(type).then(function (action) {
+                if (action != null) {
+                    // act() já lida com os erros
+                    try {
+                        mind.act(action, perception.info).then(resolve).catch(reject);
+                    }
+                    catch (e) {
+                        mind.errorBehavior.act([args, e], resolve, reject);
+                    }
+                }
+                else {
+                    /*
+                        se nao, procura o que fazer quando nao sabe, que deve
+                        de alguma forma tentar aprender.
+                        Bem, isso pode ser decidido depois.
+                        That's the hook!
+                    */
+                    if (type != null && type != 'dontKnow') {
+                        mind.see(new Symbol(0, "dontKnow", perception)).then(resolve).catch(reject);
+                    }
+                }
+            }).catch(reject);
+        } catch (e) {
+            reject(e);
+        }
 	};
 }
 
@@ -252,17 +267,16 @@ function Set(mind) {
 		if (bookname == mind.getName() || body[args[0]] == null) {
 			body[args[0]] = args[1];
 		}
-		mind.writeBehavior.act([brain, bookname, args], resolve, reject);
+		mind.write([brain, bookname, args]).then(resolve).catch(reject);
 	};
 }
 
 function GetAll(mind) {
 	this.mind = mind;
-	this.act = function(concept, callback, reject) {
-		let meanings = {};
-		
+	this.act = function(concept, callback, reject) {		
 		let mind = this.mind;
 		let brain = mind.getBrain();
+//console.log('GetAll1', brain, brain.toString(), 1);
 		let booknames;
 
 		if (concept.indexOf('.') == -1) {	
@@ -280,25 +294,33 @@ function GetAll(mind) {
 			concept = type[1];
 		}
 		// TODO atualizar Promise
+		let promises = [];
 		for (let i = booknames.length - 1; i >= 0; i--) {
 			let bookname = booknames[i];
 			let args = [brain, bookname, concept];
-			mind.readBehavior.act(args, new (function (index) { return function (symbols) {
-				meanings[index] = [];
+            
+            promises.push(mind.read(args).then(symbols => {
+//console.log('GetAll2', symbols);
+                let meanings = [];
 				for (let j in symbols) {
 					let s = symbols[j];
-					meanings[index].push(s.info);
+					meanings.push(s.info);
 				}
-				let keysLength = Object.keys(meanings).length;
-				if (keysLength >= booknames.length) {
-					let r = [];
-					for (let i in meanings) {
-						r = r.concat(meanings[i]);
-					}
-					callback(r);
-				}
-			}})(i));
-		}
+				return meanings;
+            }));
+        }
+//console.log('GetAll3', concept, promises);
+        Promise.all(promises).then(meanings => {
+            let r = [];
+            for (let i in meanings) {
+                r = r.concat(meanings[i]);
+            }
+//console.log('GetAll4', meanings);
+//console.log('GetAll5', r);
+            callback(r);
+        }).catch(e => {
+            console.error('ERROR GetAll', e);
+        });
 	};
 }
 function Get(mind) {
@@ -334,12 +356,13 @@ function Error(mind) {
 			let e = args[1];
 			let action = args[0][0];
 			let target = args[0][1];
-			console.error("Error!", mind.getName(), ":", action, "(", target, ") - ", typeof(e), ':', e);
+			console.trace(mind + " - ERROR:" + action + "(" + target + ") - ", typeof(e), ':', e);
 		} catch (e) {
 			console.error('CRITICAL ERROR', e);
+            reject(e)
 		}
 		// TODO rejeita ou não? Deu uma destravada rejeitando
-		reject();
+		resolve();
 	};
 }
 
@@ -369,7 +392,7 @@ function Act(mind) {
 }
 	
 function WriteBrain() {
-	this.act = function(args, callback, reject) {
+	this.act = function(args, resolve, reject) {
 		let brain = args[0];
 		let keyname = args[1];
 		let name = args[2][0];
@@ -393,20 +416,19 @@ function WriteBrain() {
 			value = new Symbol(0, typeof(value), value);
 		}
 		// checks if each symbol already exists
-		brain.get(key, function (keys) {
+		brain.get(key).then(function (keys) {
 			if (keys && keys.length > 0) {
 				key = keys[0];
 			}
-			brain.get(relation, function (relations) {
+			brain.get(relation).then(function (relations) {
 				if (relations && relations.length > 0) {
 					relation = relations[0];
 				}
-				brain.get(value, function (concepts) {
+				brain.get(value).then(function (concepts) {
 					if (concepts && concepts.length > 0) {
 						value = concepts[0];
 					}
-					// TODO atualizar Promise
-					brain.tie(new Link(key, relation, value), callback);
+					brain.tie(new Link(key, relation, value)).then(resolve);
 				});
 			});
 		});
@@ -414,7 +436,7 @@ function WriteBrain() {
 }
 	
 function ReadBrain() {
-	this.act = function(args, callback, reject) {
+	this.act = function(args, resolve, reject) {
 
 		let brain = args[0];
 		let bookname = args[1];
@@ -424,14 +446,16 @@ function ReadBrain() {
 		
 		let relation = new Symbol(0, null, concept);
 		// TODO atualizar Promise
-		brain.reason(new Link(book, relation), function (links) {
+		brain.reason(new Link(book, relation)).then(function (links) {
+//console.log('READ_BRAIN1', bookname, concept, links);
 			let meanings = [];
 			for (let i in links) {
 				let link = links[i];
 				let meaning = link.b;
 				meanings.push(meaning);
 			}
-			callback(meanings);
+//console.log('READ_BRAIN', bookname, concept, meanings);
+			resolve(meanings);
 		});
 	};
 }

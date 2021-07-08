@@ -15,7 +15,7 @@ describe('NaiveMind', function () {
 	describe('*intelligence', function () {
 		it('should be able to acquire and apply knowledge', async function () {
 			let agent = new NaiveMind('Joe').body;
-			agent.see('hello', 'world').then(r => {
+			await agent.see('hello', 'world').then(r => {
 				assert.equal(r, null);
 			});
 			function Hello() {
@@ -23,7 +23,12 @@ describe('NaiveMind', function () {
 					resolve('Hello, ' + args + '!');
 				};
 			}
-			agent.see('set', ['hello', new Hello()]);
+			let hello = new Hello();
+			await agent.see('set', ['hello', hello]);
+            let hello2 = await agent.see('get', 'hello');
+            assert.equal(hello, hello2);
+            let hellos = await agent.see('getAll', 'hello');
+            assert.equal(hello, hellos[0]);
 			let r = await agent.see('hello', 'world');
 			assert.equal(r, 'Hello, world!');
 			let r2 = await agent.see('hello', 'Joe');

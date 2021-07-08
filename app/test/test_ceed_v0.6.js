@@ -51,8 +51,6 @@ describe('Ceed', function () {
 		});
     });
   });
-});
-describe('Ceed', function () {
   describe('#getInstance(names) - Singleton', function () {
     it('should Promise the same agent Ceed', function (done) {
 		const name = 'Ceed';
@@ -67,9 +65,10 @@ describe('Ceed', function () {
 });
 
 describe('Ceed behaviors', function () {
-	context('*getName', async function () {
+	describe('*getName', async function () {
 		let agent = await Ceed('Joe');
-		context('when callback is not null', function () {
+/** @deprecated */
+		context('when using callback', function () {
 			it('should callback the name', function (done) {
 				agent.see('getName', 0, (name) => {
 					assert.equal(name, 'Joe');
@@ -77,6 +76,7 @@ describe('Ceed behaviors', function () {
 				});
 			});
 		});
+        /**/
 		describe('when using then', function () {
 			it('should resolve the name', function () {
 				agent.see('getName', 0).then((name) => {
@@ -105,26 +105,26 @@ describe('Ceed behaviors', function () {
 		}
 		function Hello() {
 			this.act = function (args, resolve, reject) {
-				this.agent.see('bye', 'Hello, ' + args + '!', resolve, reject);
+				this.agent.see('bye', 'Hello, ' + args + '!').then(resolve).catch(reject);
 			};
 		}
 		function HelloTimeout() {
 			this.act = function (args, resolve, reject) {
 				setTimeout(() => {
-					this.agent.see('bye', 'Hello, ' + args + '!', resolve, reject);
+					this.agent.see('bye', 'Hello, ' + args + '!').then(resolve).catch(reject);
 				}, 300);
 			};
 		}
 		
 		let writer = await Ceed('Writer');
 		
-		writer.see('write', ['Naive.hello', new Symbol(0, 'js', 'new (' + Hello.toString() + ')();')]);
-		writer.see('write', ['Naive.bye', new Symbol(0, 'js', 'new (' + Bye.toString() + ')();')]);
-		writer.see('write', ['Naive.timeout', new Symbol(0, 'js', 'new (' + HelloTimeout.toString() + ')();')]);
+		await writer.see('write', ['Naive.hello', new Symbol(0, 'js', 'new (' + Hello.toString() + ')();')]);
+		await writer.see('write', ['Naive.bye', new Symbol(0, 'js', 'new (' + Bye.toString() + ')();')]);
+		await writer.see('write', ['Naive.timeout', new Symbol(0, 'js', 'new (' + HelloTimeout.toString() + ')();')]);
 			
-		/*agent.see('getLibraries').then(l => {
-			console.log(l[0].toString());
-		});*/
+/*agent.see('getLibraries').then(l => {
+    console.log(l[0].toString());
+});*/
 		// TODO testar pedir várias vezes a mesma ação, enquanto ainda tá estudando
 		describe('*study (read key from brain)', function () {
 			it('should work with Promise', function (done) {
@@ -140,6 +140,7 @@ describe('Ceed behaviors', function () {
 				let r = await agent.see('hello', 'world');
 				assert.equal(r, 'Hello, world! Bye!');
 			});
+/** @deprecated */
 			it('should work with callback', function (done) {
 				Ceed('Noe').then(agent => {
 					agent.see('hello', 'world', r => {
@@ -148,7 +149,8 @@ describe('Ceed behaviors', function () {
 					});
 				});
 			});
-			it('should work with timeout', function (done) {
+            /**/
+			it('should work if action delays', function (done) {
 				Ceed('Poe').then(agent => {
 					agent.see('timeout', 'world').then(r => {
 						assert.equal(r, 'Hello, world! Bye!');
@@ -172,6 +174,36 @@ describe('Ceed behaviors', function () {
 				await agent.see('hello2', 'world');
 				assert.equal(r.key, 'hello2');
 			});
+            /*/
+			it('Ceed should notify questions', async function (done) {
+				
+				let r = {};
+				let agent = await Ceed('Roe');
+                agent.see('set', ['onQuestion', (function OnQuestion(r) {
+					this.act = function ([agent, key], resolve, reject) {
+                        assert.equal(key, r);
+                        done();
+						resolve();
+					};
+				})('b')]);
+                (await Ceed()).see('addListener', ['question', agent]);
+				agent.see('ask', 'a');
+                
+			});
+            /**/
 		});
+		describe('*study from multiple libraries', function() {
+            it('should');
+        });
+		describe('*extend super behaviors', function() {
+            it('should');
+            /*
+            a.see('set', ['print', (() => {
+                a.see('super.print')
+                ...
+            })()]);
+             * */
+        });
 	});
+    
 });

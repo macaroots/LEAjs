@@ -23,29 +23,33 @@ export function HTTPAgent(endereco) {
 export function SocketAgent(name, socket) {
 	//var socket = io();
 	//socket.join(name);
+    const self = this;
 	this.socket = socket;
 	
-	this.see = function (action, args, callback, reject) {
-		let r = {response: null};
-		r.response = new Promise((resolve, reject) => {
-			r.resolve = resolve;
-			r.reject = reject;
+	this.see = function (action, args) {
+		return new Promise((resolve, reject) => {
+            /*/
+            if (!callback) {
+                callback = (response) => {
+                    resolve(response);
+                };			
+            }
+            if (!fallback) {
+                fallback = (response) => {
+                    reject(response);
+                };
+            }
+            /**/
+
+            console.log(name, action, args);
+            if (!self.socket) {
+                console.error('Socket missing!');
+            }
+            else {
+                self.socket.emit('see', name, action, args, resolve);
+            }
+
 		});
-		if (!callback) {
-			callback = (response) => {
-				r.resolve(response);
-			};			
-		}
-		if (!reject) {
-			reject = (response) => {
-				r.reject(response);
-			};
-		}
-
-		console.log(name, action, args);
-		this.socket.emit('see', name, action, args, callback);
-
-		return r.response;
 	};
 }
 

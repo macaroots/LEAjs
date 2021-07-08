@@ -5,37 +5,51 @@
 	<meta charset="utf-8" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="socket.io/socket.io.js"></script>
-	<script type="module">
-	import {Ceed} from  './_js/ceed/ceed.js';
-	import {AjaxBrain} from  './_js/ceed/ajaxbrain.js';
-	import {AskScript} from  './_js/agents/script.js';
-	import {SocketAgent} from  './_js/agents/lea_client.js';
-	window.Ceed = Ceed;
-	window.SocketAgent = SocketAgent;
-	window.AskScript = AskScript;
 
-	$(function() {
-		Ceed().then(ceed => {
-			ceed.skills['ask'] = new AskScript();
-			
-			Ceed('Script').then(script => {
-				window.script = script;
-				script.see('live', 'body');
-			}); 
-			Ceed('LEAClient').then(ombuds => {
-				window.ombuds = ombuds;
-				ombuds.see('connect');
-			});
-			
-			Ceed('Joe').then(agent => {
-				window.agent = agent;
-				//agent.see('setLibrary', new AjaxBrain('/brain/'));
-				agent.see('hello', 'world');
-			});
-		});
-	});
 	</script>
 </head>
 <body>
 </body>
+<script type="module">
+import {AskAgent, Ceed} from  './_js/ceed/ceed.js';
+import {AjaxBrain} from  './_js/ceed/ajaxbrain.js';
+import {} from  './_js/agents/naive.js';
+import {} from  './_js/agents/element.js';
+import {} from  './_js/agents/ce.js';
+import {} from  './_js/agents/tools.js';
+import {} from  './_js/agents/script.js';
+import {} from  './_js/agents/ceed.js';
+import {SocketAgent} from  './_js/ceed/agent.js';
+window.Ceed = Ceed;
+window.SocketAgent = SocketAgent;
+window.AskAgent = AskAgent;
+
+Ceed().then(async ceed => {
+    ceed.skills['ask'] = new AskAgent('Script');
+    
+    const ce = await Ceed('CE');
+    window.ce = ce;
+    await ce.see('study', 'appendTo');
+    await ce.see('appendTo', 'body');
+    
+    
+    ceed.see('connect');
+    /*Ceed('Script').then(script => {
+        window.script = script;
+        script.see('live', 'body');
+    });
+    * /
+    Ceed('LEAClient').then(ombuds => {
+        window.ombuds = ombuds;
+        ombuds.see('connect');
+    });
+    /*
+    Ceed('renato').then(agent => {
+        window.agent = agent;
+        //agent.see('setLibrary', new AjaxBrain('/brain/'));
+        agent.see('hello', 'world');
+    });
+    */
+});
+</script>
 </html>

@@ -5,6 +5,9 @@
  * Released under the AGPL-3.0 License
  * https://github.com/macaroots/LEAjs/blob/main/LICENSE
  */
+/*
+ * Tentativa de evitar await Ceed(), adicionando o método see() na promessa.
+ */
 
 import {NaiveMind} from './mind.js';
 import {Symbol} from './brain.js';

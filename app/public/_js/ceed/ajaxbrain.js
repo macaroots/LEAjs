@@ -18,71 +18,87 @@ export function AjaxBrain(endereco) {
 	let responses = {};
 	this.responses = responses;
 	
-	this.get = function (symbol, callback) {
-		if (symbol == null) {
-			symbol = {};
-		}
-		if (typeof symbol == 'string') {
-			symbol = {
-				info: symbol
-			};
-		}
-		let text = JSON.stringify(symbol);
-		let oldResponse = responses[text];
-		if (oldResponse) {
-			callback(oldResponse);
-			return;
-		}
-		$.post(this.endereco + "gets", {
-			impl: symbol.impl,
-			id: symbol.id,
-			type: symbol.type,
-			info: symbol.info,
-			busca: symbol.busca,
-			ordem: symbol.ordem
-	    }, function (response) {
-			responses[text] = response;
-			callback(response);
-		});
+	this.get = function (symbol) {
+		return new Promise((resolve, reject) => {
+            if (symbol == null) {
+                symbol = {};
+            }
+            if (typeof symbol == 'string') {
+                symbol = {
+                    info: symbol
+                };
+            }
+            /*/
+            // cache simples
+            let text = JSON.stringify(symbol);
+            let oldResponse = responses[text];
+            if (oldResponse) {
+                callback(oldResponse);
+                return;
+            }
+            /**/
+            $.post(this.endereco + "gets", {
+                impl: symbol.impl,
+                id: symbol.id,
+                type: symbol.type,
+                info: symbol.info,
+                busca: symbol.busca,
+                ordem: symbol.ordem
+            }, function (response) {
+                //responses[text] = response;
+                resolve(response);
+            });
+        });
 	};
-	this.set = function (symbol, callback) {
-		$.post(this.endereco + "sets", {
-			impl: symbol.impl,
-			id: symbol.id,
-			type: symbol.type,
-			info: symbol.info
-		}, function (s) {
-			symbol.id = s.id;
-			callback(s);
-		});
+	this.set = function (symbol) {
+		return new Promise((resolve, reject) => {
+            $.post(this.endereco + "sets", {
+                impl: symbol.impl,
+                id: symbol.id,
+                type: symbol.type,
+                info: symbol.info
+            }, function (s) {
+                symbol.id = s.id;
+                resolve(s);
+            });
+        });
 	};
 	this.tie = function (no, callback) {
-		$.post(this.endereco + "tie", {
-			a: no.a,
-			b: no.b,
-			r: no.r
-		}, callback);
+		return new Promise((resolve, reject) => {
+            $.post(this.endereco + "tie", {
+                a: no.a,
+                b: no.b,
+                r: no.r
+            }, resolve);
+        });
 	};
-	this.untie = function (no, callback) {
-		this.clearLink(no);
-		$.post(this.endereco + "untie", {
-			a: no.a,
-			b: no.b,
-			r: no.r
-		}, callback);
+	this.untie = function (no) {
+		return new Promise((resolve, reject) => {
+            this.clearLink(no);
+            $.post(this.endereco + "untie", {
+                a: no.a,
+                b: no.b,
+                r: no.r
+            }, resolve);
+        });
 	};
-	this.reason = function (no, callback) {
-		let text = JSON.stringify(no);
-		let oldResponse = responses[text];
-		if (oldResponse) {
-			callback(oldResponse);
-			return;
-		}
-		no = this.getClearLink(no);
-		$.get(this.endereco + "reason", no, function (response) {
-			responses[text] = response;
-			callback(response);
-		});
+	this.reason = function (no) {
+		return new Promise((resolve, reject) => {
+            /*/
+            // cache simples
+            let text = JSON.stringify(no);
+            let oldResponse = responses[text];
+            if (oldResponse) {
+                callback(oldResponse);
+                return;
+            }
+            /**/
+            no = this.getClearLink(no);
+            $.get(this.endereco + "reason", no, function (response) {
+                //responses[text] = response;
+                resolve(response);
+            });
+        });
 	};
 	this.getClearLink = function (no) {
 		var n = {};
