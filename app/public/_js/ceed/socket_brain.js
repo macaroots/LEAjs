@@ -7,65 +7,79 @@
  */
 import {SocketAgent} from './../ceed/agent.js';
 export function SocketBrain(io, name='brain') {
+    const self = this;
     this.agent = new SocketAgent(name, io);
 
 	let responses = {};
 	this.responses = responses;
 	
-	this.get = function (symbol, callback) {
-		let s = this.getClearSymbol(symbol);
-		this.agent.see('brainGet', s).then(callback);
+	this.get = function (symbol) {
+		let p = new Promise((resolve, reject) => {
+            let s = self.getClearSymbol(symbol);
+            self.agent.see('brainGet', s).then(resolve);
+        });
+        return p;
 	};
-	this.set = function (symbol, callback) {
-		let s = this.getClearSymbol(symbol);
-		this.agent.see('brainGet', s).then(function (s) {
-			symbol.id = s.id;
-			callback(s);
-		});
+	this.set = function (symbol) {
+		let p = new Promise((resolve, reject) => {
+            let s = self.getClearSymbol(symbol);
+            self.agent.see('brainSet', s).then(function (s) {
+                symbol.id = s.id;
+                resolve(s);
+            });
+        });
+        return p;
 	};
-	this.tie = function (no, callback) {
-		this.agent.see('tie', {
-			a: no.a,
-			b: no.b,
-			r: no.r
-		}).then(callback);
+	this.tie = function (link) {
+		let p = new Promise((resolve, reject) => {
+            self.agent.see('tie', {
+                a: link.a,
+                b: link.b,
+                r: link.r
+            }).then(resolve);
+        });
+        return p;
 	};
-	this.untie = function (no, callback) {
-		this.clearLink(no);
-		this.agent.see('untie', {
-			a: no.a,
-			b: no.b,
-			r: no.r
-		}).then(callback);
+	this.untie = function (link) {
+		let p = new Promise((resolve, reject) => {
+            self.clearLink(link);
+            self.agent.see('untie', {
+                a: link.a,
+                b: link.b,
+                r: link.r
+            }).then(resolve);
+        });
+        return p;
 	};
-	this.reason = function (no, callback) {
-		let l = this.getClearLink(no);
-        
-		this.agent.see('reason', l).then(function (response) {
-			callback(response);
-		});
+	this.reason = function (link) {
+		let p = new Promise((resolve, reject) => {
+            let l = self.getClearLink(link);
+            
+            self.agent.see('reason', l).then(resolve);
+        });
+        return p;
 	};
-	this.getClearLink = function (no) {
-		var n = {};
+	this.getClearLink = function (link) {
+		var l = {};
         try {
-            let a = this.getClearSymbol(no.a);
+            let a = self.getClearSymbol(link.a);
             if (Object.keys(a).length !== 0) {
-                n.a = a;
+                l.a = a;
             }
         } catch {}
         try {
-            let r = this.getClearSymbol(no.r);
+            let r = self.getClearSymbol(link.r);
             if (Object.keys(r).length !== 0) {
-                n.r = r;
+                l.r = r;
             }
         } catch {}
         try {
-            let b = this.getClearSymbol(no.b);
+            let b = self.getClearSymbol(link.b);
             if (Object.keys(b).length !== 0) {
-                n.b = b;
+                l.b = b;
             }
         } catch {}
-		return n;
+		return l;
 	};
 	this.getClearSymbol = function (s) {
 		var symbol = {};

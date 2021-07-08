@@ -46,10 +46,10 @@ function live() {
 import {Ceed} from './../ceed/ceed.js';
 import {Symbol} from './../ceed/brain.js';
 
-Ceed().then(ceed => {
-	ceed.see('write', ['LEAClient.live', new Symbol(0, 'js', 'new (' + live.toString() + ')();')]);
-	ceed.see('write', ['LEAClient.connect', new Symbol(0, 'js', 'new (' + connect.toString() + ')();')]);
-	ceed.see('write', ['LEAClient.onQuestion', new Symbol(0, 'js', 'new (' + onQuestion.toString() + ')();')]);
-});
-
+let ceed = await Ceed();
+await Promise.all([
+    ceed.see('write', ['LEAClient.live', new Symbol(0, 'js', 'new (' + live.toString() + ')();')]),
+    ceed.see('write', ['LEAClient.connect', new Symbol(0, 'js', 'new (' + connect.toString() + ')();')]),
+    ceed.see('write', ['LEAClient.onQuestion', new Symbol(0, 'js', 'new (' + onQuestion.toString() + ')();')])
+]);
 

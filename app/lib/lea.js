@@ -31,6 +31,129 @@ export const LEA = function (name) {
 	return agent;
 }
 
+/*
+Muda o comportamento que o Ceed deve ensinar aos agentes;
+ */
+function Live() {
+	this.act = async function(args, resolve, reject) {
+		console.log(this.agent + '- LEA.live');
+		
+		// estuda enquanto tem o Ceed.JSBrain
+		let lea = this.agent;
+		// servidor HTTP
+		await Promise.all([
+            lea.see('study', 'listen'),
+            lea.see('study', 'http'),
+            // servidor Socket
+            lea.see('study', 'onSocketConnection'),
+            lea.see('study', 'onSocketSee'),
+            // concentra perguntas
+            lea.see('study', 'askFor'),
+            lea.see('study', 'onAnswer')
+        ]);
+		
+		// todos os agentes a partir de agora perguntam pro LEA
+		// TODO efeito colateral!? talvez, all over the place.
+		let ceed = await Ceed();
+        /*/
+        // não mudaria o que tem dentro. mas adiciona burocracia.
+        //ceed.see('addListener', ['question', lea]);
+        /**/
+		ceed.skills['ask'] = new AskAgent('LEA');
+		ceed.skills['hearAnswer'] = new HearAnswerNotify();
+        /**/
+		resolve(true);
+	};
+}
+
+function InitHttpBrain() {
+	this.act = async function(options, resolve, reject) {
+		let lea = this.agent;
+		
+		try {
+			const HTTPBrain = (await import('./http_brain.js')).HTTPBrain;
+			let brain = new HTTPBrain(options.host, options.protocol);
+			(await Ceed()).see('setLibrary', brain);
+			await lea.see('setLibrary', brain);
+		}
+		catch (e) {
+			reject(e);
+		}
+		
+		resolve(true);
+	}
+}
+
+function ConfigMySQLBrain() {
+	this.act = async function(options, resolve, reject) {
+        const mysql = (await import('mysql'));
+		const MySQLBrain = (await import('./mysql_brain.js')).MySQLBrain;
+		const AgentBrain = (await import('./agent_brain.js')).AgentBrain;
+
+		const lea = this.agent;
+		
+		// configura o agente brain
+		try {
+console.log('Initializing server...');
+            
+            const pool = mysql.createPool(options);
+			const mysqlBrain = new MySQLBrain(pool);
+			await mysqlBrain.createTables();
+            await lea.see('set', ['onServerInitialized', new (function () {
+                this.act = function () {
+                    lea.server.on('close', function() {
+                        console.log('Ending server...');
+                        pool.end(function (err) {
+                            if (err) throw err;
+
+                            console.log('Pool ended');
+                        });
+                    });
+                }
+            })()]);
+            lea.see('addListener', ['serverInitialized', lea]);
+            
+			/**/
+            const brain = await Ceed('Brain');
+            await brain.see('setLibrary', mysqlBrain);
+			await brain.see('study', 'reason');
+			const library = new AgentBrain(brain);
+			/*/
+            const library = mysqlBrain;
+            /**/
+            
+			(await Ceed()).see('addLibrary', library);
+			await lea.see('addLibrary', library);
+		}
+		catch (e) {
+			reject(e);
+		}
+		
+		resolve(true);
+	};
+}
+
+function InitBrain() {
+	this.act = async function(options, resolve, reject) {
+		const lea = this.agent;
+		
+		let ok;
+		do {
+			try {
+				await lea.see('configMySQLBrain', options);
+				ok = true;
+			} catch (e) {
+				ok = false;
+				console.log('InitBrain Error on Connect to DB', e);
+				console.log('Trying again in 1s');
+				await new Promise(resolve => setTimeout(resolve, 1000));
+			}
+		} while (!ok);		
+		
+		resolve(true);
+	};
+}
+
 function Heared() {
 	this.act = function (args, callback) {
 		let lea = this.agent;
@@ -42,8 +165,8 @@ function Heared() {
 		callback();
 	}
 }
-function AskFor() {
-	this.act = function(args, callback) {
+function OnQuestion() {
+	this.act = function([agent, key], callback) {
 		let lea = this.agent;
 		if (!lea.agents) {
 			lea.agents = {};
@@ -51,8 +174,6 @@ function AskFor() {
 		if (!lea.questions) {
 			lea.questions = {};
 		}
-		let agent = args[0];
-		let key = args[1];
 		agent.see('getFullName').then(function (name) {
 			if (!lea.agents[name]) {
 				lea.agents[name] = agent;
@@ -62,7 +183,7 @@ function AskFor() {
 			}
 			lea.questions[name].push(key);
 			
-			console.log(lea.toString() + ' asking for ' + agent.toString() + ' "' + args[1] + '"');
+			console.log(lea.toString() + ' asking for ' + agent.toString() + ' "' + key + '"');
 			if (lea.io) {
 				lea.io.emit('question', [name, key]);
 			}
@@ -89,30 +210,29 @@ function Listen() {
 		
 		let http = await import('http');
 		let express = (await import('express')).default;
-		let io = (await import('socket.io')).default;
-		
-		let bodyParser = (await import('body-parser')).default;
-
-		
 		const app = express();
 		const server = http.createServer(app);
-		let sio = io(server);
+        // TODO não deixa ligar vários servidores
 		agent.app = app;
 		agent.server = server;
-		agent.io = sio;
-		
+        
 		// Setting up the public directory
 		app.use(express.static(options.dir));
 		
 		// Setting up POST parser
+		let bodyParser = (await import('body-parser')).default;
 		app.use(bodyParser.json());
 		app.use(bodyParser.urlencoded({ extended: true }));
 		
+		let io = (await import('socket.io')).default;
+		let sio = io(server);
+		agent.io = sio;
 		sio.on('connection', (socket) => {
-			agent.see('OnSocketConnection', socket);
+			agent.see('onSocketConnection', socket);
 		});
 
 		// Rotas
+        // TODO colocar numa ação
 		/**/
 		app.get('/*', (req, res) => {
 			agent.see('http', [req, res]);
@@ -126,6 +246,8 @@ function Listen() {
 		server.listen(options.port, options.hostname, () => {
 		  console.log(`Server running at http://${options.hostname}:${options.port}/`);
 		});
+        
+        agent.see('notify', 'serverInitialized');
 		
 		callback();
 	}
@@ -152,7 +274,7 @@ function Http() {
 		}
 		Ceed(agentName + 'Controller Controller').then(async agent => {
 			try {
-				await agent.see('live');
+				//await agent.see('live');
 				await agent.see('preDispatch', args);
 				await agent.see(actionName, args);
 				await agent.see('postDispatch', args);
@@ -171,7 +293,7 @@ function OnSocketConnection() {
 		let lea = this.agent;
 		
 		socket.on('see', (agent, action, args, callback) => {
-			lea.see('OnSocketSee', [agent, action, args], callback);
+			lea.see('onSocketSee', [agent, action, args]).then(callback);
 		});
 		
 		//socket.join('/lea')
@@ -187,6 +309,7 @@ function OnSocketConnection() {
 		callback(true);
 	};
 }
+
 function OnSocketSee() {
 	this.act = async function(args, callback) {
 		let agentName = args[0];
@@ -202,139 +325,10 @@ function OnSocketSee() {
 			lea.agents[agentName] = agent;
 		}
 		//console.log('socketSee', agentName, action, target);
-		agent.see(action, target, callback).catch(e => {
+		agent.see(action, target).then(callback).catch(e => {
             console.log('ERRO SOCKET', e);
         });
 	}
-}
-
-
-
-/*
-Muda o comportamento que o Ceed deve ensinar aos agentes;
- */
-
-function Live() {
-	this.act = async function(args, resolve, reject) {
-		console.log('LEA.live', this.agent.toString());
-		
-		// estuda enquanto tem o Ceed.JSBrain
-		let lea = this.agent;
-		// servidor HTTP
-		lea.see('study', 'listen');
-		lea.see('study', 'http');
-		// servidor Socket
-		lea.see('study', 'OnSocketConnection');
-		lea.see('study', 'OnSocketSee');
-		// concentra perguntas
-		lea.see('study', 'askFor');
-		lea.see('study', 'onAnswer');
-		
-		// todos os agentes a partir de agora perguntam pro LEA
-		// TODO efeito colateral! talvez, all over the place.
-		let ceed = await Ceed();
-		ceed.skills['ask'] = new AskAgent('LEA');
-		ceed.skills['hearAnswer'] = new HearAnswerNotify();
-		resolve(true);
-	};
-}
-
-function InitHttpBrain() {
-	this.act = async function(options, resolve, reject) {
-		let lea = this.agent;
-		
-		try {
-			const HTTPBrain = (await import('./http_brain.js')).HTTPBrain;
-			let brain = new HTTPBrain(options.host, options.protocol);
-			(await Ceed()).see('setLibrary', brain);
-			lea.see('setLibrary', brain);
-		}
-		catch (e) {
-			reject(e);
-		}
-		
-		resolve(true);
-	}
-}
-function ConfigMySQLBrain() {
-	this.act = async function(options, resolve, reject) {
-		const MySQLBrain = (await import('./mysql_brain.js')).MySQLBrain;
-		const AgentBrain = (await import('./agent_brain.js')).AgentBrain;
-
-		let lea = this.agent;
-		
-		// configura o agente brain
-		let brain = await Ceed('Brain');
-		try {
-			let mysqlBrain = new MySQLBrain(options);
-			await mysqlBrain.createTables();
-			await brain.see('setLibrary', mysqlBrain);
-			await brain.see('study', 'reason');
-
-			let library = new AgentBrain(brain);
-			(await Ceed()).see('setLibrary', library);
-			await lea.see('setLibrary', library);
-		}
-		catch (e) {
-			reject(e);
-		}
-		
-		resolve(true);
-	};
-}
-function InitBrain() {
-	this.act = async function(options, resolve, reject) {
-		const lea = this.agent;
-		
-		let ok;
-		do {
-			try {
-				await lea.see('configMySQLBrain', options);
-				ok = true;
-			} catch (e) {
-				ok = false;
-				console.log('InitBrain Error on Connect to DB', e);
-				console.log('Trying again in 1s');
-				await new Promise(resolve => setTimeout(resolve, 1000));
-			}
-		} while (!ok);		
-		
-		lea.see('read', 'Naive.EmptyAction').then(function (meanings) {
-			if (meanings.length == 0) {
-				lea.see('write', [
-					'Naive.EmptyAction', 
-					new Symbol(0, 'js', 'new (function EmptyAction() {\n\tthis.act = function (args, resolve, reject) {\n\t\t// your code here\n\t\tresolve();\n\t};\n})();')
-				]);
-			}
-		});
-		lea.see('read', 'Controller.EmptyAction').then(function (meanings) {
-			if (meanings.length == 0) {
-				lea.see('write', [
-					'Controller.EmptyAction', 
-					new Symbol(0, 'js', 'new (function EmptyAction() {\n\tthis.act = function (args, resolve, reject) {\n\t\tlet req = args[0];\n\t\tlet res = args[1];\n\t\t// your code here\n\t\tresolve();\n\t};\n})();')
-				]);
-			}
-		});
-
-		lea.see('read', 'Controller.preDispatch').then(function (meanings) {
-			if (meanings.length == 0) {
-				lea.see('write', [
-					'Controller.preDispatch', 
-					new Symbol(0, 'js', 'new (function PreDispatch() {\n\tthis.act = function (args, resolve, reject) {\n\t\tlet req = args[0];\n\t\tlet res = args[1];\n\t\t// your code here\n\t\tresolve(true);\n\t};\n})();')
-				]);
-			}
-		});
-		lea.see('read', 'Controller.postDispatch').then(function (meanings) {
-			if (meanings.length == 0) {
-				lea.see('write', [
-					'Controller.postDispatch', 
-					new Symbol(0, 'js', 'new (function PostDispatch() {\n\tthis.act = function (args, resolve, reject) {\n\t\tlet req = args[0];\n\t\tlet res = args[1];\n\t\t// your code here\n\t\tresolve(true);\n\t};\n})();')
-				]);
-			}
-		});
-		
-		resolve(true);
-	};
 }
 
 export function EmptyAction() {
@@ -354,15 +348,16 @@ await Promise.all([
 	ceed.see('write', ['LEA.initHttpBrain', new Symbol(0, 'js', 'new (' + InitHttpBrain.toString() + ')();')]),
 	ceed.see('write', ['LEA.http', new Symbol(0, 'js', 'new (' + Http.toString() + ')();')]),
 	ceed.see('write', ['LEA.listen', new Symbol(0, 'js', 'new (' + Listen.toString() + ')();')]),
-	ceed.see('write', ['LEA.OnSocketConnection', new Symbol(0, 'js', 'new (' + OnSocketConnection.toString() + ')();')]),
-	ceed.see('write', ['LEA.OnSocketSee', new Symbol(0, 'js', 'new (' + OnSocketSee.toString() + ')();')]),
-	ceed.see('write', ['LEA.askFor', new Symbol(0, 'js', 'new (' + AskFor.toString() + ')();')]),
+	ceed.see('write', ['LEA.onSocketConnection', new Symbol(0, 'js', 'new (' + OnSocketConnection.toString() + ')();')]),
+	ceed.see('write', ['LEA.onSocketSee', new Symbol(0, 'js', 'new (' + OnSocketSee.toString() + ')();')]),
+	ceed.see('write', ['LEA.askFor', new Symbol(0, 'js', 'new (' + OnQuestion.toString() + ')();')]),
 	ceed.see('write', ['LEA.onAnswer', new Symbol(0, 'js', 'new (' + Heared.toString() + ')();')]),
 	// Controller
 	ceed.see('write', ['Controller.EmptyAction', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')]),
 	ceed.see('write', ['Controller.preDispatch', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')]),
 	ceed.see('write', ['Controller.postDispatch', new Symbol(0, 'js', 'new (' + EmptyAction.toString() + ')();')])
 ]);
+console.log('Writing server...');
 //console.log((await ceed.see('getLibraries'))[0].toString());
 /**/
 //lea.see('set', ['live', new Live()]);
