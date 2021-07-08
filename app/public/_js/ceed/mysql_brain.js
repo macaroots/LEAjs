@@ -200,7 +200,8 @@ console.trace('MySQLBrain.set()', s);
                 if (error) return reject(error);
                 c.commit();
                 c.release();
-                            
+
+console.debug('MySQLBrain.tie()', l);                            
                 resolve(l);
             })}).catch(console.error);
             
