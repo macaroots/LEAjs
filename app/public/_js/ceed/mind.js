@@ -91,7 +91,7 @@ export function NaiveMind(name, brain) {
 				callback = resolve;
 			}
 			else {
-console.trace('@Deprecated see() should use Promise');
+console.trace('@Deprecated MIND', self.toString() + '.see(' + perception + ') should use Promise');
 				callback = ((call) => { return (response) => {
 					resolve(call(response));
 				}})(callback);
@@ -100,7 +100,7 @@ console.trace('@Deprecated see() should use Promise');
 				fallback = reject;
 			}
 			else {
-console.trace('@Deprecated see() should use Promise');
+//console.trace('@Deprecated see() should use Promise');
 				fallback = ((call) => { return (response) => {
 					reject(call(response));
 				}})(fallback);
@@ -166,7 +166,7 @@ console.trace('@Deprecated see() should use Promise');
 	
     this.id = new Date().getTime();
 	this.toString = function() {
-		return this.getFullName() + '@' + this.id;
+		return this.getName() + '@' + this.id;
 	};
 }
 
@@ -356,7 +356,7 @@ function Error(mind) {
 			let e = args[1];
 			let action = args[0][0];
 			let target = args[0][1];
-			console.error("Error!", mind.getName(), ":", action, "(", target, ") - ", typeof(e), ':', e);
+			console.trace(mind + " - ERROR:" + action + "(" + target + ") - ", typeof(e), ':', e);
 		} catch (e) {
 			console.error('CRITICAL ERROR', e);
             reject(e)

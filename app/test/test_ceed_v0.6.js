@@ -174,6 +174,23 @@ describe('Ceed behaviors', function () {
 				await agent.see('hello2', 'world');
 				assert.equal(r.key, 'hello2');
 			});
+            /*/
+			it('Ceed should notify questions', async function (done) {
+				
+				let r = {};
+				let agent = await Ceed('Roe');
+                agent.see('set', ['onQuestion', (function OnQuestion(r) {
+					this.act = function ([agent, key], resolve, reject) {
+                        assert.equal(key, r);
+                        done();
+						resolve();
+					};
+				})('b')]);
+                (await Ceed()).see('addListener', ['question', agent]);
+				agent.see('ask', 'a');
+                
+			});
+            /**/
 		});
 		describe('*study from multiple libraries', function() {
             it('should');

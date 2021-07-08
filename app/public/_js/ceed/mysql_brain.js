@@ -118,6 +118,8 @@ export function MySQLBrain(pool) {
                 })}).catch(console.error);
             }
             else {
+console.trace('MySQLBrain.set()', s);
+                /*/
                 let sql = "update symbols set ? where id = ?";
                 if (self.debug) {
                     console.log(sql);
@@ -129,6 +131,7 @@ export function MySQLBrain(pool) {
                             
                     resolve(s);
                 })}).catch(console.error);
+                /**/
             }
         });
     };
@@ -169,33 +172,27 @@ export function MySQLBrain(pool) {
     };
     this.tie = function(l) {
         return new Promise(async (resolve, reject) => {
-            await self.get(l.a).then(async symbols => {
-//console.debug('JsBrain.tie(a)', l.a, symbols);
-                if (symbols.length != 0) {
-                    l.a = symbols[0];
-                }
-                else {
-                    return await self.set(l.a);
-                }
-            }).catch(reject);
-            await self.get(l.r).then(async symbols => {
-//console.debug('JsBrain.tie(r)', l.r, symbols);
-                if (symbols.length != 0) {
-                    l.r = symbols[0];
-                }
-                else {
-                    return await self.set(l.r);
-                }
-            }).catch(reject);
-            await self.get(l.b).then(async symbols => {
-// console.debug('JsBrain.tie(b)', l.b, symbols);
-                if (symbols.length != 0) {
-                    l.b = symbols[0];
-                }
-                else {
-                    return await self.set(l.b);
-                }
-            }).catch(reject);            
+            let symbolsA = await self.get(l.a);
+            if (symbolsA.length != 0) {
+                l.a = symbolsA[0];
+            }
+            else {
+                await self.set(l.a);
+            }
+            let symbolsR = await self.get(l.r);
+            if (symbolsR.length != 0) {
+                l.r = symbolsR[0];
+            }
+            else {
+                await self.set(l.r);
+            }
+            let symbolsB = await self.get(l.b);
+            if (symbolsB.length != 0) {
+                l.b = symbolsB[0];
+            }
+            else {
+                await self.set(l.b);
+            }         
             
             let sql = "insert into links (a, r, b) values (?, ?, ?)";
             let connection = self.connect();
