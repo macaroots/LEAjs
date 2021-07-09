@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LEA - Live Environment for Agents</title>
+	<meta charset="utf-8" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+
+	</script>
+</head>
+<body>
+</body>
+<script type="module">
+import {AskAgent, Ceed} from  './_js/ceed/ceed.js';
+import {SocketAgent} from  './_js/ceed/agent.js';
+import {} from  './_js/agents/ceed.js';
+import {} from  './_js/agents/ce.js';
+import {} from  './_js/agents/tools.js';
+import {} from  './_js/agents/script.js';
+window.Ceed = Ceed;
+window.SocketAgent = SocketAgent;
+window.AskAgent = AskAgent;
+
+const ceed = await Ceed();
+window.ceed = ceed;
+// TODO addListener
+ceed.skills['ask'] = new AskAgent('Script');
+
+const ce = await Ceed('CE');
+window.ce = ce;
+await ce.see('study', 'appendTo');
+await ce.see('appendTo', 'body');
+
+ceed.see('connect');
+</script>
+</html>

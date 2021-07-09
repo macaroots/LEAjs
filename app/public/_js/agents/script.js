@@ -1,5 +1,6 @@
 import {Ceed} from './../ceed/ceed.js';
 import {Symbol} from './../ceed/brain.js';
+import {} from  './element.js';
 
 Ceed().then(async agent => {
 	await Promise.all([

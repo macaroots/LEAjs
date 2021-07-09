@@ -686,7 +686,7 @@ export function HearAnswerNotify() {
 	 */
 	this.act = function(args, callback) {
 		let agent = this.agent;
-console.log(agent + ' - HEAR_NOTIFY', args);
+//console.log(agent + ' - HEAR_NOTIFY', args);
 		agent.see('write', args);
 		agent.see('understand', args).then((learned) => {
 			if (learned) {
