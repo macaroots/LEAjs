@@ -23,7 +23,7 @@ ceed.skills['ask'] = new AskFor();
 describe('Ceed', function () {
   describe('#getAgent(names)', function () {
     it('should Promise an agent', function (done) {
-		const name = 'Test';
+		const name = 'PromiseAgent';
 		Ceed(name).then(front => {
 			front.see('getName').then(function (n) {
 				assert.equal(n, name);
@@ -31,13 +31,13 @@ describe('Ceed', function () {
 			});
 		});
     });
-    it('should await an agent', async function () {
-		const name = 'Test2';
+    it('should await an agent', function (done) { (async function () {
+		const name = 'AwaitAgent';
 		let front = await Ceed(name);
 		let n = await front.see('getName');
 		assert.equal(n, name);
-		
-    });
+        done();
+    })()});
   });
   describe('#getInstance(names)', function () {
     it('should Promise the agent Ceed', function (done) {
@@ -65,13 +65,17 @@ describe('Ceed', function () {
 });
 
 describe('Ceed behaviors', function () {
-	describe('*getName', async function () {
-		let agent = await Ceed('Joe');
+	describe('*getName', function () {
+        let agentName = 'GetName';
+		let agent;
+        before(async function () {
+            agent = await Ceed(agentName);
+        });
 /** @deprecated */
-		context('when using callback', function () {
+		describe('when using callback', function () {
 			it('should callback the name', function (done) {
 				agent.see('getName', 0, (name) => {
-					assert.equal(name, 'Joe');
+					assert.equal(name, agentName);
 					done();
 				});
 			});
@@ -80,14 +84,14 @@ describe('Ceed behaviors', function () {
 		describe('when using then', function () {
 			it('should resolve the name', function () {
 				agent.see('getName', 0).then((name) => {
-					assert.equal(name, 'Joe');
+					assert.equal(name, agentName);
 				});
 			});
 		});
 		describe('when using await', function () {
 			it('should return the name', async function () {
 				let name = await agent.see('getName', 0);
-				assert.equal(name, 'Joe');
+				assert.equal(name, agentName);
 			});
 		});
 		describe('when callback is null', function () {
@@ -97,7 +101,7 @@ describe('Ceed behaviors', function () {
 			});
 		});
 	});
-	context('when dontKnow', async function () {
+	context('if dontKnow', function () {
 		function Bye() {
 			this.act = function (args, resolve, reject) {
 				resolve(args + ' Bye!');
@@ -115,12 +119,13 @@ describe('Ceed behaviors', function () {
 				}, 300);
 			};
 		}
-		
-		let writer = await Ceed('Writer');
-		
-		await writer.see('write', ['Naive.hello', new Symbol(0, 'js', 'new (' + Hello.toString() + ')();')]);
-		await writer.see('write', ['Naive.bye', new Symbol(0, 'js', 'new (' + Bye.toString() + ')();')]);
-		await writer.see('write', ['Naive.timeout', new Symbol(0, 'js', 'new (' + HelloTimeout.toString() + ')();')]);
+		before(async function() {
+            let writer = await Ceed('Writer');
+            
+            await writer.see('write', ['Naive.hello', new Symbol(0, 'js', 'new (' + Hello.toString() + ')();')]);
+            await writer.see('write', ['Naive.bye', new Symbol(0, 'js', 'new (' + Bye.toString() + ')();')]);
+            await writer.see('write', ['Naive.timeout', new Symbol(0, 'js', 'new (' + HelloTimeout.toString() + ')();')]);
+        });
 			
 /*agent.see('getLibraries').then(l => {
     console.log(l[0].toString());
@@ -128,21 +133,26 @@ describe('Ceed behaviors', function () {
 		// TODO testar pedir várias vezes a mesma ação, enquanto ainda tá estudando
 		describe('*study (read key from brain)', function () {
 			it('should work with Promise', function (done) {
-				Ceed('Joe').then(agent => {
-					agent.see('hello', 'world').then(r => {
-						assert.equal(r, 'Hello, world! Bye!');
-						done();
-					});
+				Ceed('PromiseStudy').then(agent => {
+                    let promises = [];
+                    for (let i = 0; i < 10; i++) {
+                        promises.push(agent.see('hello', 'world').then(r => {
+                            assert.equal(r, 'Hello, world! Bye!');
+                        }));
+                    }
+                    Promise.all(promises).then(() => {
+                        done()
+                    });
 				});
 			});
 			it('should work with await', async function () {
-				let agent = await Ceed('Moe');
+				let agent = await Ceed('AwaitStudy');
 				let r = await agent.see('hello', 'world');
 				assert.equal(r, 'Hello, world! Bye!');
 			});
 /** @deprecated */
 			it('should work with callback', function (done) {
-				Ceed('Noe').then(agent => {
+				Ceed('CallbackStudy').then(agent => {
 					agent.see('hello', 'world', r => {
 						assert.equal(r, 'Hello, world! Bye!');
 						done();
@@ -151,7 +161,7 @@ describe('Ceed behaviors', function () {
 			});
             /**/
 			it('should work if action delays', function (done) {
-				Ceed('Poe').then(agent => {
+				Ceed('DelayStudy').then(agent => {
 					agent.see('timeout', 'world').then(r => {
 						assert.equal(r, 'Hello, world! Bye!');
 						done();
@@ -168,7 +178,7 @@ describe('Ceed behaviors', function () {
 					};
 				}
 				let r = {};
-				let agent = await Ceed('Noe');
+				let agent = await Ceed('Ask');
 				agent.see('set', ['ask', new Ask(r)]);
 				
 				await agent.see('hello2', 'world');
