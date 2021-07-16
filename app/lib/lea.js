@@ -218,6 +218,17 @@ function Listen() {
         
 		// Setting up the public directory
 		app.use(express.static(options.dir));
+        /**/
+        // Sessão
+        const session = (await import('express-session')).default;
+        const sessionParser = session({
+            saveUninitialized: false,
+            secret: 'superSegredo',
+            resave: false,
+            //cookie: { secure: false }
+        });
+        app.use(sessionParser);
+        /**/
 		
 		// Setting up POST parser
 		let bodyParser = (await import('body-parser')).default;
@@ -230,6 +241,9 @@ function Listen() {
 		sio.on('connection', (socket) => {
 			agent.see('onSocketConnection', socket);
 		});
+        sio.use(function(socket, next) {
+            sessionParser(socket.request, socket.request.res || {}, next);
+        });
 
 		// Rotas
         // TODO colocar numa ação
