@@ -6,38 +6,20 @@
  * https://github.com/macaroots/LEAjs/blob/main/LICENSE
  */
 import {Symbol, Link} from './../public/_js/ceed/brain.js';
-import {JSBrain} from './../public/_js/ceed/jsbrain.js';
-import mysql from 'mysql';
-import {MySQLBrain} from './../public/_js/ceed/mysql_brain.js';
 import {AjaxBrain} from './../public/_js/ceed/ajaxbrain.js';
-//import {Ceed, AskAgent} from './../public/_js/ceed/ceed.js';
 import {AgentBrain} from './../public/_js/ceed/agent_brain.js';
 import {DummyBrain} from './dummy_brain.js';
 import assert from 'assert';
 
-describe('Brain', async function () {
+export function shouldBehaveLikeABrain(getBrain) {
+    const brain = getBrain();
+    /*
+    beforeEach(function() {
+console.log('BEFORE', brain);
+        brain = getBrain();
+console.log('BEFORE', brain);
+    });*/
 	//const brain = new AjaxBrain();
-    /**/
-    const pool = mysql.createPool({
-        database: 'test',
-        host: 'localhost',
-        port: 3307,
-        user: process.env.MYSQL_USER || 'root',
-        password: process.env.MYSQL_PASSWORD || 'admin'
-        //debug: true
-    });
-	const brain = new MySQLBrain(pool);
-    after(async function () {
-        await brain.clear();
-        pool.end(function (err) {
-            if (err) throw err;
-
-            console.log('Pool ended');
-        });
-    });
-    /*/
-	const brain = new JSBrain();
-    /**/
     
 	//const brain = new DummyBrain();
 	/*/
@@ -50,6 +32,7 @@ describe('Brain', async function () {
 	agent.see('setLibrary', new MySQLBrain());
 	const brain = new AgentBrain(agent);
 	/**/
+    /*/
 	describe('#set', function () {
 		function assertSymbol(s, s2) {
 			assert.notEqual(s.id, 0);
@@ -73,6 +56,7 @@ describe('Brain', async function () {
 			});
 		});
 	});
+	/**/
 	describe('#tie-reason', function () {
 		for (let i = 0; i < 3; i++) {
 			let a = new Symbol(0, 't' + (i%2), 'i1');
@@ -161,4 +145,4 @@ describe('Brain', async function () {
 		});
 		/**/
 	});
-});
+};
