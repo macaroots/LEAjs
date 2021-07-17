@@ -12,13 +12,13 @@ import {DummyBrain} from './dummy_brain.js';
 import assert from 'assert';
 
 export function shouldBehaveLikeABrain(getBrain) {
-    const brain = getBrain();
-    /*
+    let brain = getBrain();
+    /*/
     beforeEach(function() {
 console.log('BEFORE', brain);
         brain = getBrain();
 console.log('BEFORE', brain);
-    });*/
+    });/**/
 	//const brain = new AjaxBrain();
     
 	//const brain = new DummyBrain();
@@ -58,13 +58,17 @@ console.log('BEFORE', brain);
 	});
 	/**/
 	describe('#tie-reason', function () {
-		for (let i = 0; i < 3; i++) {
-			let a = new Symbol(0, 't' + (i%2), 'i1');
-			let r = new Symbol(0, 't' + i, 'i' + (i%2));
-			let b = new Symbol(0, 't' + (2-i), 'i' + i);
-			let link = new Link(a, r, b);
-			brain.tie(link).catch(e => { console.error('ERROR Test-tie-reason', e); });
-		}
+        before(async function () {
+            let promises = []
+            for (let i = 0; i < 3; i++) {
+                let a = new Symbol(0, 't' + (i%2), 'i1');
+                let r = new Symbol(0, 't' + i, 'i' + (i%2));
+                let b = new Symbol(0, 't' + (2-i), 'i' + i);
+                let link = new Link(a, r, b);
+                promises.push(brain.tie(link).catch(e => { console.error('ERROR Test-tie-reason', e); }));
+            }
+            await Promise.all(promises);
+        });
 		function assertSearchA(links) {			
 			assert.notEqual(links.length, 0);
 			try {
