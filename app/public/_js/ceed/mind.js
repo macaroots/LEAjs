@@ -379,7 +379,7 @@ function Act(mind) {
 			action.agent = mind.body;
 			// resolve.agent = mind.body;
 			if (este.log) {
-				console.log('Act!', mind.getNames(), action);
+				console.log('Act!', mind.toString(), action);
 			}
 			action.act(target, resolve, reject);
 		}
