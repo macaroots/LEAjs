@@ -1,3 +1,4 @@
 node_modules/
 db_data/
 .env
+test_agents/

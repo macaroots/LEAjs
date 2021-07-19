@@ -4,5 +4,5 @@ import {FileBrain} from './../public/_js/ceed/file_brain.js';
 import {shouldBehaveLikeABrain} from './test_brain.js';
 
 describe('FileBrain', function() {
-  shouldBehaveLikeABrain(() => new FileBrain('/agentes'));
+  shouldBehaveLikeABrain(() => new FileBrain('./test/test_agents/'));
 });
