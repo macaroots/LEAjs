@@ -28,7 +28,7 @@ function Live() {
 		skills['setLibrary'] = new SetLibrary();
 		skills['getLibrary'] = new GetLibrary();
 		skills['read'] = new CERead();
-		skills['ask'] = new Ask();
+		skills['ask'] = new AskListeners();
 		skills['askFor'] = new AskFor();
 		skills['hearAnswer'] = new HearAnswer();
 		skills['write'] = new CEWrite();
@@ -227,6 +227,8 @@ function CERead() {
 				}
 			}
             /*/
+//console.log('CEREAD3', concept, brains);
+            
             for (let i = booknames.length - 1; i >= 0; i--) {
                 for (let j in brains) {
                     let brain = brains[j];

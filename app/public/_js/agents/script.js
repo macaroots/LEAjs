@@ -32,9 +32,10 @@ console.log('SCRIPT LIVE', this.agent.toString());
     			agent.see('study', 'appendTo'),
     			agent.see('study', 'trigger'),
     			agent.see('study', 'onLoad'),
-		        agent.see('study', 'askFor'),
+		        agent.see('study', 'onQuestion'),
     			agent.see('study', 'askBind')
     		]);
+            (await Ceed()).see('addListener', ['question', agent]);
 			resolve(true);
 		});
 	};
@@ -104,7 +105,7 @@ console.log('SCRIPT LIVE', this.agent.toString());
 		});
 	};
 })();`)]),
-		agent.see('write', ['Script.askFor', new Symbol(0, 'js', `new (function askFor () {
+		agent.see('write', ['Script.onQuestion', new Symbol(0, 'js', `new (function askFor () {
 	this.act = function (args, resolve, reject) {
 		let script = this.agent;
 		let asker;

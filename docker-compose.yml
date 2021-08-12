@@ -15,6 +15,7 @@ services:
       - db
     depends_on:
       - db
+    restart: always
 
   db:
     image: mysql:8
@@ -27,6 +28,7 @@ services:
     volumes:
       - ./db_data:/var/lib/mysql
       - ./leajs.sql:/docker-entrypoint-initdb.d/dump.sql
+    restart: always
       
   test_db:
     image: mysql:8
