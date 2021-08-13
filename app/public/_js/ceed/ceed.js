@@ -30,7 +30,7 @@ function Live() {
 		skills['read'] = new CERead();
 		skills['ask'] = new AskListeners();
 		skills['askFor'] = new AskFor();
-		skills['hearAnswer'] = new HearAnswer();
+		skills['hear'] = new Hear();
 		skills['write'] = new CEWrite();
 		skills['understand'] = new Understand();
 		
@@ -306,7 +306,7 @@ function AskFor() {
 		a.btCancelar.click(function () { form.remove(); callback(false); });
 		form.submit(function () {
 			let answer = new Symbol(0, a.type.val(), a.info.val());
-			asker.see('hearAnswer', [a.key.val(), answer]).then(function (learned) {
+			asker.see('hear', [a.key.val(), answer]).then(function (learned) {
 				if (learned) {
 					form.remove();
 				}
@@ -350,7 +350,7 @@ function AskFor() {
 		callback(false);
 	};
 }
-function HearAnswer() {
+function Hear() {
 	/**
 	 * args = [concept: String, answer: Symbol]
 	 */
@@ -682,7 +682,7 @@ export function AskAgent(helperName) {
 		});
 	};
 }
-export function HearAnswerNotify() {
+export function HearNotify() {
 	/**
 	 * args = [concept: String, answer: Symbol]
 	 */

@@ -230,7 +230,7 @@ console.log('SCRIPT LIVE', this.agent.toString());
 		        var type = body.find('input[name=type]').val();
 				var info = editor.getValue();
 		        var answer = new Symbol(0, type, info);
-				asker.see('hearAnswer', [key, answer]).then(function (learned) {
+				asker.see('hear', [key, answer]).then(function (learned) {
 				    console.log('Learned:', key, learned);
 					if (learned) {
 						question.addClass('learned');
