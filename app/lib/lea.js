@@ -18,7 +18,7 @@ LEA
 			- 
 */
 //import ejs from 'ejs';
-import {Ceed, AskAgent, HearAnswerNotify} from './../public/_js/ceed/ceed.js';
+import {Ceed, AskAgent, HearNotify} from './../public/_js/ceed/ceed.js';
 import {Symbol} from './../public/_js/ceed/brain.js';
 import {MySQLBrain} from './../public/_js/ceed/mysql_brain.js';
 import {AgentBrain} from './../public/_js/ceed/agent_brain.js';
@@ -62,7 +62,7 @@ function Live() {
         /*/
 		ceed.skills['ask'] = new AskAgent('LEA');
         /**/
-		ceed.skills['hearAnswer'] = new HearAnswerNotify();
+		ceed.skills['hear'] = new HearNotify();
 		resolve(true);
 	};
 }
@@ -347,7 +347,7 @@ function OnSocketSee() {
 function CheckPermission() {
 	this.act = function (args, resolve, reject) {
 	    let [agentName, action, target, socket] = args;
-		let prohibited = ['hearAnswer', 'write', 'tie', 'set'];
+		let prohibited = ['hear', 'write', 'tie', 'set'];
 		let allow = false;
 		
 		if (!prohibited.includes(action)) {
