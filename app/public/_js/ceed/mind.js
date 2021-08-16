@@ -415,23 +415,7 @@ function WriteBrain() {
 		if (!(value instanceof Symbol || (value.type && value.info))) {
 			value = new Symbol(0, typeof(value), value);
 		}
-		// checks if each symbol already exists
-		brain.get(key).then(function (keys) {
-			if (keys && keys.length > 0) {
-				key = keys[0];
-			}
-			brain.get(relation).then(function (relations) {
-				if (relations && relations.length > 0) {
-					relation = relations[0];
-				}
-				brain.get(value).then(function (concepts) {
-					if (concepts && concepts.length > 0) {
-						value = concepts[0];
-					}
-					brain.tie(new Link(key, relation, value)).then(resolve);
-				});
-			});
-		});
+		brain.tie(new Link(key, relation, value)).then(resolve);/*
 	};
 }
 	
