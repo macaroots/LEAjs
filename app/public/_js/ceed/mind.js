@@ -415,7 +415,7 @@ function WriteBrain() {
 		if (!(value instanceof Symbol || (value.type && value.info))) {
 			value = new Symbol(0, typeof(value), value);
 		}
-		brain.tie(new Link(key, relation, value)).then(resolve);/*
+		brain.tie(new Link(key, relation, value)).then(resolve);
 	};
 }
 	
