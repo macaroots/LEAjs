@@ -339,7 +339,7 @@ function OnSocketSee() {
             });
 		}
 		else {
-            console.log('Socket action not allowed!', args);
+            console.log('Socket action not allowed!', args.slice(0, 3));
 		}
 	}
 }
@@ -347,7 +347,7 @@ function OnSocketSee() {
 function CheckPermission() {
 	this.act = function (args, resolve, reject) {
 	    let [agentName, action, target, socket] = args;
-		let prohibited = ['hear', 'write', 'tie', 'set'];
+		let prohibited = ['hear', 'write', 'tie', 'set', 'understand'];
 		let allow = false;
 		
 		if (!prohibited.includes(action)) {
