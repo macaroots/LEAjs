@@ -10,8 +10,12 @@
 <script type="module">
 import {Ceed} from  './_js/ceed/ceed.js';
 window.Ceed = Ceed;
-
-Ceed('guest').then(agent => {
+Ceed().then(async ceed => {
+    await ceed.see('set', ['onQuestion', {act: event => {
+        ceed.see('askFor', event);
+    }}]);
+    await ceed.see('addListener', ['question', ceed]);
+    let agent = await Ceed('guest');
     window.agent = agent;
     agent.see('hello', 'world');
 });

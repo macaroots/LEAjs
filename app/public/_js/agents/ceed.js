@@ -20,10 +20,9 @@ Ceed().then(async agent => {
 		let name = data[0];
 		let key = data[1];
 		let lea = this.agent;
-		let script = await Ceed('Script');
 		
 		let agent = await lea.see('getSocketAgent', name);
-		script.see('askFor', [agent, key]);
+		lea.see('notify', ['question', [agent, key]]);
 		callback(true); 
 	};
 })();`)]),
