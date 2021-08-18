@@ -61,7 +61,7 @@ console.log('BEFORE', brain);
         before(async function () {
             let promises = []
             for (let i = 0; i < 3; i++) {
-                let a = new Symbol(0, 't' + (i%2), 'i1');
+                let a = new Symbol(0, 't' + (i%2), 'i' + (i%2));
                 let r = new Symbol(0, 't' + i, 'i' + (i%2));
                 let b = new Symbol(0, 't' + (2-i), 'i' + i);
                 let link = new Link(a, r, b);
@@ -73,7 +73,7 @@ console.log('BEFORE', brain);
 			assert.notEqual(links.length, 0);
 			try {
 				for (let link of links) {
-					assert.equal(link.a.type, 't0');		
+					assert.equal(link.a.info, 'i0');		
 				}
 			}
 			catch (e) {
@@ -83,7 +83,7 @@ console.log('BEFORE', brain);
 		function assertSearchAB(links) {	
 			assert.notEqual(links.length, 0);
 			for (let link of links) {
-				assert.equal(link.a.type, 't0');	
+				assert.equal(link.a.info, 'i0');	
 				assert.equal(link.b.info, 'i0');		
 			}
 		}
@@ -101,52 +101,24 @@ console.log('BEFORE', brain);
 			}
 		}
 		context('await', function () {
-			it('should search for a.type', async function () {
-				let links = await brain.reason(new Link(new Symbol(0, 't0', null), null, null)).catch(e => { console.error('ERROR Test-tie-reason', e); });
+			it('should search for a.info', async function () {
+				let links = await brain.reason(new Link(new Symbol(0, null, 'i0'), null, null)).catch(e => { console.error('ERROR Test-tie-reason', e); });
 				assertSearchA(links);
 			});
-			it('should search for a.type and b.info', async function () {
-				let links = await brain.reason(new Link(new Symbol(0, 't0', null), null, new Symbol(0, null, 'i0'))).catch(e => { console.error('ERROR Test-tie-reason', e); });
+			it('should search for a.info and b.info', async function () {
+				let links = await brain.reason(new Link(new Symbol(0, null, 'i0'), null, new Symbol(0, null, 'i0'))).catch(e => { console.error('ERROR Test-tie-reason', e); });
 				assertSearchAB(links);
 			});
 			it('should search for r.info', async function () {
 				let links = await brain.reason(new Link(null, new Symbol(0, null, 'i0'), null, null)).catch(e => { console.error('ERROR Test-tie-reason', e); });
 				assertSearchR(links);
-			});
+			});/*
 			it('should search for r.type and r.info', async function () {
 				let links = await brain.reason(new Link(null, new Symbol(0, 't0', 'i0'), null, null)).catch(e => { console.error('ERROR Test-tie-reason', e); });
 				assertSearchRR(links);
                 
 //console.log(brain);
-			});
+			});*/
 		});
-		/**/
-		context('then', function () {
-			it('should search for a.type', function (done) {
-				brain.reason(new Link(new Symbol(0, 't0', null), null, null)).then(function(links) {
-					assertSearchA(links);
-					done();
-				}).catch(e => { console.error('ERROR Test-tie-reason', e); });
-			});
-			it('should search for a.type and b.info', function (done) {
-				brain.reason(new Link(new Symbol(0, 't0', null), null, new Symbol(0, null, 'i0'))).then(function(links) {
-					assertSearchAB(links);
-					done();
-				}).catch(console.error);
-			});
-			it('should search for r.info', function (done) {
-				brain.reason(new Link(null, new Symbol(0, null, 'i0'), null, null)).then(function(links) {
-					assertSearchR(links);
-					done();
-				}).catch(e => { console.error('ERROR Test-tie-reason', e); });
-			});
-			it('should search for r.type and r.info', function (done) {
-				brain.reason(new Link(null, new Symbol(0, 't0', 'i0'), null, null)).then(function(links) {
-					assertSearchRR(links);
-					done();
-				}).catch(e => { console.error('ERROR Test-tie-reason', e); });
-			});
-		});
-		/**/
 	});
 };

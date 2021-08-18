@@ -45,13 +45,13 @@ export function FileBrain(rootPath) {
     };
     function symbolsEqual(a, search) {
         let equals = true;
-        if (search) {
+        if (search) {/*
             if (search.id && search.id != a.id) {
                 equals = false;
             }
             if (search.type && search.type != a.type) {
                 equals = false;
-            }
+            }*/
             if (search.info && search.info != a.info) {
                 equals = false;
             }
@@ -65,13 +65,13 @@ export function FileBrain(rootPath) {
         if (!s) {
             return '';
         }
-        else {
+        else {/*
             if (s.type) {
                 name += s.type + '-';
-            }
+            }*/
             if (s.info) {
                 name += s.info;
-            }
+            }/*
             if (!s.id) {
                 if (createId) {
                     s.id = MD5(name);
@@ -82,7 +82,7 @@ export function FileBrain(rootPath) {
                 }
             }
             name = s.id + '-' + name;
-//console.log('FILE NAME', name);
+//console.log('FILE NAME', name);*/
             return name;
         }
     }
@@ -151,6 +151,9 @@ export function FileBrain(rootPath) {
         let index = first ?
             value.indexOf(separator)
             : value.lastIndexOf(separator);
+        if (index == -1) {
+            index = value.length;
+        }
         return [value.substring(0, index), value.substring(index + 1)];
     }
     this.reason = function(l) {
@@ -189,18 +192,14 @@ export function FileBrain(rootPath) {
                     .sort((a, b) => b.time - a.time)
                     .map(file => file.name);
                 
-                let a = new Symbol();
-                [a.id, a.type] = splitAt(book, '-');
-                [a.type, a.info] = splitAt(a.type, '-');
+                let a = new Symbol(book);
 //console.log('FILE REASONa', a);
                 for (let key of keys) {
-                    let r = new Symbol();
                     let b = new Symbol();
                     let filename;
                     [filename, b.type] = splitAt(key, '.', false);
                     [filename, b.id] = splitAt(filename, '-', false);
-                    [r.id, filename] = splitAt(filename, '-');
-                    [r.type, r.info] = splitAt(filename, '-');
+                    let r = new Symbol(filename);
                     let filePath = path.join(dir, key);
                     b.info = fs.readFileSync(filePath, 'utf8');
 
