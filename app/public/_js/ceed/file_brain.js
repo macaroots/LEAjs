@@ -45,13 +45,13 @@ export function FileBrain(rootPath) {
     };
     function symbolsEqual(a, search) {
         let equals = true;
-        if (search) {/*
+        if (search) {/**/
             if (search.id && search.id != a.id) {
                 equals = false;
             }
             if (search.type && search.type != a.type) {
                 equals = false;
-            }*/
+            }/**/
             if (search.info && search.info != a.info) {
                 equals = false;
             }
@@ -158,41 +158,50 @@ export function FileBrain(rootPath) {
     }
     this.reason = function(l) {
 		return new Promise((resolve, reject) => {
+            let i = 1;
 //console.log('REASON', l);
             let links = [];
             
             let dirName = getFolderName(l);
             let filename = getFileName(l);
-            if (filename[filename.length-1] != '-') {
+            /*if (filename[filename.length-1] != '-') {
                 filename += '-';
-            }
+            }*/
             let extention = getType(l);
             let data = getData(l);
             
             let books = fs.readdirSync(rootPath);
             //console.log('BOOKS', books);
-            books = books.filter(name => name.indexOf(dirName)>=0);
+            if (l?.a?.info) {
+                books = books.filter(name => name == dirName);
+            }
             //console.log('BOOKS FILTERED', books);
             
             for (let book of books) {
+console.log('BOOKS', book);
                 let dir = path.join(rootPath, book);
                 let keys = fs.readdirSync(dir);
 //console.log('KEYS', filename, keys);
-                keys = keys.filter(name => name.indexOf(filename)>=0);
+                if (l?.r?.info) {
+                    keys = keys.filter(name => name.indexOf(filename + '-')>=0);
+                }
 //console.log('KEYS FILTERED', keys);
-                keys = keys.filter(name => name.indexOf('.' + extention)>=0);
-                //console.log('B TYPES FILTERED', keys);
+                if (extention) {
+                    keys = keys.filter(name => name.indexOf('.' + extention)>=0);
+                }
+                console.log('B TYPES FILTERED', filename, keys);
                 
                 // ordena por última modificação
                 keys = keys
                     .map(fileName => ({
                         name: fileName,
-                        time: fs.statSync(`${dir}/${fileName}`).mtime.getTime(),
+                        time: fs.statSync(`${dir}/${fileName}`).mtimeMs,
                     }))
-                    .sort((a, b) => b.time - a.time)
+                    .sort((a, b) => a.time - b.time)
                     .map(file => file.name);
                 
                 let a = new Symbol(book);
+                a.id = i++;
 //console.log('FILE REASONa', a);
                 for (let key of keys) {
                     let b = new Symbol();
@@ -200,13 +209,19 @@ export function FileBrain(rootPath) {
                     [filename, b.type] = splitAt(key, '.', false);
                     [filename, b.id] = splitAt(filename, '-', false);
                     let r = new Symbol(filename);
+                    r.id = i++;
                     let filePath = path.join(dir, key);
-                    b.info = fs.readFileSync(filePath, 'utf8');
+                    
+                    try {
+                        b.info = fs.readFileSync(filePath, 'utf8');
 
-//console.log('FILE REASONr', r);                    
-                    if (b.info.indexOf(data)>=0) {
-                        let link = new Link(a, r, b);
-                        links.push(link);
+    //console.log('FILE REASONr', r);                    
+                        if (b.info.indexOf(data)>=0) {
+                            let link = new Link(a, r, b);
+                            links.push(link);
+                        }
+                    } catch (e) {
+                        books.push(book + '/' + key);
                     }
                 }
                 
