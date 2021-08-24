@@ -8,10 +8,10 @@
 import {Ceed} from './public/_js/ceed/ceed.js';
 import {FileBrain} from './public/_js/ceed/file_brain.js';
 import {} from './lib/lea.js';
-/*/
+/**/
 let library = new FileBrain('./live');
 const ceed = await Ceed();
-ceed.see('addLibrary', library).then(async () => {
+await ceed.see('addLibrary', library);
 /**/
 
 const lea = await Ceed('LEA');
@@ -21,7 +21,7 @@ lea.see('initHttpBrain', {
 	host: process.env.BRAIN_HOST,
 	protocol: process.env.BRAIN_PROTOCOL
 }).then(() => {
-/*/
+/* /
 lea.see('initBrain', {
 	host: process.env.MYSQL_HOST || 'localhost',
 	database: process.env.MYSQL_DATABASE || 'leajs',
@@ -35,7 +35,7 @@ lea.see('initBrain', {
         hostname: process.env.HOSTNAME || '127.0.0.1', 
         port: process.env.PORT || 3000
     });
-/**/
+/** /
 }).catch(e => {
 	console.error('ERROR LEA APP', e);
 });/**/

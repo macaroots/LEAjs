@@ -347,7 +347,7 @@ function OnSocketSee() {
 function CheckPermission() {
 	this.act = function (args, resolve, reject) {
 	    let [agentName, action, target, socket] = args;
-		let prohibited = ['hear', 'write', 'tie', 'set', 'understand'];
+		let prohibited = [];//['hear', 'write', 'tie', 'set', 'understand'];
 		let allow = false;
 		
 		if (!prohibited.includes(action)) {
