@@ -170,17 +170,18 @@ export function FileBrain(rootPath) {
             let extention = getType(l);
             let data = getData(l);
             
-            let books = fs.readdirSync(rootPath);
-            //console.log('BOOKS', books);
-            if (l?.a?.info) {
-                books = books.filter(name => name == dirName);
-            }
-            //console.log('BOOKS FILTERED', books);
+            let books = (dirName) ? [dirName] : fs.readdirSync(rootPath);
+//console.log('BOOKS', books);
             
             for (let book of books) {
-console.log('BOOKS', book);
+//console.log('BOOKS', book);
                 let dir = path.join(rootPath, book);
-                let keys = fs.readdirSync(dir);
+                let keys;
+                try {
+                    keys = fs.readdirSync(dir);
+                } catch {
+                    keys = [];
+                }
 //console.log('KEYS', filename, keys);
                 if (l?.r?.info) {
                     keys = keys.filter(name => name.indexOf(filename + '-')>=0);
@@ -189,7 +190,7 @@ console.log('BOOKS', book);
                 if (extention) {
                     keys = keys.filter(name => name.indexOf('.' + extention)>=0);
                 }
-                console.log('B TYPES FILTERED', filename, keys);
+//console.log('B TYPES FILTERED', filename, keys);
                 
                 // ordena por última modificação
                 keys = keys

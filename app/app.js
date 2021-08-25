@@ -7,7 +7,7 @@
  */
 import {Ceed} from './public/_js/ceed/ceed.js';
 import {FileBrain} from './public/_js/ceed/file_brain.js';
-import {} from './lib/lea.js';
+//import {} from './lib/lea.js';
 /**/
 let library = new FileBrain('./live');
 const ceed = await Ceed();
