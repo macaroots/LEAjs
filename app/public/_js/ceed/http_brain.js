@@ -13,28 +13,38 @@ export function HTTPBrain(url, protocol) {
 	}, protocol);
 	//const get = await HTTPAgentFactory.newAgent(url);
 	
-	this.get = function (symbol, callback) {
-		let s = this.getClearSymbol(symbol);
-		post.then(a => { a.see("gets", s).then(JSON.parse).then(callback)});
+	this.get = function (symbol) {
+		return new Promise(async (resolve, reject) => {
+            let s = this.getClearSymbol(symbol);
+            post.then(a => { a.see("gets", s).then(JSON.parse).then(resolve)});
+        });
 	};
-	this.set = function (symbol, callback) {
-		let s = this.getClearSymbol(symbol);
-		post.then(a => { a.see("sets", s).then(JSON.parse).then(function (s) {
-			symbol.id = s.id;
-			callback(s);
-		})});
+	this.set = function (symbol) {
+		return new Promise(async (resolve, reject) => {
+            let s = this.getClearSymbol(symbol);
+            post.then(a => { a.see("sets", s).then(JSON.parse).then(function (s) {
+                symbol.id = s.id;
+                resolve(s);
+            })});
+        });
 	};
-	this.tie = function (l, callback) {
-		l = this.getClearLink(l);
-		post.then(a => { a.see("tie", l).then(JSON.parse).then(callback)});
+	this.tie = function (l) {
+		return new Promise(async (resolve, reject) => {
+            l = this.getClearLink(l);
+            post.then(a => { a.see("tie", l).then(JSON.parse).then(resolve)});
+        });
 	};
-	this.untie = function (l, callback) {
-		l = this.getClearLink(l);
-		post.then(a => { a.see("untie", l).then(JSON.parse).then(callback)});
+	this.untie = function (l) {
+		return new Promise(async (resolve, reject) => {
+            l = this.getClearLink(l);
+            post.then(a => { a.see("untie", l).then(JSON.parse).then(resolve)});
+        });
 	};
-	this.reason = function (l, callback) {
-		l = this.getClearLink(l);
-		post.then(a => { a.see("reason", l).then(JSON.parse).then(callback)});
+	this.reason = function (l) {
+		return new Promise(async (resolve, reject) => {
+            l = this.getClearLink(l);
+            post.then(a => { a.see("reason", l).then(JSON.parse).then(resolve)});
+        });
 	};
 	this.getClearLink = function (no) {
 		var n = {};

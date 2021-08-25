@@ -86,7 +86,7 @@ export const HTTPAgentFactory = {newAgent: async function (baseUrl, options, pro
 				const postData = querystring.stringify(info);
 				
 				let url = baseUrl + type;
-console.log('HTTP Agent Request', url);
+console.log('HTTP Agent Request', url, postData);
 						
 				const options = (defaults.method == 'POST') ?
 					Object.assign(defaults, {
