@@ -1,0 +1,20 @@
+<form onsubmit="getAgent(this).see('submit', this); return false;">
+    <div class="questions"></div>
+    <div class="info" style="width: 600px; height: 400px; float: left;"></div>
+    <input name="type" placeholder="type" onchange="getAgent(this).see('typeChanged', this);">
+    <div class="versions">
+        <label for="version">version: </label>
+        <input id="version" onchange="getAgent(this).see('changeVersion', 0);" value="0">
+        / <label class="total"></label>
+        <button accessKey="p" onclick="getAgent(this).see('changeVersion', -1);" type="button">previous</button>
+        <button accessKey="n" onclick="getAgent(this).see('changeVersion', 1);" type="button">next</button>
+    </div>
+    
+    <br>
+    <button accessKey="" onclick="getAgent(this).see('executeClick');" type="button">execute</button>
+    <button accessKey="s" type="submit">Save</button>
+    <button accessKey="w" onclick="getAgent(this).see('close');" type="button">close</button>
+    <button accessKey="t" onclick="getAgent(this).see('setClick');" type="button">set</button>
+    <button accessKey="r" onclick="getAgent(this).see('readClick');" type="button">read</button>
+    <button accessKey="d" onclick="getAgent(this).see('download');" type="button">download</button>
+</form>

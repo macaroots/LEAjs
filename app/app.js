@@ -7,13 +7,9 @@
  */
 import {Ceed} from './public/_js/ceed/ceed.js';
 import {FileBrain} from './public/_js/ceed/file_brain.js';
-/**/
-import {} from './lib/lea.js';
-/*/
 let library = new FileBrain('./live');
 const ceed = await Ceed();
 await ceed.see('addLibrary', library);
-/**/
 
 const lea = await Ceed('LEA');
 try {
@@ -22,7 +18,7 @@ try {
         host: process.env.BRAIN_HOST || 'http://localhost/brain',
         protocol: process.env.BRAIN_PROTOCOL || 'http'
     });
-/*/
+/* /
     await lea.see('initBrain', {
         host: process.env.MYSQL_HOST || 'localhost',
         database: process.env.MYSQL_DATABASE || 'leajs',

@@ -1,0 +1,6 @@
+ul input ~ ul {
+    display: none;
+}
+ul input:checked ~ ul {
+    display: block;
+}

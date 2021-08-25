@@ -1,0 +1,16 @@
+<form id="formReason" onsubmit="getAgent(this).see('submit', this); return false;">
+	<div id="formA">
+		A: <input name="a[id]" placeholder="id"><input name="a[type]" placeholder="type"><textarea name="a[info]" rows="6" cols="50" placeholder="info"></textarea>
+	</div>
+	<div id="formR">
+		R: <input name="r[id]" placeholder="id"><input name="r[type]" placeholder="type"><textarea name="r[info]" rows="6" cols="50" placeholder="info"></textarea>
+	</div>
+	<div id="formB">
+		B: <input name="b[id]" placeholder="id"><input name="b[type]" placeholder="type"><textarea name="b[info]" rows="6" cols="50" placeholder="info"></textarea>
+	</div>
+	<div class="">
+	    Order by: A <input id="order_a" value="desc"> R <input id="order_r" value="desc"> B <input id="order_b" value="asc">
+	</div>
+	<input type="submit" value="Reason">
+	<div class="responses"></div>
+</form>

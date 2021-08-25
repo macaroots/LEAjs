@@ -25,9 +25,11 @@ Problemas:
 
 ## [main - v0.3] - 2021-08-24
 
-- Tirado callback. Agora somente promessas:
+- BREAKING CHANGE hearAnswer -> hear
+- BREAKING CHANGE Tirado callback. Agora somente promessas:
     - Brain. 
     - Mind
 - Fix problema da conexão
 - Add sessões
 - Add FileBrain
+- Conhecimento LEA em arquivos no ./live

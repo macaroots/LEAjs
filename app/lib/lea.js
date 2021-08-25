@@ -371,7 +371,15 @@ export function EmptyAction() {
 	};
 }
 /**/
-let ceed = await Ceed();
+const ceed = await Ceed();
+
+/**/
+// Exporta pro sistema de arquivos
+import {FileBrain} from './../public/_js/ceed/file_brain.js';
+let library = new FileBrain('./live');
+await ceed.see('addLibrary', library);
+/**/
+
 await Promise.all([
 	ceed.see('write', ['LEA.live', new Symbol(0, 'js', 'new (' + Live.toString() + ')();')]),
 	ceed.see('write', ['LEA.configMySQLBrain', new Symbol(0, 'js', 'new (' + ConfigMySQLBrain.toString() + ')();')]),

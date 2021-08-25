@@ -1,0 +1,98 @@
+:root {
+    --largura: 220px;
+    --color: #822;
+    --bg-color: white;
+    /**/--fonte-logo: Barrio;/**/
+    /**/--fonte-titulo: Nova Square;/**/
+    /**/--fonte-texto: Tenor Sans;/**/
+}
+body {
+    margin: 16px 0;
+    font-family: var(--fonte-texto);
+}
+.Page {
+    margin: auto;
+    max-width: 900px;
+}
+.logo {
+    position: fixed;
+    /**/font-family: var(--fonte-logo);
+    background: var(--color);
+    color: var(--bg-color);/**/
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    font-weight: normal;
+    font-size: calc(var(--largura)*0.75);
+    line-height: var(--largura);
+    height: var(--largura);
+    width: var(--largura);
+    text-align: center;
+    overflow: hidden;
+    border-radius: calc(var(--largura)*0.1);
+}
+
+aside {
+    position: fixed;
+    width: var(--largura);
+    height: 100%;
+    top: calc(var(--largura) + 2em);
+}
+
+section > h1 {
+    font-family: var(--fonte-titulo);
+}
+h1, a {
+    color: var(--color);
+}
+aside, aside a, aside h1 {
+    /**/
+    background: var(--color);
+    color: var(--bg-color);/**/
+}
+aside section {
+    padding: 0.1em 1em;
+}
+aside a:hover {
+    background: var(--bg-color);
+    color: var(--color);
+}
+main {
+    margin-left: calc(var(--largura) + 1em);
+    padding: 2em;
+    background: #fff;
+}
+main h1 {
+    text-align: center;
+}
+main section:not(:first-child) {
+    margin-top: 2em;
+}
+.Page img {
+    width: 100%;
+}
+.grupo {
+    display: flex;
+    text-align: center;
+    flex-wrap: wrap;
+}
+.grupo article {
+    margin: auto;
+    width: 20ch;
+}
+#negocio p { 
+    text-align: center;
+}
+
+.Page button {
+    background: var(--color);
+    color: var(--bg-color);
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 0.5em;
+}
+.Page button:hover {
+    background: var(--bg-color);
+    color: var(--color);
+}
