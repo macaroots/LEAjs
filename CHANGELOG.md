@@ -23,8 +23,11 @@ Problemas:
 - Brain não tá assíncrono.
 - Requisições demoram cada vez mais. Porque não fecha conexão com o banco? Porque não tá mantendo os agentes no servidor?
 
-## [async - v0.3] - 2021-07-03
+## [main - v0.3] - 2021-08-24
 
-- Tirar o callback.
+- Tirado callback. Agora somente promessas:
     - Brain. 
     - Mind
+- Fix problema da conexão
+- Add sessões
+- Add FileBrain
