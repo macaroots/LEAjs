@@ -52,7 +52,7 @@ services:
       - "443:443"
     volumes:
       - web-root:/var/www/html
-      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
     links:
