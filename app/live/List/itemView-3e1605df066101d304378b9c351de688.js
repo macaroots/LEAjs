@@ -6,7 +6,6 @@ new (function itemView () {
 		    html += '\n\t<span class="' + i + '">' + args[i] + '</span>';
 		}
 		html += '\n</div>';
-		let item = $(html);
-		resolve(item);
+		resolve(html);
 	};
 })();

@@ -28,10 +28,10 @@ new (function addName () {
 	    for (var i in newNames) {
 	        name = newNames[i];
 	        var indexNew = names.indexOf(name);
-		if (indexNew != -1) {
-		        indexFinal = indexNew + 1;
-		        continue;
-		}
+    		if (indexNew != -1) {
+    		        indexFinal = indexNew + 1;
+    		        continue;
+    		}
     	    
 	        names.splice(indexFinal, 0, name);
 	        indexFinal++;

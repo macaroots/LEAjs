@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=Barrio');
+:root {
+    --largura: 64px;
+    --color: #822;
+    --bg-color: white;
+    --fonte-logo: Barrio;
+    --fonte-titulo: Nova Square;
+    --fonte-texto: Tenor Sans;
+    counter-reset: secao;
+    counter-reset: h3counter;
+    counter-reset: h4counter;
+    counter-reset: figura;
+}
+.logo {
+    /**/font-family: var(--fonte-logo);
+    background: var(--color);
+    color: var(--bg-color);/**/
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    font-weight: normal;
+    font-size: calc(var(--largura)*0.75);
+    line-height: var(--largura);
+    height: var(--largura);
+    width: var(--largura);
+    border-radius: calc(var(--largura)*0.1);
+}
+#auth, #license, .Page {
+    background: var(--bg-color);
+    padding: 0.5em;
+    border-radius: 5px;
+}
+body {
+    background: var(--color);
+}
+.Page {
+    max-width: 960px;
+    margin: auto;
+    padding: 1em;
+    margin-bottom: 6em;
+}
+img {
+    max-width: 100%;
+}

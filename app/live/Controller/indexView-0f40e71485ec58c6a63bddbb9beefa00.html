@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>LEA - Live Environment for Agents</title>
+	<title><%=req.params.agent%> LEA - Live Environment for Agents</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -36,8 +36,8 @@
 			await ce.see('appendTo', 'body');
     		agent.see('edit');
     		
-			ceed.see('connect');
-			ceed.see('getSocketAgent', controllerName + 'Controller');
+			//ceed.see('connect');
+			//ceed.see('getSocketAgent', controllerName + 'Controller');
 		});
 	});
 	</script>
@@ -54,9 +54,6 @@
         right: 8px;
         text-align: right;
         width: 445px;
-    }
-    body {
-        padding-bottom: 75px;
     }
 	</style>
 </head>

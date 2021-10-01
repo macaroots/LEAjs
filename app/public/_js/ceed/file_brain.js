@@ -158,7 +158,7 @@ export function FileBrain(rootPath) {
     }
     this.reason = function(l) {
 		return new Promise((resolve, reject) => {
-            let i = 1;
+            let id = 1;
 //console.log('REASON', l);
             let links = [];
             
@@ -173,8 +173,21 @@ export function FileBrain(rootPath) {
             let books = (dirName) ? [dirName] : fs.readdirSync(rootPath);
 //console.log('BOOKS', books);
             
-            for (let book of books) {
-//console.log('BOOKS', book);
+            // ordena por última modificaçãobooks
+            try {
+                books = books
+                    .map(fileName => ({
+                        name: fileName,
+                        time: fs.statSync(`${rootPath}/${fileName}`).mtimeMs,
+                    }))
+                    .sort((a, b) => a.time - b.time)
+                    .map(file => file.name);
+            } catch {}
+            
+            let keysIds = {};
+            
+            function processBook(book) {
+//console.log('BOOK', book);
                 let dir = path.join(rootPath, book);
                 let keys;
                 try {
@@ -202,7 +215,7 @@ export function FileBrain(rootPath) {
                     .map(file => file.name);
                 
                 let a = new Symbol(book);
-                a.id = i++;
+                a.id = id++;
 //console.log('FILE REASONa', a);
                 for (let key of keys) {
                     let b = new Symbol();
@@ -210,7 +223,13 @@ export function FileBrain(rootPath) {
                     [filename, b.type] = splitAt(key, '.', false);
                     [filename, b.id] = splitAt(filename, '-', false);
                     let r = new Symbol(filename);
-                    r.id = i++;
+                    let rid = keysIds[filename];
+                    if (!rid) {
+                        rid = id++
+                        keysIds[filename] = rid;
+                    }
+                    r.id = rid;
+                    
                     let filePath = path.join(dir, key);
                     
                     try {
@@ -222,10 +241,14 @@ export function FileBrain(rootPath) {
                             links.push(link);
                         }
                     } catch (e) {
-                        books.push(book + '/' + key);
+                        processBook(book + '/' + key);
                     }
                 }
                 
+            }
+            
+            for (let book of books) {
+                processBook(book);
             }
             
 //console.log('FILE REASONl', links); 

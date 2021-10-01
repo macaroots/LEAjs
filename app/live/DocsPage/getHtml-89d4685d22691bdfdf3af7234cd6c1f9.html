@@ -1,0 +1,169 @@
+<header>
+    <div class="logo">TIIA</div>
+    <h1>LEA - Live Environment for Agents</h1>
+</header>
+<main>
+    <section>
+        <p>LEA é uma plataforma web para edição ao vivo baseado no framework multi-agente MInD.</p>
+        
+        <h2>Framework MInD (Model for Intelligence Development)</h2>
+        <p>O estudo de agentes inteligentes está entre as correntes da inteligência artificial (IA). De acordo com Russell (), um agente é um ente que percebe o ambiente a partir de sensores e age alterando o ambiente através de seus atuadores (Figura 1). A representação dessa situação através de um diagrama de sequência UML, como visto na Figura 2, ajuda a entender que a única função do agente é "perceber" as sensações adquiridas pelos sensores.</p>
+        <div>
+            <figure>
+                <img src="_img/agent.png">
+                <figcaption>Um agente percebe e age.</figcaption>
+            </figure>
+            <figure>
+                <img src="_img/uml_agent.png">
+                <figcaption>Diagrama UML de sequência de interação com um agente.</figcaption>
+            </figure>
+        </div>
+        <p>Espera-se que a sensações percebidas pelo agente disparem ações através de seus atuadores para modificar o ambiente, mas já não podemos garantir que o agente fará algo. Agir ou não é escolha do agente. É interessante notar que apesar do nome, não é o agente que age, e sim o atuador escolhido pelo agente. Perceba também que o agente fica escondido atrás de seus sensores e atuadores. O ambiente não tem acesso ao agente e para todos os efeitos, nem sabe se existe algum agente. Ambiente, sensores e atuadores são <abbr title="Plain Old Java Objects">POJO</abbr>s e estão representados no diagrama como atores porque não pertencem ao escopo do framework MInD. Apesar de reconhecer a interconexão entre o corpo e a mente, MInD os define separadamente e se concentra apenas na mente. Quando falamos de mente, estamos pensando na unidade de decisão que recebe estímulos do corpo e reage novamente através do corpo.</p>
+        
+        <h3>Interface Agent</h3>
+        <p>Assim, o único método na interface <code>Agent</code> é perceber, para encurtar <code>see()</code>.</p>
+       
+        <h3>Interface Mind</h3>
+        <p>De acordo com a definição de Russell, um interruptor, que percebe o ambiente quando é pressionado e age ligando a luz, pode ser considerado um agente. Fica claro para nós que o conceito de agência e até "fazer a coisa certa" (acender ou apagar a luz conforme solicitado) ainda não é a mesma coisa que inteligência.</p>
+        <p>Entre as inúmeras definições de inteligência, MInD considera essencial "a capacidade de <b>adquirir</b> e <b>aplicar</b> conhecimento". Além de perceber o ambiente, a interface Mind representa o que se espera de um agente inteligente: set(), definir novos conhecimentos; e get(), recuperar esse conhecimentos para que possam ser aplicados.</p>
+        <h3>Interface Action</h3>
+        <p>Uma ação age, <code>act()</code>. Permite que o agente realize operações.</p>
+        
+        <h3>Classe NaiveMind</h3>
+        <p>Entre as diversas possibilidades de agentes inteligentes, o framework MInD oferece agentes prontos para serem treinados, NaiveAgents. Os "agentes ingênuos" são uma tentativa de representação de uma mente inteligente, uma unidade de decisão capaz de adquirir e aplicar conhecimento. Assim que "nascem", como bebês, apresentam apenas comportamentos básicos, não fazem nada além de aprender novas ações. São ditos ingênuos porque seu comportamento inicial não critica nem questiona ordens. Tais agentes representam apenas a mente (sua unidade de decisão), portanto, precisam de um corpo (sensores e atuadores) para sentir e atuar no ambiente. A cada percepção, o agente deve procurar em sua mente conhecimentos para decidir como agir. Se não souber, o agente percebe que não sabe e faz nada.</p>
+        
+        <h4>Ações Naive</h4>
+        <ul>
+            <li>set</li>
+            <li>get</li>
+            <li>getAll</li>
+            <li>getName</li>
+            <li>getNames</li>
+            <li>getFullName</li>
+            <li>error</li>
+            <li>readBrain</li>
+            <li>writeBrain</li>
+            <li>dontKnow</li>
+            <li>notAction</li>
+        </ul>
+        <h4>Exemplo</h4>
+        <p>O código abaixo é um teste simples que exemplifica o comportamento inicial de um NaiveAgent, que inicialmente não consegue realizar a operação de soma, mas após esse conhecimento ser inserido em sua base de conhecimentos, é capaz de somar com sucesso.</p>
+        <code><pre>let tester = LEA.getAgent('Tester');
+let tested = LEA.getAgent('Joe');
+
+// Sum should fail
+tested.see('sum', [1, 2], function (sum) {
+    tester.see('assertEquals', [sum, null]);
+});
+
+// Teaching new action
+tested.see('set', ['sum', new (function sum () {
+	this.act = function (args, callback) {
+		let sum = 0;
+		for (let i in args) {
+		    sum += args[i];
+		}
+		callback(sum); // return statement
+	};
+})()]);
+
+// Sum should succeed
+tested.see('sum', [1, 2], function (sum) {
+    tester.see('assertEquals', [sum, 3]);
+});</pre></code>
+        <h2>Framework LEA</h2>
+        <p>A utilização de agentes como objetos não é muito interessante, sendo difícil perceber onde está a inteligência. Se a definição de inteligência for "a capacidade de adquirir e aplicar conhecimento", isso acabou de ficar demonstrado. Não tem nada na definição sobre a forma que o agente irá adquirir esse conhecimento. Se isso é inteligência, não impressionou muito. Eu espereva mais da inteligência. Mas agentes não devem ser usados como objetos (Costalima, 2014). Agentes devem ter um corpo que os permitam aprender a partir de observações do ambiente. NaiveAgents são reativos. A autonomia depende de um corpo.</p>
+        
+        <h3>CEED (Clever Editing)</h3>
+        <p>Adicionando um pouco de autonomia aos agentes, CEED oferece um treinamento básico que dá acesso a duas fontes de conhecimento. Pegando o gancho quando o agente percebe que não sabe algo, é-lhe ensinado que ao invés de ficar parado, deve estudar em um banco de dados ou perguntar ao usuário. Para entender a resposta do usuário, o agente deve ser treinado na língua que a resposta for escrita. Alguns protótipos foram desenvolvidos em PHP, Java, Javascript e Python. Cada protótipo foi treinado em sua língua nativa e em ações do ciclo básico para Clever Editing, a saber:</p>
+        <h4>Ações Ciclo Ceed</h4>
+        <ul>
+            <li>dontKnow</li>
+            <li>study</li>
+            <li>getLibraries</li>
+            <li>addLibrary</li>
+            <li>getLibrary</li>
+            <li>setLibrary</li>
+            <li>read</li>
+            <li>ask</li>
+            <li>hear</li>
+            <li>write</li>
+            <li>understand</li>
+        </ul>
+        <h4>Ações de linguagem</h4>
+        <ul>
+            <li>js</li>
+        </ul>
+        <h4>Ações Ceed</h4>
+        <ul>
+            <li>getAgent</li>
+    		<li>newAgent</li>
+    		<li>initAgent</li>
+    		<li>subscribe</li>
+    		<li>notify</li>
+    		<li>help</li>
+    		<li>teach</li>
+        </ul>
+        <p>A edição ao vivo costuma recarregar o resultado para dar o efeito de programação em tempo real. Conceito complementar, a edição esperta (Clever Editing) desenvolve aplicações vivas, treinando agentes reativos codificados em tempo de execução. Entre as vantagens, podemos citar:</p>
+        <ul>
+            <li>Codificação interativa: cada vez que um agente se depara com uma função que ele não sabe, é aberta uma caixa de diálogo para definição da função. Dessa forma, é possível descrever os algoritmos em alto nível e definir os detalhes de implementação à medida que forem surgindo. Usando TDD, vamos começar com os testes e passá-los para agentes destreinados, que serão codificados em tempo de execução à medida que os desafios forem aparecendo.</li>
+            <li>Edição ao vivo: uma vez que os agentes podem ser treinados em tempo de execução, é possível editar partes do software, o comportamento de um botão, por exemplo, sem a necessidade de reiniciar o software.</li>
+            <li>Visualização e granularidade do código: agentes podem abrir ou fechar o código de funções individualmente.</li>
+            <li>Compartilhamento e colaboração: com a granularidade do código, usuários podem compartilhar funcionalidades e colaborar em software de outros usuários.</li>
+        </ul>
+        
+        <h3>Plataforma LEA</h3>
+        <p>Devidamente treinados, os agentes ganham um corpo dentro de uma página web. Agora eles podem perceber ordens dadas por usuários na Internet. Se não souber executar a ordem, o agente irá procurar o significado na biblioteca. Se não encontrar, ele pergunta ao usuário. É oferecida uma estrutura básica para definição de uma nova ação na língua conhecida pelo agente. Qualquer argumento passado para a ação estará disponível na variável "args". Pode ser definida uma função para ser executada após o termino da ação. A execução da função seguinte pode ser manipulada através da variável "callback".</p>
+        <p>Uma equipe de agentes da plataforma LEA está em constante desenvolvimento para ajudar a comunicação com os agentes. Podemos destacar os trabalhos dos seguintes agentes:</p>
+        <ul>
+            <li>
+                Lado do servidor
+                <ul>
+                    <li>NaiveAgent</li>
+                    <li>Front</li>
+                    <li>
+                        Controller
+                        <ul>
+                            <li>object</li>
+                            <li>html</li>
+                            <li>css</li>
+                        </ul>
+                    </li>
+                    <li>AuthController</li>
+                    <li>CrudController</li>
+                    <li>Crud</li>
+                </ul>
+            </li>
+            <li>
+                Lado do cliente
+                <ul>
+                    <li>NaiveAgent</li>
+                    <li>Ceed</li>
+                    <li>Script</li>
+                    <li>Tools</li>
+                    <li>Properties</li>
+                    <li>Element</li>
+                    <li>Page</li>
+                    <li>Template</li>
+                    <li>List</li>
+                    <li>Crud</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <h4>Controller.index</h4>
+        <p>Para criar uma nova página na plataforma LEA, basta acessar o endereço desejado. Os agentes vão estar lá para te ajudar a editar teu site ao vivo!</p>
+        <p>A plataforma LEA dá suporte à criação e interação com agentes inteligentes com o objetivo de ajudar a edição de páginas web. As páginas web em si, são descritas utilizando as mesmas tecnologias atuais (por enquanto: HTML, CSS, Javascript, Java, JSP).</p>
+        <p>Cada tecnologia em sua área, os agentes vem pra somar. Um NaiveAgent é, na prática, um objeto dinâmico, cujos atributos e métodos são definidos em tempo de execução. O código abaixo exemplifica como é possível criar um agente com o método <code>LEA.getAgent()</code>. A partir daí, o método <code>see()</code> solicita que o agente execute uma "ação", que é o equivalente a um método. Se a ação não tiver sido definida ainda, o agente abrirá uma caixa de diálogo. Pode-se definir e recuperar variáveis através das ações "set" e "get", respectivamente.</p>
+        <pre>let agente1 = LEA.getAgent('agente1');
+agente1.see('metodo1');
+agente1.see('set', ['a', 1]);
+agente1.see('get', 'a', function (a) { console.log(a); });</pre>
+        <p>Agentes podem interagir com o DOM. Qualquer evento pode ser direcionado para um agente, por exemplo, o código:</p>
+        <pre>&lt;button onclick="getAgent(this).see('nomeFuncao', 'args');"&gt;Clique&lt;/button&gt;</pre>
+        <button onclick="getAgent(this).see('nomeFuncao', 'args');">Clique</button>
+    </section>
+</main>
+<footer>
+    Potencializado por <a href="https://tiia.com.br">TIIA LEA</a>.
+</footer>

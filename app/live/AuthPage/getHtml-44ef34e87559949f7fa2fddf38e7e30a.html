@@ -1,0 +1,28 @@
+<form id="google" action="/auth/googleLogin" method="post">
+        <input name="id" id="id" type="hidden" />
+    </form>
+    <header>
+        <div class="logo">TIIA</div>
+        <h1>LEA - Live Environment for Agents</h1>
+        by <a href="mailto: macaroots@gmail.com">Renato Lenz Costalima</a>
+    </header>
+    <p class="license">
+        This <a rel="noopener" target="_blank" href="https://github.com/macaroots/LEAjs.git">Source Code Form</a> is subject to the terms of the <a rel="license noopener" target="_blank" href="https://github.com/macaroots/LEAjs/blob/main/LICENSE">GNU Affero General Public License v3.0</a>.
+    </p>
+    <p>By logging in, you agree with the <a href="/LEA/ce/termos" target="_blank">Terms & Conditions</a>.</p>
+
+
+
+    
+    <form action="/auth/login" method="post">
+        Who are you?<br/>
+        <input name="username" />
+        <input name="password" type="password" />
+        
+        <input value="Submit" type="submit" /><br/><br/>or
+    </form>       
+    <div>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        
+        <a class="g-signout2" href="#" onclick="signOut();">Sign out</a>
+    </div>

@@ -11,7 +11,7 @@ let library = new FileBrain('./live');
 const ceed = await Ceed();
 await ceed.see('addLibrary', library);
 
-const lea = await Ceed('LEA');
+const lea = await Ceed('Front');
 try {
 /*/
     await lea.see('initHttpBrain', {

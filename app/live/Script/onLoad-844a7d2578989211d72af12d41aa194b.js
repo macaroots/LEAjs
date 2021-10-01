@@ -10,7 +10,7 @@ new (function onLoad () {
 			*/
 			
 			var info = body.find('.info');
-			console.warn('script onLoad', body, info[0]);
+			console.log('Loading script...', body, info[0]);
 			
 			var editor = ace.edit(info[0]);
 			body.editor = editor;

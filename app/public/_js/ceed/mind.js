@@ -197,12 +197,7 @@ function See(mind) {
             mind.get(type).then(function (action) {
                 if (action != null) {
                     // act() já lida com os erros
-                    try {
-                        mind.act(action, perception.info).then(resolve).catch(reject);
-                    }
-                    catch (e) {
-                        mind.errorBehavior.act([args, e], resolve, reject);
-                    }
+                    mind.act(action, perception.info).then(resolve).catch(reject);
                 }
                 else {
                     /*
@@ -356,7 +351,7 @@ function Error(mind) {
 			let e = args[1];
 			let action = args[0][0];
 			let target = args[0][1];
-			console.trace(mind + " - ERROR:", action, "(" + target + ") - ", typeof(e), ':', e);
+			console.trace(mind + " - ERROR:" + action.name + "(" + target + ") - ", typeof(e), ':', e);
 		} catch (e) {
 			console.error('CRITICAL ERROR', e);
             reject(e)

@@ -3,7 +3,7 @@ version: '3'
 services:
   lea:
     build: .
-    #env_file: .env
+    env_file: .env
     #environment:
       #- MYSQL_HOST=db
     ports:

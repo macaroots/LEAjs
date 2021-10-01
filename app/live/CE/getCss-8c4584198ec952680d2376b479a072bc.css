@@ -1,6 +1,6 @@
 #auth {
     position: fixed;
-    top: 0px;
+    top: 8px;
     right: 8px;
 }
 .dividido {
@@ -14,7 +14,7 @@
     border: 1px solid;
     position: fixed;
     width: 47%;
-    top: 20px;
+    top: calc(2rem + 18px);
     right: 0px;
     bottom: 6em;
     display: flex;

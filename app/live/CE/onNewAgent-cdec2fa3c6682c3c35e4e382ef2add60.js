@@ -2,7 +2,12 @@ new (function onNewAgent() {
 	this.act = function (args, resolve, reject) {
 		var ce = this.agent;
 		ce.see('getBody').then(async function (body) {
+			if (!body) {
+			    console.warn('Missed newAgent', args);
+			    return;
+			}
 			var select = body.find('select');
+			    
 			select.empty();
 			var agents = (await Ceed()).agents;
 			var names = [];

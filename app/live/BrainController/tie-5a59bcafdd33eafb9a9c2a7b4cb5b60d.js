@@ -5,8 +5,12 @@ new (function tie() {
 		let link = await agent.see('getLinkFromRequest', args);
 console.log(agent + ' - TIE', link);
 		let library = await agent.see('getLibrary');
-	    let l = await library.tie(link);
-	    res.json(l);
+		try {
+    	    let l = await library.tie(link);
+    	    res.json(l);
+		} catch (e) {
+		    res.status(500).json({ok: false, error: e});
+		}
 		resolve();
 	    
 	};
