@@ -6,8 +6,8 @@ services:
     env_file: .env
     #environment:
       #- MYSQL_HOST=db
-    ports:
-      - "80:3000"
+    #ports:
+      #- "80:3000"
     volumes:
       - ./app:/home/node/app
       - node_modules:/home/node/app/node_modules
@@ -42,9 +42,42 @@ services:
     #volumes:
       #- test_db_data:/var/lib/mysql
       #- ./mind_v2.sql:/docker-entrypoint-initdb.d/dump.sql
+      
+  web:
+    image: nginx:mainline-alpine
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+    links:
+      - lea
+    depends_on:
+      - lea
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    links:
+      - web
+    depends_on:
+      - web
+    command: certonly --webroot --webroot-path=/var/www/html --email macaroots@gmail.com --agree-tos --no-eff-email --staging -d tiia.com.br -d www.tiia.com.br
 
 volumes:
   node_modules:
   #app:
   #db_data:
   #test_db_data:
+  web-root:
+  certbot-etc:
+  certbot-var:
