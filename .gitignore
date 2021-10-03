@@ -2,3 +2,7 @@ node_modules/
 db_data/
 .env
 test_agents/
+
+selfsigned.crt
+selfsigned.key
+dhparam.pem
