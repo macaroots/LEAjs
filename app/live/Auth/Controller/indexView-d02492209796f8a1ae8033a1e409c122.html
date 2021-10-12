@@ -22,7 +22,7 @@
 	var pathname = window.location.pathname.split('/');
 	let paths = pathname.slice(1);
     let controllerName = paths[0];
-    let agentName = paths.join('/') + 'Page Page';
+    let agentName = paths.join('/') + '/Page Page';
 	$(function() {
 		Ceed().then(ceed => {
 		    let ask = new AskAgent('CE');

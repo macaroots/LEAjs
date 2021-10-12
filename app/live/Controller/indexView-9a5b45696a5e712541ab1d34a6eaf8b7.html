@@ -9,7 +9,8 @@
 	<script type="module">
 	import {Ceed, AskAgent} from  '<%=baseUrl%>_js/ceed/ceed.js';
 	import {SocketAgent} from  '<%=baseUrl%>_js/ceed/agent.js';
-	import {SocketBrain} from  '<%=baseUrl%>_js/ceed/socket_brain.js';
+	//import {SocketBrain} from  '<%=baseUrl%>_js/ceed/socket_brain.js';
+    import {AjaxBrain} from  '<%=baseUrl%>_js/ceed/ajaxbrain.js';
 	window.Ceed = Ceed;
 	window.SocketAgent = SocketAgent;
 	window.AskAgent = AskAgent;
@@ -18,12 +19,14 @@
 	var pathname = window.location.pathname.split('/');
 	let paths = pathname.slice(1);
     let controllerName = paths[0];
-    let agentName = paths.join('/') + 'Page Page';
+    let agentName = paths.join('/') + '/Page Page';
 	$(function() {
 		Ceed().then(async ceed => {
 		    let ask = new AskAgent('CE');
 			ceed.skills['ask'] = ask;
-			await ceed.see('setLibrary', new SocketBrain(io()));
+			//await ceed.see('setLibrary', new SocketBrain(io()));
+			await ceed.see('setLibrary', new AjaxBrain('/brain/'));
+
 			await ceed.see('set', ['ask', ask]);
 			
 			let agent = await Ceed(agentName);
