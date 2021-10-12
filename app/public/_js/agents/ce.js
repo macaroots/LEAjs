@@ -21,16 +21,14 @@ Ceed().then(async agent => {
     top: 0px;
     right: 8px;
 }
-body > * {
-    width: 52%;
-}
 [accesskey]::after {
     content: " [" attr(accesskey) "]";
 }
 .CE {
     border: 1px solid;
     position: fixed;
-    width: 47%;
+    width: 100%;
+    box-sizing: border-box;
     top: 20px;
     right: 0px;
     bottom: 4px;
@@ -48,7 +46,7 @@ body > * {
     margin: 8px;
 }
 .answers {
-    display: none;
+    padding: 1em;
 }
 
 .questions {
