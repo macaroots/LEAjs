@@ -19,10 +19,19 @@
 	let username = '<%=req.session.user%>' || 'guest';
 	var pathname = window.location.pathname.split('/');
 	let paths = pathname.slice(1);
-    let controllerName = paths.shift() || 'Index';
-    paths.unshift(controllerName);
-    let agentName = paths.join('/') + '/Page';
-    let fullName = username + '/' + agentName + ' ' + agentName + ' Page';
+	
+	let names = ['Page'];
+	// se não tiver nada
+    paths.unshift(paths.shift() || 'Index');
+    let path = '';
+    let separator = '';
+	for (let p of paths) {
+	    path += separator + p;
+	    separator = '/';
+	    names.unshift(path + '/Page');
+	    names.unshift(username + '/' + path + '/Page');
+	}
+    let fullName = names.join(' ');
     
 	$(function() {
 		Ceed().then(async ceed => {
