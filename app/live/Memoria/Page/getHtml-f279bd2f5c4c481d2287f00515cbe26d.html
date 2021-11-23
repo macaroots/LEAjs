@@ -1,0 +1,28 @@
+<!-- LEA - Live Environment for Agents
+   - by Renato Lenz Costalima
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<header>
+    <div class="logo">TIIA</div>
+    <h1>Jogo da memória</h1>
+</header>
+<nav>
+    <form onSubmit="event.preventDefault(); getAgent(this).see('novo', this);">
+        <label>
+            Tema
+            <select name="tema">
+                <option>Linux</option>
+                <option>Inglês</option>
+            </select>
+        </label>
+        <button>Novo</button>
+    </form>
+</nav>
+<main>
+</main>
+<template id="carta">
+    <article>
+        <h1></h1>
+    </article>
+</template>

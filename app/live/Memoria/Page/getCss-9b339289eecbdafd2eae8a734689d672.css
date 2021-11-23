@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=Barrio');
+:root {
+    --largura: 64px;
+    --color: #822;
+    --bg-color: white;
+    --fonte-logo: Barrio;
+    --fonte-titulo: Nova Square;
+    --fonte-texto: Tenor Sans;
+}
+.logo {
+    /**/font-family: var(--fonte-logo);
+    background: var(--color);
+    color: var(--bg-color);/**/
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    font-weight: normal;
+    font-size: calc(var(--largura)*0.78);
+    line-height: var(--largura);
+    height: var(--largura);
+    width: var(--largura);
+    border-radius: calc(var(--largura)*0.1);
+}
+#auth, #license, .Page {
+    background: var(--bg-color);
+    padding: 0.5em;
+    border-radius: 5px;
+}
+body {
+    background: var(--color);
+}
+.Page {
+    max-width: 870px;
+    margin: auto;
+    background: var(--bg-color);
+    padding: 2em;
+    border-radius: 15px;
+}
+
+main {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr [col-start]);
+    grid-template-rows: repeat(3, 1fr [col-start]);
+    gap: 1em;
+}
+article {
+    text-align: center;
+    border: 1px solid;
+    aspect-ratio: 1;
+}
+article h1 {
+    visibility: hidden;
+}
+
+.virada h1 {
+    visibility: visible;
+}
+#jogador1 {
+    border: 1px solid;
+}
+#jogador1 article, #jogador1 h1 {
+    display: inline;
+}
