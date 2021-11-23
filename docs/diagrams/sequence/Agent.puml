@@ -1,0 +1,20 @@
+@startuml Agent
+
+skinparam ActorBorderColor #Black
+hide footbox
+
+actor Environment
+box Agent
+    actor Sensor
+    participant Mind as "<<interface>>\n:Mind"
+    actor Actuator as "Effector"
+end box
+
+autoactivate on
+Environment->Sensor:sense()
+Sensor->Mind:perceive()
+'Mind->Mind:actions = get(perception)
+Mind->Actuator:act()
+Actuator->Environment:modify()
+
+@enduml

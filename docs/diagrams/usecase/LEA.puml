@@ -1,0 +1,52 @@
+@startuml usecase
+
+title LEA - Diagrama de Casos de Uso
+header Ultima Alteração 04/11/2021 - Renato Lenz
+
+!$corProgramador = "#CornFlowerBlue"
+!$corFundo = "#White"
+!$estiloModalidade = $corProgramador + ";line:Black"
+!$estiloAgente = "#LightBlue;line:Black"
+!$estiloProgramador = "#CornFlowerBlue/LightBlue;line:Black"
+
+skinparam BackgroundColor<<system>> $corFundo
+skinparam ActorStyle awesome
+skinparam arrowThickness 2
+left to right direction
+
+actor programador as "Programador" $estiloModalidade
+
+rectangle LEA {
+    database arquivo as "Brain" $estiloAgente
+    actor agente as "Ceed" $estiloAgente
+
+    (UC00\n--\nConfigurar: Brains; portas; e chaves SSL) as uc0 $estiloProgramador
+
+    (UC01\n--\nExecutar ação) as uc1 $estiloProgramador
+    (UC02\n--\nVer todas as perguntas) as uc2 $estiloProgramador
+    (UC02\n--\nVer perguntas agente específico) as uc3 $estiloProgramador
+    (UC03\n--\nSubscrever todas as perguntas) as uc4 $estiloProgramador
+    (UC04\n--\nSubscrever perguntas\n agente específico) as uc5 $estiloProgramador
+    (UC05\n--\nFechar pergunta) as uc6 $estiloProgramador
+}
+' UploaderT
+programador -[$corProgramador]-> uc0 : programming language
+programador -[$corProgramador]-> uc1 : http://agent/action(req, res)
+programador -[$corProgramador]-> uc1 : ws://see(agent, action, args)
+programador -[$corProgramador]-> uc2 : http://questions(req, res)
+programador -[$corProgramador]-> uc3 : http://agent/questions(req, res)
+programador -[$corProgramador]-> uc4 : ws://localhost
+programador -[$corProgramador]-> uc5 : ws://localhost/agent
+programador -[$corProgramador]-> uc6
+
+uc1 -[$corProgramador]-> agente
+uc2 -[$corProgramador]-> agente
+uc3 -[$corProgramador]-> agente
+uc4 -[$corProgramador]-> agente
+uc5 -[$corProgramador]-> agente
+uc6 -[$corProgramador]-> agente
+
+agente -[$corProgramador]-> arquivo
+
+
+@enduml

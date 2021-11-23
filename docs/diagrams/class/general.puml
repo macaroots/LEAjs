@@ -1,0 +1,35 @@
+@startuml
+
+interface Agent {
+    +see(action: Object, args: Object, callback: Object)
+}
+interface Mind {
+    +see(s: Symbol, a: Action)
+    +get(key: Object): Object
+}
+interface IntelligentMind{
+    +set(key: Object, value: Object)
+}
+interface Action {
+    +act(args: Object, callback: Object)
+    +getAgent(): Agent
+}
+abstract AbstractAction {
+    +getAgent(): Agent
+}
+class NaiveMind {
+    +seeBehavior: Action
+    +getBehavior: Action
+    +setBehavior: Action
+    +actBehavior: Action
+}
+
+
+Agent - Mind
+Mind <|-- IntelligentMind
+Mind - Action
+Action <|-- AbstractAction
+
+IntelligentMind <|-- NaiveMind
+
+@enduml

@@ -1,0 +1,45 @@
+@startuml usecase
+
+title Brain - Diagrama de Casos de Uso
+header Ultima Alteração 04/11/2021 - Renato Lenz
+
+!$corProgramador = "#CornFlowerBlue"
+!$corFundo = "#White"
+!$estiloModalidade = $corProgramador + ";line:Black"
+!$estiloAgente = "#LightBlue;line:Black"
+!$estiloProgramador = "#CornFlowerBlue/LightBlue;line:Black"
+
+skinparam BackgroundColor<<system>> $corFundo
+skinparam ActorStyle awesome
+skinparam arrowThickness 2
+left to right direction
+
+actor programador as "Programador" $estiloModalidade
+
+rectangle Brain {
+    actor agente $estiloAgente
+    database arquivo as "Brain" $estiloAgente
+
+    (UC01\n--\nUsar Brain: set, get, forget, reason, tie, untie) as uc1 $estiloProgramador
+    (UC02\n--\nApagar Symbol/Link) as uc2 $estiloProgramador
+    (UC03\n--\nAdicionar Brain) as uc3 $estiloProgramador
+    (UC04\n--\nComparar Symbols) as uc4 $estiloProgramador
+    (UC05\n--\nImportar/Exportar Links) as uc5 $estiloProgramador
+}
+' UploaderT
+programador -[$corProgramador]-> uc1
+programador -[$corProgramador]-> uc2
+programador -[$corProgramador]-> uc3
+programador -[$corProgramador]-> uc4
+programador -[$corProgramador]-> uc5
+
+uc1 -[$corProgramador]-> agente
+uc2 -[$corProgramador]-> agente
+uc3 -[$corProgramador]-> agente
+uc4 -[$corProgramador]-> agente
+uc5 -[$corProgramador]-> agente
+
+agente -[$corProgramador]-> arquivo
+
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml NaiveMind
+
+hide footbox
+
+actor Environment
+actor Sensor
+participant Mind as "NaiveMind"
+participant Actuator as ":Action"
+
+
+autoactivate on
+Environment->Sensor:sense()
+Sensor->Mind:perceive(perception)
+Mind->Mind:actions = get(perception.type)
+alt actions not empty 
+Mind->Actuator:act(perception.info)
+Actuator->Environment:modify()
+deactivate Environment
+deactivate Actuator
+
+else 
+Mind->Mind:perceive(new Symbol('dontKnow', perception))
+deactivate Mind
+end
+
+@enduml

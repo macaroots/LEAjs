@@ -1,0 +1,62 @@
+@startuml  
+
+!includesub definitions.iuml!INFO
+!includesub definitions.iuml!DEF
+!includesub definitions.iuml!VAR
+!includesub definitions.iuml!LEG
+
+
+
+start 
+:abrir aplicação;
+
+repeat
+    if (há arquivo escolhido para ser editado?) then (não)
+        if (Usuário apertou \nbotão de Abrir arquivo) then (sim)
+            :Solicitar\nArquivo .ntb;
+        elseif (Usuário apertou \nbotão Importar arquivo) then (sim)
+            :Solicitar\nArquivo .txt;
+            :converter \npara .ntb;
+        elseif (Usuário apertou \nbotão Criar novo \narquivo) then (sim)
+            :Cria folha em \nbranco;
+        elseif (Usuário apertou \nAdministrar \nImpressoras) then (sim)
+            $subColor:Fluxo de \nadministração \nde Impressoras;
+        elseif (Usuário apertou \nbotão Sair) then (sim)
+            stop
+        endif
+    else (Abrir Arquivo na Edição de Texto)
+        if (Usuário apertou \nbotão Salvar Como) then (sim)
+            :Solicitar local e \nnome do arquivo;
+            :Salvar arquivo;
+        elseif (Usuário apertou \nbotão Salvar) then (sim)
+            if (Arquivo estiver local \njá estabelecido) then (sim)
+                :Salvar modificações \ndo arquivo no local;
+            else (não)
+                :Solicitar local e \nnome do arquivo;
+                :Salvar arquivo;
+            endif
+        elseif (Usuário apertou \nbotão Imprimir) then (sim)
+            $subColor:Fluxo de \nConfigurações \nde Impressão;
+            :Imprimir;    
+        elseif (Usuário apertou \nbotão Abrir arquivo) then (sim)
+            $subColor:Lidar com \ndescarte ou não \nde arquivo ;
+            :solicitar arquivo .ntb;
+        elseif (Usuário apertou \nbotão Importar arquivo) then (sim)
+            $subColor:Lidar com \ndescarte ou não \nde arquivo ;
+            :solicitar arquivo .txt;
+            :converter para .ntb;
+        elseif (Usuário apertou \nbotão Criar novo \narquivo) then (sim)
+            $subColor:Lidar com \ndescarte ou não \nde arquivo ;
+            :Criar folha em branco;
+        elseif (Usuário apertou \nbotão Administrar \nImpressoras) then (sim)
+            $subColor:Lidar com \ndescarte ou não \nde arquivo ;
+            $subColor:Fluxo de \nadministração \nde Impressoras;   
+        elseif (Usuário apertou \nbotão Sair) then (sim)
+            $subColor:Lidar com \ndescarte ou não \nde arquivo ;
+            stop
+        endif
+    endif
+repeat while (clicou em fechar?) is (não)
+    ->sim;
+stop
+@enduml

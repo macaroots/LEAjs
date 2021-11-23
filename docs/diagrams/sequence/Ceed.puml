@@ -1,0 +1,57 @@
+@startuml Ceed dontKnow
+
+
+actor GUI as "GUI"
+participant Ceed as "Ceed"
+participant Brain
+
+
+autoactivate on
+GUI->Ceed:see('addListener', ['question', this])
+deactivate
+GUI->Ceed:see(perception)
+Ceed->Ceed:see('dontKnow', perception)
+Ceed->Ceed:learned = see('study', perception)
+Ceed->Ceed:representations = see('read', perception)
+loop brain in see('getLibraries')
+loop name in getNames()
+Ceed->Brain:links = reason(new Link(name, perception.type))
+deactivate
+autoactivate off
+Ceed->Ceed:representations.push(links.b)
+autoactivate on
+end
+end
+deactivate
+Ceed->Ceed:see('understand', representations[-1])
+Ceed->Ceed:meaning = see(representation)
+Ceed->Ceed:see('set', [perception.type, meaning])
+deactivate
+deactivate
+deactivate
+deactivate
+
+alt learned
+Ceed->Ceed:see(perception)
+deactivate
+else
+Ceed->Ceed:see('ask', perception)
+Ceed->Ceed:see('notify', ['question', agent, perception])
+Ceed->GUI:see('onQuestion', [agent, perception])
+deactivate
+deactivate
+deactivate
+end
+deactivate
+deactivate
+
+GUI->Ceed:see('hear', [key, value])
+Ceed->Ceed:see('write', [key, value])
+Ceed->Brain:tie(new Link(getName(), key, value))
+deactivate
+deactivate
+Ceed->Ceed:see('understand', [key, value])
+deactivate
+deactivate
+
+@enduml
