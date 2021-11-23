@@ -33,7 +33,11 @@ import {JSBrain} from './jsbrain.js';
 export function NaiveMind(name, brain) {
     const self = this;
 	this.setName = function(name) {
-		let names = name.split(' ');
+		name = name.replace(new RegExp('\\.', 'g'), '_');
+		let names = name.split(' ').map(function (name) {
+			return name.charAt(0).toUpperCase() + name.slice(1);
+		});
+
 		names.push('Naive');
 		this.names = names;
 	};

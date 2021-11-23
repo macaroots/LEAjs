@@ -28,14 +28,16 @@ function Live() {
 		skills['setLibrary'] = new SetLibrary();
 		skills['getLibrary'] = new GetLibrary();
 		skills['read'] = new CERead();
-		skills['ask'] = new AskListeners();
-		skills['askFor'] = new AskFor();
-		skills['hear'] = new Hear();
-		skills['write'] = new CEWrite();
 		skills['understand'] = new Understand();
 		
 		// linguagens para interpretação de Symbols
 		skills['js'] = new JS();
+
+		// habilidades podem ser estudadas para o ciclo Clever Editing
+		skills['ask'] = new AskListeners();
+		skills['askFor'] = new AskFor();
+		skills['hear'] = new Hear();
+		skills['write'] = new CEWrite();	
 		
 		// não essenciais para o ciclo Clever Editing
 		// skills['live'] = new NaiveLive();
@@ -43,6 +45,7 @@ function Live() {
 		skills['getAgent'] = new GetAgent();
 		skills['newAgent'] = new NewChildAgent();
 		skills['initAgent'] = new InitAgentSameLibrary();
+		// TODO publish/subscribe?
 		skills['addListener'] = new AddListener();
 		skills['notify'] = new Notify();
         

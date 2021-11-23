@@ -9,7 +9,7 @@
  * Tentativa de evitar await Ceed(), adicionando o método see() na promessa.
  */
 
-import {Ceed} from './ceed.js';
+import {Ceed, CeedAgent} from './ceed.js';
 
 export const Ceed2 = function (names) {
 	let promise;

@@ -5,10 +5,12 @@
  * Released under the AGPL-3.0 License
  * https://github.com/macaroots/LEAjs/blob/main/LICENSE
  */
-import {Ceed, InitAgentSameLibrary} from './../public/_js/ceed/ceed2.js';
+//import {Ceed} from './../public/_js/ceed/ceed2.js';
+import {InitAgentSameLibrary} from './../public/_js/ceed/ceed.js';
 import {Symbol} from './../public/_js/ceed/brain.js';
 import assert from 'assert';
 
+const Ceed = (await import('./../public/_js/ceed/ceed2.js')).Ceed2;
 
 function AskFor() {
 	this.act = async function (args, resolve, reject) {

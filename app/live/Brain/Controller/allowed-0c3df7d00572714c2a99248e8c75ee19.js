@@ -2,9 +2,10 @@ new (function allowed() {
 	this.act = function (args, resolve, reject) {
 	    let [link, user] = args;
 	    
-		let allow = false;
+	    // descomente para restringir
+		let allow = true; //false;
 console.log('Checking Permission: ', args);
-	    if (link.a.info.startsWith(user + '/')) {
+	    if (link.a.info.toLowerCase().startsWith(user + '/')) {
 	        allow = true;
 	    }
 	    else {

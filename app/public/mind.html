@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LEA - Live Environment for Agents</title>
+	<meta charset="utf-8" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+</body>
+<script type="module">
+import {NaiveMind} from  './_js/ceed/mind.js';
+let agent = new NaiveMind('Joe').body;
+
+console.log('Sum should fail, agent knows nothing', await agent.see('sum', [1, 2]));
+
+// Teaching new action
+await agent.see('set', ['sum', new (function sum () {
+    this.act = function (args, resolve, reject) {
+        let sum = 0;
+        for (let n of args) {
+            sum += n;
+        }
+        resolve(sum);
+    };
+})()]);      
+
+console.log('Sum should succeed', await agent.see('sum', [1, 2]));
+</script>
+</html>

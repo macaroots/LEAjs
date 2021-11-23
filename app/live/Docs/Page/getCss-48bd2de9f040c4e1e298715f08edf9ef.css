@@ -65,13 +65,27 @@ p, li {
 p {
     text-indent: 3em;
 }
-figcaption::before {
-    counter-increment: figura;
-    content: 'Figura ' counter(secao) '.' counter(figura) ': ';
+a {
+    text-decoration: none;
+    color: var(--color);
+}
+a:hover {
+    text-decoration: underline;
 }
 figure {
     display: inline-block;
     vertical-align: middle;
+}
+section > div {
+    text-align: center;
+}
+figcaption {
+    text-align: left;
+    
+}
+figcaption::before {
+    counter-increment: figura;
+    content: 'Figura ' counter(secao) '.' counter(figura) ': ';
 }
 img {
     max-width: 100%;

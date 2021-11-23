@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Barrio');
+
 :root {
     --largura: 64px;
     --hue: 0deg;
@@ -122,6 +123,15 @@ p, li {
 p {
     text-indent: 3em;
 }
+
+a {
+    text-decoration: none;
+    color: var(--color);
+}
+a:hover {
+    text-decoration: underline;
+}
+
 figcaption::before {
     counter-increment: figura;
     content: 'Figura ' counter(secao) '.' counter(figura) ': ';
@@ -133,3 +143,4 @@ figure {
 img {
     max-width: 100%;
 }
+

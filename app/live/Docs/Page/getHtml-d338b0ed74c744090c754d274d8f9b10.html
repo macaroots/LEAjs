@@ -6,8 +6,73 @@
     <section>
         <p>LEA é uma plataforma web para edição ao vivo baseado no framework multi-agente MInD.</p>
         
+        <h2>TL;DR;</h2>
+        <p><b>Ceed</b>s são sensores com apenas um método: <code>see(acao, argumento)</code>, capaz de solicitar ações ao agente; devolve uma Promise.</p>
+        <p>A ação 'set' permite definir novas ações. Caso o agente não conheça a ação, ele deve perguntar ao programador.</p>
+        <p>Exemplo: Um clique no botão "Olá, mundo!" dispara a função 'ola' definida no &lt;script&gt;. Um clique no botão "Nova ação" dispara uma pergunta, já que a função 'novaAcao' nunca foi definida.</p>
+        <pre>&lt;script type="module"&gt;
+    import {Ceed} from  '//localhost/_js/ceed/ceed.js';
+    let agente = await Ceed('NovoAgente');
+    window.agente = agente;
+    agente.see('set', ['ola', new (function () {
+        this.act = function (args, resolve, reject) {
+            alert('Olá, ' + args);
+        };
+    })()]);
+&lt;/script&gt;
+&lt;button onclick="agente.see('ola', 'mundo');"&gt;Olá, mundo!&lt;/button&gt;
+&lt;button onclick="agente.see('novaAcao', 'args');"&gt;Nova ação&lt;/button&gt;</pre>
+        <script type="module">import {Ceed} from  '//localhost/_js/ceed/ceed.js';
+let agente = await Ceed('NovoAgente');
+window.agente = agente;
+agente.see('set', ['ola', new (function () {
+    this.act = function (args, resolve, reject) {
+        alert('Olá, ' + args);
+    };
+})()]);</script>
+        <button onclick="agente.see('ola', 'mundo');">Olá, mundo!</button>
+        <button onclick="agente.see('novaAcao', 'args');">Nova ação</button>
+        <p>A <b>edição assistida por agentes</b> permite descrever o algoritmo numa abordagem top-down interativa. Cada ação desconhecida o agente abre uma pergunta.</p>
+        <pre>&lt;script&gt;
+    agente.see('set', ['topDown', new (function () {
+        this.act = async function (args, resolve, reject) {
+            let agent = this.agent;
+            let r1 = await agent.see('passo1', args);
+            let r2 = await agent.see('passo2', r1);
+            let r3;
+            if (await agent.see('teste', r2)) {
+                r3 = await agent.see('alternativa1', r2);
+            }
+            else {
+                r3 = await agent.see('alternativa2', r2);
+            }
+            resolve(r3);
+        };
+    })()]);
+&lt;/script&gt;
+&lt;button onclick="agente.see('topDown', 'mundo');"&gt;CleverEditing&lt;/button&gt;
+        </pre>
+        <script>
+    agente.see('set', ['topDown', new (function () {
+        this.act = async function (args, resolve, reject) {
+            let agent = this.agent;
+            let r1 = await agent.see('passo1', args);
+            let r2 = await agent.see('passo2', r1);
+            let r3;
+            if (await agent.see('teste', r2)) {
+                r3 = await agent.see('alternativa1', r2);
+            }
+            else {
+                r3 = await agent.see('alternativa2', r2);
+            }
+            resolve(r3);
+        };
+    })()]);</script>
+        <button onclick="agente.see('topDown', 'args');">CleverEditing</button>
         <h2>Framework MInD (Model for Intelligence Development)</h2>
-        <p>O estudo de agentes inteligentes está entre as correntes da inteligência artificial (IA). De acordo com Russell (), um agente é um ente que percebe o ambiente a partir de sensores e age alterando o ambiente através de seus atuadores (Figura 1). A representação dessa situação através de um diagrama de sequência UML, como visto na Figura 2, ajuda a entender que a única função do agente é "perceber" as sensações adquiridas pelos sensores.</p>
+        <p>O objetivo do framework MInD é estabelecer uma base para aplicações inteligentes. Nosso projeto começa tentando entender o que é inteligência, procurando encontrar sua essência, sua abstração máxima.</p>
+        <p>Uma das abordagens para descrição da inteligência artificial (IA) é baseada em <b>agentes inteligentes</b>. De acordo com Russell (), um <b>agente</b> é um ente que percebe o ambiente a partir de sensores e age alterando o ambiente através de seus atuadores, ilustrado na Figura 1. O "?" talvez represente bem a unidade de decisão do agente, uma vez que o ambiente só "enxerga" o corpo do agente e pode somente imaginar que existe uma unidade de decisão fazendo as escolhas. A unidade de decisão de um agente pode ser distribuída, talvez seja puramente mecânica ou química, ou pode não ter decisão nenhuma. Qualquer que seja a forma dessa unidade de decisão, este projeto irá chamá-la de <b>mente</b>. Apesar de acreditar na teoria de uma mente corpórea (), onde corpo e mente são uma coisa só, um pensamento analítico força a identificação de duas tarefas: a) interagir com o ambiente, papel do corpo (sensores e atuadores); e b) processar informações e tomar decisões, papel da mente. Veremos que a falta de uma distinção clara entre corpo e mente não acaba aqui e tem consequências práticas na implementação do código.</p>
+        <p>A representação da mesma situação através de um diagrama de sequência UML (Figura 2) ajuda a entender como a mente está "escondida" do ambiente atrás de seus sensores e atuadores. Note que agente é como chamamos a união corpo-mente. Não é possível ver "agentes" por aí, vemos corpos, que supostamente são controlados por mentes. Não há como ter certeza, por isso o "?".</p>
         <div>
             <figure>
                 <img src="_img/agent.png">
@@ -18,12 +83,15 @@
                 <figcaption>Diagrama UML de sequência de interação com um agente.</figcaption>
             </figure>
         </div>
-        <p>Espera-se que a sensações percebidas pelo agente disparem ações através de seus atuadores para modificar o ambiente, mas já não podemos garantir que o agente fará algo. Agir ou não é escolha do agente. É interessante notar que apesar do nome, não é o agente que age, e sim o atuador escolhido pelo agente. Perceba também que o agente fica escondido atrás de seus sensores e atuadores. O ambiente não tem acesso ao agente e para todos os efeitos, nem sabe se existe algum agente. Ambiente, sensores e atuadores são <abbr title="Plain Old Java Objects">POJO</abbr>s e estão representados no diagrama como atores porque não pertencem ao escopo do framework MInD. Apesar de reconhecer a interconexão entre o corpo e a mente, MInD os define separadamente e se concentra apenas na mente. Quando falamos de mente, estamos pensando na unidade de decisão que recebe estímulos do corpo e reage novamente através do corpo.</p>
+        <p>Espera-se que a sensações percebidas pelo agente disparem ações através de seus atuadores para modificar o ambiente, mas já não podemos garantir que o agente fará algo. Agir ou não é escolha do agente. </p>
+        <p>Encontramos inteligência nos mais variados ambientes, com variados sensores e atuadores. É claro que a mente depende de um corpo, mas nada disso faz parte da essência da inteligência, portanto, são descritos em Java como <abbr title="Plain Old Java Objects">POJO</abbr>s e estão representados no diagrama como atores porque não pertencem ao escopo do framework MInD. 
+        A única função do agente é "perceber" as sensações adquiridas pelos sensores.</p>
         
-        <h3>Interface Agent</h3>
-        <p>Assim, o único método na interface <code>Agent</code> é perceber, para encurtar <code>see()</code>.</p>
-       
         <h3>Interface Mind</h3>
+        <p>A Figura 1.1 representa um agente
+            Assim, o único método na interface <code>Agent</code> é perceber, para encurtar <code>see()</code>.</p>
+       
+        <h3>Interface IntelligentMind</h3>
         <p>De acordo com a definição de Russell, um interruptor, que percebe o ambiente quando é pressionado e age ligando a luz, pode ser considerado um agente. Fica claro para nós que o conceito de agência e até "fazer a coisa certa" (acender ou apagar a luz conforme solicitado) ainda não é a mesma coisa que inteligência.</p>
         <p>Entre as inúmeras definições de inteligência, MInD considera essencial "a capacidade de <b>adquirir</b> e <b>aplicar</b> conhecimento". Além de perceber o ambiente, a interface Mind representa o que se espera de um agente inteligente: set(), definir novos conhecimentos; e get(), recuperar esse conhecimentos para que possam ser aplicados.</p>
         <h3>Interface Action</h3>
@@ -32,6 +100,27 @@
         <h3>Classe NaiveMind</h3>
         <p>Entre as diversas possibilidades de agentes inteligentes, o framework MInD oferece agentes prontos para serem treinados, NaiveAgents. Os "agentes ingênuos" são uma tentativa de representação de uma mente inteligente, uma unidade de decisão capaz de adquirir e aplicar conhecimento. Assim que "nascem", como bebês, apresentam apenas comportamentos básicos, não fazem nada além de aprender novas ações. São ditos ingênuos porque seu comportamento inicial não critica nem questiona ordens. Tais agentes representam apenas a mente (sua unidade de decisão), portanto, precisam de um corpo (sensores e atuadores) para sentir e atuar no ambiente. A cada percepção, o agente deve procurar em sua mente conhecimentos para decidir como agir. Se não souber, o agente percebe que não sabe e faz nada.</p>
         
+        <h4>Teste de inteligência</h4>
+        <p>O teste abaixo verifica se o agente é inteligente, ou seja, é capaz de adquirir e aplicar conhecimento.</p>
+        <code><pre>let agent = new NaiveMind('Joe').body;
+
+// Sum should fail, agent knows nothing
+assert.equal(await agent.see('sum', [1, 2]), null);
+
+// Teaching new action
+await agent.see('set', ['sum', new (function sum () {
+    this.act = function (args, resolve, reject) {
+        let sum = 0;
+        for (let n of args) {
+            sum += n;
+        }
+        resolve(sum);
+    };
+})()]);      
+
+// Sum should succeed
+assert.equal(await agent.see('sum', [1, 2]), 3);</pre></code>
+
         <h4>Ações Naive</h4>
         <ul>
             <li>set</li>
@@ -46,31 +135,7 @@
             <li>dontKnow</li>
             <li>notAction</li>
         </ul>
-        <h4>Exemplo</h4>
-        <p>O código abaixo é um teste simples que exemplifica o comportamento inicial de um NaiveAgent, que inicialmente não consegue realizar a operação de soma, mas após esse conhecimento ser inserido em sua base de conhecimentos, é capaz de somar com sucesso.</p>
-        <code><pre>let tester = LEA.getAgent('Tester');
-let tested = LEA.getAgent('Joe');
-
-// Sum should fail
-tested.see('sum', [1, 2], function (sum) {
-    tester.see('assertEquals', [sum, null]);
-});
-
-// Teaching new action
-tested.see('set', ['sum', new (function sum () {
-	this.act = function (args, callback) {
-		let sum = 0;
-		for (let i in args) {
-		    sum += args[i];
-		}
-		callback(sum); // return statement
-	};
-})()]);
-
-// Sum should succeed
-tested.see('sum', [1, 2], function (sum) {
-    tester.see('assertEquals', [sum, 3]);
-});</pre></code>
+        
         <h2>Framework LEA</h2>
         <p>A utilização de agentes como objetos não é muito interessante, sendo difícil perceber onde está a inteligência. Se a definição de inteligência for "a capacidade de adquirir e aplicar conhecimento", isso acabou de ficar demonstrado. Não tem nada na definição sobre a forma que o agente irá adquirir esse conhecimento. Se isso é inteligência, não impressionou muito. Eu espereva mais da inteligência. Mas agentes não devem ser usados como objetos (Costalima, 2014). Agentes devem ter um corpo que os permitam aprender a partir de observações do ambiente. NaiveAgents são reativos. A autonomia depende de um corpo.</p>
         

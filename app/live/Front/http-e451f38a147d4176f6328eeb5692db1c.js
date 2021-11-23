@@ -1,7 +1,7 @@
 new (function Http() {
 	this.act = async function (args, callback) {
 		let [req, res] = args;
-console.log(this.agent + 'http', req.params);		
+console.log(this.agent + ' - http', req.params, new Date());		
 	    let agentName = req.params.agent || 'index';
 	    let actionName = req.params.action || 'index';
 		
