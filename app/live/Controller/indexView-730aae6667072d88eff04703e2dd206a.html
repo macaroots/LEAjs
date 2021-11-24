@@ -21,15 +21,18 @@
 	let paths = pathname.slice(1);
 	
 	let names = ['Page'];
-	// se não tiver nada
-    paths.unshift(paths.shift() || 'Index');
+	// se não tiver nada, padrão é index
+	let controllerName = paths.shift() || 'Index';
+    paths.unshift(controllerName);
     let path = '';
     let separator = '';
 	for (let p of paths) {
 	    path += separator + p;
 	    separator = '/';
 	    names.unshift(path + '/Page');
-	    names.unshift(username + '/' + path + '/Page');
+	    if (controllerName != username) {
+	        names.unshift(username + '/' + path + '/Page');
+	    }
 	}
     let fullName = names.join(' ');
     
