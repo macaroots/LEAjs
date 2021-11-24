@@ -22,11 +22,12 @@ console.log('TOKEN', token);
           
 console.log('GOOGLE_LOGIN', user);
 		    req.session.user = user;
-		    res.json({ok: true});
+		    //res.json({ok: true});
+		    res.redirect('/' + user);
         }
         verify().catch(e => {
 		    req.session.destroy();
-            res.json({ok: false, error: 'Invalid ID token.', e: e});
+            res.status(403).json({ok: false, error: 'Invalid ID token.', e: e});
         });
 		
 		resolve();

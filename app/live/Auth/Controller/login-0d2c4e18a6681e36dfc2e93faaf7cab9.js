@@ -8,11 +8,16 @@ new (function login() {
 		if (password == username + '!@#') {
 		    req.session.user = username;
 		    ok = true;
+		    
+		    res.redirect('/' + username);
 		}
 		else {
 		    req.session.destroy();
+		    
+            res.status(403).json({ok: false, error: 'Invalid crendentials.'});
 		}
-	    res.send({ok: ok});
+	    //res.send({ok: ok});
+	    
 		
 		resolve();
 	};
