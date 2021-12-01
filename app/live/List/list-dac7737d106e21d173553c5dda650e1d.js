@@ -2,13 +2,11 @@ new (function list() {
 	this.act = async function (args, resolve, reject) {
 	    const agent = this.agent;
 	    const body = await agent.see('getBody');
-	    const table = body.find('table')[0];
-	    let header = table.tHead;
-	    let tbody = table.tBodies[0];
+	    const tbody = body.find('.list')[0];
 	    
 		tbody.innerHTML = "Carregando...";
-		let url = await agent.see('getUrl');
-		let r = await fetch(url + 'list');
+		let url = await agent.see('listUrl');
+		let r = await fetch(url);
 		let rows = await r.json();
 	    await agent.see('study', 'itemView');
 	    let html = '';
