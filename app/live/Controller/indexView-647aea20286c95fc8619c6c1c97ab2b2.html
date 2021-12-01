@@ -16,13 +16,13 @@
 	window.AskAgent = AskAgent;
 	window.baseUrl = '<%=baseUrl%>';
 
-	let username = '<%=req.session.user%>' || 'guest';
 	var pathname = window.location.pathname.split('/');
 	let paths = pathname.slice(1);
 	
 	let names = ['Page'];
 	// se não tiver nada, padrão é index
 	let controllerName = paths.shift() || 'Index';
+	let username = '<%=req.session.user%>' || controllerName;
     paths.unshift(controllerName);
     let path = '';
     let separator = '';
