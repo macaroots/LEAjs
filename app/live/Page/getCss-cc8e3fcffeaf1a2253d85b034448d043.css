@@ -1,0 +1,410 @@
+/*
+    SUBSTITUIR PELO TEMA ESCOLHIDO
+*/
+@import url('https://fonts.googleapis.com/css?family=Barrio');
+
+:root {
+
+    --primary-color-fg: #636363;
+
+    --primary-color-bg: #935d8c;
+    --secondary-color-bg: #e37682;
+    --ternary-color-bg: #5f4d93;
+
+    --primary-color-gradient: #efa8b0;
+    --secondary-color-gradient: #a89cc8;
+    --ternary-color-gradient: #8cc9f0;    
+
+    --text-color: #000;
+    --title-color: #000;
+
+    --highlight-color: #efefef;
+
+    --button-size: 16px;
+
+}
+
+:root {
+    --largura: 64px;
+    --hue: 0deg;
+    --color: var(--highlight-color);
+    --bg-color: var(--primary-color-bg);
+    --fonte-logo: Barrio;
+}
+.logo {
+    /**/font-family: var(--fonte-logo);
+    background: var(--color);
+    color: var(--bg-color);/**/
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    font-weight: normal;
+    font-size: calc(var(--largura)*0.75);
+    line-height: var(--largura);
+    height: var(--largura);
+    width: var(--largura);
+    border-radius: calc(var(--largura)*0.1);
+    margin: 8px;
+    position: fixed;
+    z-index: 1000;
+}
+/*
+    FIM DE TEMA
+*/
+
+
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
+
+.Page {
+
+    font-family: 'Source Sans Pro', sans-serif;
+    background-color: var(--ternary-color-fg);
+    background-image: -moz-linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+    background-image: -webkit-linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+    background-image: -ms-linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+    background-image: linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+
+    padding: 0;
+}
+
+body, html {
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+.Page h1, h2, h3, h4, h5, h6 {
+    font-family: 'Libre Baskerville', serif;
+    text-transform: uppercase;
+}
+
+.Page * {
+    outline-color: var(--ternary-color-bg);
+}
+
+.Page {
+    width: 100% !important;
+}
+
+.Page header {
+    height: 100vh;
+    overflow: hidden;
+
+    /* USAR IMAGEM COMO BACKGROUND DO HEADER */
+    /*background: url(https://cdn.wallpapersafari.com/88/66/lz7nYc.jpg) no-repeat;*/
+    /*background-size: cover;*/
+}
+
+.Page header::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  
+  /* FILTRO PARA COR */
+  /*background: rgba(0,0,0,.5);*/
+
+  /* FILTRO PARA IMAGEM */
+  /*background-image: url(graphic-to-be-filtered.jpg);*/
+  /*filter: grayscale(100%);*/
+
+}
+
+.Page nav {
+    position: fixed;
+    z-index: 999;
+    top: 10px;
+    left: 0;
+    right: 0;
+    max-width: 1024px;
+    margin: 0 auto;
+    transition: all .2s;
+}
+
+.Page nav ul {
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding: 5px 20px;
+    width: calc(100% - 40px - 10px);
+    background: rgba(255, 255, 255, .9);
+    border-radius: 10px;
+    border: 5px solid rgba(255, 255, 255, .8);
+    height: 30px;
+}
+
+.Page nav ul li {
+    display: inline-block;
+    text-transform: uppercase;
+    background: #efefef;
+    border-radius: 5px;
+    padding: 0 10px;
+    position: relative;
+    height: 100%;
+    line-height: 30px;
+    margin-right: 10px;
+} 
+.Page nav ul li:hover {
+    background: var(--primary-color-bg);
+}
+.Page nav ul li:hover > a {
+    color: var(--highlight-color);
+}
+
+.Page nav ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: bolder;
+    display: block;
+    width: 100%;
+}
+
+.Page nav ul li ul {
+    position: absolute;
+    display: none;
+    left: 0;
+    top: 30px;
+    max-width: 200px;
+    width: 200px;
+    z-index: 9;
+    box-shadow: 1px 1px #bbb;
+    height: auto;
+    background-color: white;
+    padding: 10px;
+}
+
+.Page nav ul li ul li {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.Page nav ul li ul li:last-child {
+    margin: 0;
+}
+
+.Page nav ul li:hover ul {
+    display: block;
+}
+
+.Page nav.sticky {
+    position: fixed;
+    top: 0;
+    max-width: 100%;
+    width: 100%;
+    z-index: 999;
+    border: 0;
+}
+.Page nav.sticky + .Page section {
+    padding-top: 102px;
+}
+
+.Page nav.sticky > ul {
+    border: 0;
+    border-radius: 0;
+    width: 100%;
+    background: rgba(0,0,0,.5);
+    padding: 10px;
+}
+
+.Page header h1 {
+    text-align: center;
+    margin: 0;
+    color: var(--highlight-color);
+    line-height: 100vh;
+    position: relative;
+}
+
+.Page section, .Page aside  {
+    padding: 50px 70px 40px 70px;
+    min-height: 100vh;
+    text-align: center;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.Page aside {
+    padding-top: 100px;
+}
+
+/*
+
+REPETIR PARA CUSTOMIZAR OUTRAS SECTIONS
+
+*/
+
+.Page section:nth-child(1) {
+    background-color: #efefef;
+    color: #000;
+}
+
+.Page section:nth-child(2) {
+    color: #000;
+    background-color: #ccc;
+}
+
+/* FIM DE CUSTOMIZAÇÃO DAS SECTIONS */
+
+
+.Page main {
+    position: relative;
+}
+
+.Page main h1 {
+    color: var(--primary-color-fg);
+    font-family: 'Libre Baskerville', serif;
+}
+
+.Page section h1 {
+    font-size: 40px;
+}
+
+.Page section h1:after {
+    display: block;
+    content: '';
+    width: 100%;
+    height: 2px;
+    margin: 0.7em 0 1em 0;
+    border-radius: 2px;
+
+    background-color: var(--highlight-color);
+    background-image: -moz-linear-gradient(90deg, var(--primary-color-gradient), var(--secondary-color-gradient), var(--ternary-color-gradient));
+    background-image: -webkit-linear-gradient(90deg, var(--primary-color-gradient), var(--secondary-color-gradient), var(--ternary-color-gradient));
+    background-image: -ms-linear-gradient(90deg, var(--primary-color-gradient), var(--secondary-color-gradient), var(--ternary-color-gradient));
+    background-image: linear-gradient(90deg, var(--primary-color-gradient), var(--secondary-color-gradient), var(--ternary-color-gradient));
+}
+
+.Page button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 0;
+
+    transition: all .2s;
+
+    background: var(--primary-color-bg);
+    color: var(--highlight-color);
+
+    cursor: pointer;
+    font-size: var(--button-size);
+
+}
+.Page button:hover {
+    background: var(--secondary-color-bg);
+}
+
+.Page form label {
+    display: block;
+    text-align: left;
+    padding: 10px;
+}
+
+.Page form label span {
+    display: block;
+}
+
+.Page form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.Page input[type="text"], 
+.Page form input[type="text"], 
+.Page form input[type="number"], 
+.Page form input[type="date"] {
+    padding: 9px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    max-width: 400px;
+    width: 100%;
+}
+
+.Page form input[type="submit"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 0;
+    min-width: 100px;
+
+    width: calc(100% - 20px);
+
+    transition: all .2s;
+
+    background: var(--primary-color-bg);
+    color: var(--highlight-color);
+
+    cursor: pointer;
+    font-size: var(--button-size);
+    
+}
+.Page form input[type="submit"]:hover {
+    background: var(--secondary-color-bg);
+}
+
+.Page form textarea {
+    padding: 9px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    max-width: 400px;
+    width: 100%;
+    min-height: 120px;
+}
+
+.Page footer {
+    height: 200px;
+    line-height: 100px;
+    text-align: center;
+    color: #fff;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .Page header h1 {
+        line-height: initial; 
+        padding: 40vh 10px 0 10px;
+    }
+
+    .Page nav {
+        left: 10px;
+        right: 10px;
+    }
+    .Page nav > ul {
+        height: auto;
+    }
+/*    .Page header nav.sticky {
+        left: 0;
+        right: 0;
+        height: auto;
+    }
+    .Page nav.sticky ul {
+        height: auto;
+        padding-bottom: 0;
+    }
+    .Page nav.sticky ul > li {
+        margin-bottom: 10px;
+    }*/
+
+    .Page nav ul {
+        padding: 5px 10px 0 10px;
+        width: calc(100% - 20px);
+    }
+    .Page nav ul > li {
+        margin-bottom: 10px;
+    }
+
+    .Page nav ul li ul {
+        width: 150px;
+        height: auto;
+    }
+    .Page button {
+        width: 250px;
+        margin-bottom: 20px;
+    }
+    .Page section {
+        padding: 90px 20px 20px 20px;
+        height: auto;
+        overflow: initial;
+    }
+    .Page aside {
+        padding-top: 120px;
+    }
+}

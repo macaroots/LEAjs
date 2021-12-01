@@ -1,0 +1,395 @@
+/*
+    SUBSTITUIR PELO TEMA ESCOLHIDO
+*/
+@import url('https://fonts.googleapis.com/css?family=Barrio');
+
+:root {
+
+    --primary-color-fg: #636363;
+
+    --primary-color-bg: #463f3a;
+    --secondary-color-bg: #8a817c;
+    --ternary-color-bg: #bcb8b1;
+
+    --header-title-color: #f4f3ee;
+
+    --text-color: #000;
+    --title-color: #000;
+
+    --highlight-color: #efefef;
+
+    --button-size: 16px;
+
+    --itens-color: #ff7f51;
+
+}
+:root {
+    --largura: 64px;
+    --hue: 0deg;
+    --color: var(--highlight-color);
+    --bg-color: var(--primary-color-bg);
+    --fonte-logo: Barrio;
+}
+.logo {
+    /**/font-family: var(--fonte-logo);
+    background: var(--color);
+    color: var(--bg-color);/**/
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    font-weight: normal;
+    font-size: calc(var(--largura)*0.75);
+    line-height: var(--largura);
+    height: var(--largura);
+    width: var(--largura);
+    border-radius: calc(var(--largura)*0.1);
+    float: left;
+    margin-top: 1.5em;
+}
+
+/*
+    FIM DE TEMA
+*/
+
+/*
+    DESCOMENTE AS DUAS LINHAS ABAIXO, CASO NÃO TENHA ASIDE
+*/
+
+/*.Page main { width: calc(100% - 260px) !important; }*/
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Source+Sans+Pro:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body, html {
+    background-color: var(--ternary-color-fg);
+    background-image: -moz-linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+    background-image: -webkit-linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+    background-image: -ms-linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+    background-image: linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+
+    padding: 0;
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Source Sans Pro', sans-serif;
+    /*text-transform: uppercase;*/
+    font-weight: normal;
+}
+
+* {
+	outline-color: var(--ternary-color-bg);
+}
+
+.Page {
+    font-family: 'Roboto', sans-serif;
+    width: 100% !important;
+    max-width: calc(100% - 40px);
+    margin: 0 auto;
+}
+
+.Page header {
+	height: 200px;
+}
+
+.Page header h1 {
+    line-height: 200px;
+    margin: 0;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+
+    padding-right: 20px;
+
+/*	text-shadow: -1px -1px 0px rgba(255,255,255,0.3), 1px 1px 0px rgba(0,0,0,0.8);
+	color: #333;
+	opacity: 0.4;*/
+
+    color: var(--header-title-color);
+	text-shadow: 0 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+
+}
+
+.Page nav {
+    border: 10px solid rgba(255,255,255,.2);
+    position: fixed;
+    left: 20px;
+    top: 200px;
+    width: 200px;
+    border-radius: 20px;
+    z-index: 99;
+}
+
+.Page nav > ul {
+    list-style: none;
+	margin: 0;
+    padding: 0;
+    background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.35));
+    background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.35));
+    background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.35));
+    background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.35));
+    position: relative;
+    background-color: var(--primary-color-bg);
+    /*background-color: rgba(59, 62, 69, 0.9);*/
+    border-radius: 8px;
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.45), inset 0px 2px 1px 0px rgba(255, 255, 255, 0.15);
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.Page nav ul li:hover a {
+    background: rgba(0, 0, 0, 0.15);
+    box-shadow: inset 1px 1px 0px 0px rgba(0, 0, 0, 0.025), 1px 1px 0px 0px rgba(255, 255, 255, 0.025);
+}
+.Page nav ul a:hover {
+    color: var(--itens-color);
+}
+
+.Page nav ul li:hover ul {
+    display: block;
+}
+
+.Page nav > ul li {
+	text-align: center;
+	border-bottom: 1px solid #333;
+}
+.Page nav > ul li:last-child {
+	border-bottom: 0;
+}
+
+.Page nav ul li ul {
+	display: none;
+}
+
+.Page nav a {
+	color: var(--highlight-color);
+	text-decoration: none;
+	text-transform: uppercase;
+	padding: 10px;
+	display: block;
+}
+
+.Page main {
+    background: #fff;
+    display: inline-block;
+    width: calc(75% - 260px);
+    /* float: left; */
+    /* clear: both; */
+    border-radius: 30px;
+    /* border-bottom-left-radius: 30px; */
+    /* border-bottom-right-radius: 30px; */
+    box-sizing: border-box;
+    margin-left: 240px;
+}
+
+.Page main section {
+	padding: 20px 40px;
+	padding-bottom: 50px;
+}
+
+.Page section h1 {
+    position: relative;
+    padding-left: 25px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 50px;
+    color: var(--primary-color-bg);
+}
+
+.Page section h1:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 6px;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    background-color: var(--itens-color);
+    border: 1px solid rgb(48,49,51);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 2px white,
+                    0 0 0 4px white;
+}
+
+.Page section h1:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: var(--itens-color);
+    left: 0;
+    bottom: -10px;
+}
+
+.Page aside {
+	display: inline-block;
+	background: #fff;
+	width: 25%;
+	padding: 20px;
+	box-sizing: border-box;
+	border-radius: 30px;
+	min-height: 100vh;
+    float: right;
+}
+
+.Page button {
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 0;
+
+    transition: all .2s;
+
+    background: var(--primary-color-bg);
+    color: var(--highlight-color);
+
+    cursor: pointer;
+    font-size: var(--button-size);
+
+}
+.Page button:hover {
+    background: var(--secondary-color-bg);
+}
+
+.Page form label {
+    display: block;
+    text-align: left;
+    padding: 10px;
+}
+
+.Page form label span {
+    display: block;
+}
+
+.Page form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.Page input[type="text"], 
+.Page form input[type="text"], 
+.Page form input[type="number"], 
+.Page form input[type="date"] {
+    padding: 9px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    max-width: 400px;
+    width: 100%;
+}
+
+.Page form input[type="submit"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 0;
+    min-width: 100px;
+
+    width: 100%;
+
+    transition: all .2s;
+
+    background: var(--primary-color-bg);
+    color: var(--highlight-color);
+
+    cursor: pointer;
+    font-size: var(--button-size);
+    
+}
+.Page form input[type="submit"]:hover {
+    background: var(--secondary-color-bg);
+}
+
+.Page form textarea {
+    padding: 9px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    max-width: 400px;
+    width: 100%;
+    min-height: 120px;
+}
+
+.Page footer  {
+	clear: both;
+	padding: 50px;
+	color: var(--highlight-color);
+	text-align: center;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+
+
+@media only screen and (max-width: 600px) {
+
+    .Page {
+        max-width: 100%;
+    }
+
+	.Page header {
+		height: auto;
+	}
+
+	.Page header h1 {
+		position: relative;
+		height: 100px;
+		line-height: 50px;
+		padding-top: 50px;
+		text-align: center;
+		margin-bottom: 50px;
+	}
+
+	.Page nav {
+	    border: 10px solid rgba(255,255,255,.2);
+	    position: initial;
+	    right: 0;
+	    width: calc(100% - 20px);
+	    margin: 0 auto;
+	    margin-bottom: 20px;
+	    border-radius: 20px;
+	    box-sizing: border-box;
+	}
+
+    .Page main section {
+        padding: 10px 20px;
+        padding-bottom: 30px;
+        margin-bottom: 20px;
+    }
+
+	.Page main {
+		display: block;
+		width: 100%;
+		border-radius: 0;
+        margin-left: 0;
+	}
+
+	.Page aside {
+		display: block;
+		width: 100%;
+		border-radius: 0;
+        height: auto;
+        min-height: auto;
+	}
+
+    .Page footer  {
+        width: 100%;
+    }
+
+
+}

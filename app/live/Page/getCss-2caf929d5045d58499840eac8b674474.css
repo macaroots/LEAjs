@@ -1,0 +1,381 @@
+/*
+    SUBSTITUIR PELO TEMA ESCOLHIDO
+*/
+@import url('https://fonts.googleapis.com/css?family=Barrio');
+
+:root {
+
+    --primary-color-fg: #636363;
+
+    --primary-color-bg: #247ba0;
+    --secondary-color-bg: #70c1b3;
+    --ternary-color-bg: #50514f;
+
+    --primary-color-gradient: #50514f;
+    --secondary-color-gradient: #f25f5c;
+    --ternary-color-gradient: #ffe066;    
+
+    --text-color: #000;
+    --title-color: #000;
+
+    --highlight-color: #efefef;
+
+    --button-size: 16px;
+
+}
+
+
+:root {
+    --largura: 64px;
+    --hue: 0deg;
+    --color: var(--highlight-color);
+    --bg-color: var(--primary-color-bg);
+    --fonte-logo: Barrio;
+}
+.logo {
+    /**/font-family: var(--fonte-logo);
+    background: var(--color);
+    color: var(--bg-color);/**/
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    font-weight: normal;
+    font-size: calc(var(--largura)*0.75);
+    line-height: var(--largura);
+    height: var(--largura);
+    width: var(--largura);
+    border-radius: calc(var(--largura)*0.1);
+    float: left;
+    margin-top: 1.25em;
+}
+/*
+    FIM DE TEMA
+*/
+
+
+/*
+    DESCOMENTE AS DUAS LINHAS ABAIXO, CASO NÃO TENHA ASIDE
+*/
+
+/*.Page main { width: 100% !important; }*/
+/*.Page nav { width: 100% !important; }*/
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&display=swap');
+
+body {
+
+    font-family: 'Merriweather', serif;
+    background-color: var(--ternary-color-fg);
+    background-image: -moz-linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+    background-image: -webkit-linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+    background-image: -ms-linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+    background-image: linear-gradient(45deg, var(--secondary-color-bg) 15%, var(--primary-color-bg) 85%);
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fira Sans', sans-serif;
+    /*text-transform: uppercase;*/
+    font-weight: bold;
+}
+
+* {
+    outline-color: var(--ternary-color-bg);
+}
+
+.Page p, .Page footer, .Page a {
+    
+}
+
+.Page {
+    max-width: 1024px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.Page header {
+    /*height: 40vw;*/
+}
+
+.Page section {
+    padding: 0 40px 40px 40px;
+}
+
+.Page header h1 {
+    text-align: center;
+    margin: 0;
+    color: #efefef;
+    height: 20vh;
+    line-height: 20vh;
+    font-size: 3rem;
+}
+
+.Page nav {
+    width: calc(75% - 10px);
+}
+
+.Page main {
+
+    margin: 0 auto;
+    margin-right: 10px;
+    background: #fff;
+
+    width: calc(75% - 10px);
+
+    box-sizing: border-box;
+
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    margin-bottom: 50px;
+    display: inline-block;
+    /*height: 100%;*/
+    vertical-align: top;
+    float: left;
+    clear: none;
+
+}
+
+.Page main h1 {
+    color: var(--primary-color-fg);
+}
+
+.Page aside {
+    display: inline-block;
+    background: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 25%;
+    border-radius: 10px;
+    height: 100%;
+    margin-top: -90px;
+}
+
+.Page section h1 {
+    font-size: 30px;
+}
+
+.Page section h1:after {
+    display: block;
+    content: '';
+    width: 100%;
+    height: 2px;
+    margin: 0.7em 0 1em 0;
+    border-radius: 2px;
+
+    background-color: var(--highlight-color);
+    background-image: -moz-linear-gradient(90deg, var(--primary-color-gradient), var(--secondary-color-gradient), var(--ternary-color-gradient));
+    background-image: -webkit-linear-gradient(90deg, var(--primary-color-gradient), var(--secondary-color-gradient), var(--ternary-color-gradient));
+    background-image: -ms-linear-gradient(90deg, var(--primary-color-gradient), var(--secondary-color-gradient), var(--ternary-color-gradient));
+    background-image: linear-gradient(90deg, var(--primary-color-gradient), var(--secondary-color-gradient), var(--ternary-color-gradient));
+}
+
+
+.Page nav ul {
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 50px;
+}
+
+.Page nav ul li {
+    display: inline-block;
+    text-transform: uppercase;
+    /*background: #efefef;*/
+    border-radius: 5px;
+    padding: 0 20px;
+    position: relative;
+    height: 100%;
+    line-height: 50px;
+    margin-right: 10px;
+} 
+.Page nav ul li:hover {
+    background: var(--primary-color-bg);
+}
+.Page nav ul li:hover > a {
+    color: var(--highlight-color);
+}
+
+.Page nav ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: bolder;
+    display: block;
+    width: 100%;
+}
+
+.Page nav ul li ul {
+    position: absolute;
+    display: none;
+    left: 0;
+    top: 50px;
+    max-width: 200px;
+    width: 200px;
+    z-index: 9;
+    box-shadow: 1px 1px #bbb;
+    height: auto;
+    background-color: #efefef;
+    padding: 10px;
+    border-radius: 10px; 
+}
+
+.Page nav ul li ul li {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.Page nav ul li ul li:last-child {
+    margin: 0;
+}
+
+.Page nav ul li:hover ul {
+    display: block;
+}
+
+.Page button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 0;
+
+    transition: all .2s;
+
+    background: var(--primary-color-bg);
+    color: var(--highlight-color);
+
+    cursor: pointer;
+    font-size: var(--button-size);
+
+    margin: 0 10px 10px 0;
+}
+.Page button:hover {
+    background: var(--secondary-color-bg);
+}
+
+.Page form label {
+    display: block;
+    text-align: left;
+    padding: 10px;
+}
+
+.Page form label span {
+    display: block;
+}
+
+.Page form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.Page input[type="text"], .Page form input[type="text"], .Page form input[type="number"], .Page form input[type="date"] {
+    padding: 9px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    max-width: 400px;
+    width: 100%;
+}
+
+.Page form input[type="submit"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 0;
+    min-width: 100px;
+
+    margin-left: 10px;
+
+    width: calc(100% - 20px);
+
+    transition: all .2s;
+
+    background: var(--primary-color-bg);
+    color: var(--highlight-color);
+
+    cursor: pointer;
+    font-size: var(--button-size);
+    
+}
+.Page form input[type="submit"]:hover {
+    background: var(--secondary-color-bg);
+}
+
+.Page form textarea {
+    padding: 9px;
+    border-radius: 5px;
+    border: 1px solid #888;
+    max-width: 400px;
+    width: 100%;
+    min-height: 120px;
+}
+
+.Page footer {
+    height: 150px;
+    line-height: 100px;
+    text-align: center;
+    color: var(--highlight-color);
+    clear: both;
+    /*width: 75%;*/
+}
+
+@media only screen and (max-width: 600px) {
+
+    .Page header h1 {
+        line-height: initial;
+        padding: 70px 0;
+        box-sizing: border-box;
+        height: auto;
+    }
+
+    .Page nav {
+        left: 10px;
+        right: 10px;
+        min-height: 50px;
+        height: fit-content;
+        width: 100%;
+    }
+    .Page nav ul {
+        height: auto;
+    }
+    .Page nav > ul {
+        padding: 10px;
+        width: auto;
+    }
+    .Page nav ul li ul {
+        width: 150px;
+        height: auto;
+    }
+    .Page button {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .Page section {
+        padding: 20px;
+        height: auto;
+        overflow: initial;
+    }
+    .Page main {
+        display: block !important;
+        float: none;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .Page aside {
+        width: 100%;
+        display: block;
+        border-radius: 10px;
+        height: auto;
+        margin-top: 0;
+    }
+    .Page footer {
+        width: 100%;
+        height: 100px;
+    }
+
+}
+
+
