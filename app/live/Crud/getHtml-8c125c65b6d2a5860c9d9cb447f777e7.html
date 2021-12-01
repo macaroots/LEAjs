@@ -1,0 +1,46 @@
+<section>
+    <h1>Exemplo de formulário</h1>
+    <form onsubmit="event.preventDefault(); getAgent(this).see('onSubmit', this);">
+        <p>Formulários permitem receber do usuário vários tipos de dados.</p>
+        <p id="mensagem"></p>
+        <input name="id" value="0" type="hidden">
+        <label>
+            <span>
+               Texto
+            </span>
+            <input name="texto" type="text">
+        </label>
+        <label>
+            <span>
+               Número
+            </span>
+            <input name="numero" type="number">
+        </label>
+        <label>
+            <span>
+               Data
+            </span>
+            <input name="data" type="date">
+        </label>
+        <label>
+            <span>
+               Parágrafo
+            </span>
+            <textarea name="paragrafo"></textarea>
+        </label>
+        <input type="submit">
+    </form>
+</section>
+<section>
+	<button onclick="getAgent(this).see('list');">Listar</button>
+	<table>
+	    <thead>
+    		<tr> 
+    			<th>ID</th>
+    			<th>Nome</th>
+    			<th></th>
+    		</tr> 
+	    </thead>
+		<tbody class="list"></tbody>
+	</table>
+</section>

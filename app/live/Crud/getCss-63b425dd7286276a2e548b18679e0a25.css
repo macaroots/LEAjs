@@ -1,0 +1,8 @@
+.Page label {
+    display: table-row;
+}
+.Page label  * {
+    display: table-cell;
+    padding-right: 1em;
+    vertical-align: top;
+}
