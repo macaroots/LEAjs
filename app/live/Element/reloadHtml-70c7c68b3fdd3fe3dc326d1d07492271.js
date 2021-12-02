@@ -3,7 +3,7 @@ new (function reloadHtml () {
 	    var agent = this.agent;
         agent.see('get', 'body').then(function (body) {
     		agent.see('getHtml').then(function (html) {
-    		    body.append(html);
+    		    body.html(html);
     		    resolve(body);
     		});
         });
