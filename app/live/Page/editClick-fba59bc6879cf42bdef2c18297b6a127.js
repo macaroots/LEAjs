@@ -3,7 +3,13 @@ new (function editClick() {
 	    let agent = this.agent;
 	    if (!event.ctrlKey) {
 	        let ce = await Ceed('CE');
-	        ce.see('toggle');
+	        if (!document.querySelector('.CE')) {
+	            ce.see('appendTo', 'body');
+	            agent.see('edit');
+	        }
+	        else {
+	            ce.see('toggle');
+	        }
 	    }
 	    else {
 	        agent.see('ask', 'editClick');
