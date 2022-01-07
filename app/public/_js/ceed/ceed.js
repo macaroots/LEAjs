@@ -424,87 +424,10 @@ function Teach() {
 
 function NaiveLive() {
 	this.act = function (args, callback) {
-console.log(this.agent + ' - Ceed.live');
+		console.log(this.agent + ' - Ceed.live');
 		callback(this.agent);
 	}
 }
-
-function Help() {
-	this.act = async function (args, resolve, reject) {
-		const agent = this.agent;
-		const agents = {
-		    'known': {},
-		    'learnable': {}
-		};
-		{
-    		const brain = agent.mind.getBrain();
-    		const links = await brain.reason(null);
-  		
-    		for (let i in links) {
-    		    let link = links[i];
-    		    let actions = agents['known'][link.a.info];
-    		    if (!actions) {
-    		        actions = [];
-    		        agents['known'][link.a.info] = actions;
-    		    }
-    		    if (!actions.includes(link.r.info)) {
-    		        actions.push(link.r.info);
-    		    }
-    		    
-    		}
-		}
-		
-		const brains = await agent.see('getLibraries');
-        agents.libraries = brains;
-		for (let brain of brains) {
-    		const links = await brain.reason();
-    		
-    		for (let i in links) {
-    		    let link = links[i];
-    		    let actions = agents['learnable'][link.a.info];
-    		    if (!actions) {
-    		        actions = [];
-    		        agents['learnable'][link.a.info] = actions;
-    		    }
-    		    if (!actions.includes(link.r.info)) {
-    		        actions.push(link.r.info);
-    		    }
-    		    
-    		}
-		}
-		
-		console.log('help', agents);
-		resolve(agents);
-	};
-}
-
-export function InitAgentSameLibrary() {
-	this.act = async function (agent, callback) {
-		let ceed = this.agent;
-		/*/
-		let libraries = await ceed.see('getLibraries');
-		await agent.see('setLibrary', libraries[0]);
-		
-		callback(agent);		
-		/*/
-		
-		ceed.see('getLibraries').then(libraries => {
-            let promises = [];
-            for (let library of libraries) {
-                promises.push(agent.see('addLibrary', library));
-            }
-            Promise.all(promises).then(() => {
-				//callback(agent);
-                // TODO acho que não deve chamar logo o live!
-				agent.see('live').then(() => {
-					callback(true);
-				});
-			});
-		});
-		/**/
-	}
-}
-
 function AddListener() {
 	this.act = async function (args, resolve, reject) {
 		let event = args[0];
@@ -553,9 +476,41 @@ function NewChildAgent() {
         var capitalized = name.charAt(0).toUpperCase() + name.slice(1);
         var firstName = capitalized.split(' ')[0];
 		let childName = (await ceed.see('getName')) + '/' + firstName + ' ' + name;
-		Ceed(childName).then(callback);
+		Ceed(childName).then(function (agent) {
+			agent.see('set', ['parent', ceed]);
+			callback(agent);
+		});
 	}
 }
+
+export function InitAgentSameLibrary() {
+	this.act = async function (agent, callback) {
+		let ceed = this.agent;
+		/*/
+		let libraries = await ceed.see('getLibraries');
+		await agent.see('setLibrary', libraries[0]);
+		
+		callback(agent);		
+		/*/
+		
+		ceed.see('getLibraries').then(libraries => {
+            let promises = [];
+            for (let library of libraries) {
+                promises.push(agent.see('addLibrary', library));
+            }
+            Promise.all(promises).then(() => {
+				//callback(agent);
+                // TODO será que deve chamar logo o live!
+				// ou a aplicação deve ter o controle?
+				agent.see('live').then(() => {
+					callback(true);
+				});
+			});
+		});
+		/**/
+	}
+}
+
 function GetAgent() {
 	this.act = async function (fullname, callback) {
 		// Talvez o próprio agente devesse lidar com o nome
@@ -699,5 +654,54 @@ console.log(agent + ' - HEAR_NOTIFY', args);
 			}
 			callback(learned);
 		});
+	};
+}
+
+function Help() {
+	this.act = async function (args, resolve, reject) {
+		const agent = this.agent;
+		const agents = {
+		    'known': {},
+		    'learnable': {}
+		};
+		{
+    		const brain = agent.mind.getBrain();
+    		const links = await brain.reason(null);
+  		
+    		for (let i in links) {
+    		    let link = links[i];
+    		    let actions = agents['known'][link.a.info];
+    		    if (!actions) {
+    		        actions = [];
+    		        agents['known'][link.a.info] = actions;
+    		    }
+    		    if (!actions.includes(link.r.info)) {
+    		        actions.push(link.r.info);
+    		    }
+    		    
+    		}
+		}
+		
+		const brains = await agent.see('getLibraries');
+        agents.libraries = brains;
+		for (let brain of brains) {
+    		const links = await brain.reason();
+    		
+    		for (let i in links) {
+    		    let link = links[i];
+    		    let actions = agents['learnable'][link.a.info];
+    		    if (!actions) {
+    		        actions = [];
+    		        agents['learnable'][link.a.info] = actions;
+    		    }
+    		    if (!actions.includes(link.r.info)) {
+    		        actions.push(link.r.info);
+    		    }
+    		    
+    		}
+		}
+		
+		console.log('help', agents);
+		resolve(agents);
 	};
 }
