@@ -12,10 +12,11 @@ new (function newBody() {
 			body.addClass(names);
 		});
 		
-		agent.see('reloadHtml').then(function () {
-			resolve(body);
-			agent.see('trigger', 'onLoad');
+		agent.see('reloadCss').then(function () {
+    		agent.see('reloadHtml').then(function () {
+    			resolve(body);
+    			agent.see('trigger', 'onLoad');
+    		});
 		});
-		agent.see('reloadCss');
 	};
 })();

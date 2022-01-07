@@ -4,53 +4,55 @@
 </header>
 <main>
     <section>
-        <p>LEA é uma plataforma web para edição ao vivo baseado no framework multi-agente MInD.</p>
+        <p>LEA é uma plataforma multi-agente/web para edição ao vivo baseado no framework MInD.</p>
         
         <h2>TL;DR;</h2>
+        
         <p><b>Ceed</b>s são sensores com apenas um método: <code>see(acao, argumento)</code>, capaz de solicitar ações ao agente; devolve uma Promise.</p>
-        <p>A ação 'set' permite definir novas ações. Caso o agente não conheça a ação, ele deve perguntar ao programador.</p>
-        <p>Exemplo: Um clique no botão "Olá, mundo!" dispara a função 'ola' definida no &lt;script&gt;. Um clique no botão "Nova ação" dispara uma pergunta, já que a função 'novaAcao' nunca foi definida.</p>
-        <pre>&lt;script type="module"&gt;
-    import {Ceed} from  '//localhost/_js/ceed/ceed.js';
-    let agente = await Ceed('NovoAgente');
-    window.agente = agente;
-    agente.see('set', ['ola', new (function () {
-        this.act = function (args, resolve, reject) {
-            alert('Olá, ' + args);
-        };
-    })()]);
-&lt;/script&gt;
-&lt;button onclick="agente.see('ola', 'mundo');"&gt;Olá, mundo!&lt;/button&gt;
-&lt;button onclick="agente.see('novaAcao', 'args');"&gt;Nova ação&lt;/button&gt;</pre>
+        <p>A ação 'set'([key, value]) permite definir novas ações. Caso o agente não conheça a ação, ele deve perguntar a quem tiver ouvindo.</p>
+        <p>Segue um 'Hello, world!'. As Linhas 2 e 3 importa a biblioteca e chama um novo agente. As Linhas de 4 a 8 definem uma nova ação através da ação 'set', associando a chave 'ola' a uma ação. Um clique no botão "Olá, mundo!" (Linha 11) dispara a ação 'ola' definida. Um clique no botão "Nova ação" (Linha 12) dispara uma pergunta, já que a ação 'novaAcao' nunca foi definida.</p>
+        <pre><span>&lt;script type="module"&gt;</span>
+<span>    import {Ceed} from  '//localhost/_js/ceed/ceed.js';</span>
+<span>    let agente = await Ceed('NovoAgente');</span>
+<span>    agente.see('set', ['ola', new class {</span>
+<span>        act(args, resolve, reject) {</span>
+<span>            alert('Olá, ' + args);</span>
+<span>        };</span>
+<span>    }()]);</span>
+<span>    window.agente = agente;</span>
+<span>&lt;/script&gt;</span>
+<span>&lt;button onclick="agente.see('ola', 'mundo');"&gt;Olá, mundo!&lt;/button&gt;</span>
+<span>&lt;button onclick="agente.see('novaAcao', 'args');"&gt;Nova ação&lt;/button&gt;</span></pre>
         <script type="module">import {Ceed} from  '//localhost/_js/ceed/ceed.js';
 let agente = await Ceed('NovoAgente');
-window.agente = agente;
-agente.see('set', ['ola', new (function () {
-    this.act = function (args, resolve, reject) {
-        alert('Olá, ' + args);
+agente.see('set', ['ola', new class {
+    act(args, resolve, reject) {
+        alert(this.agent + 'Olá, ' + args);
     };
-})()]);</script>
+}()]);
+window.agente = agente;</script>
         <button onclick="agente.see('ola', 'mundo');">Olá, mundo!</button>
         <button onclick="agente.see('novaAcao', 'args');">Nova ação</button>
         <p>A <b>edição assistida por agentes</b> permite descrever o algoritmo numa abordagem top-down interativa. Cada ação desconhecida o agente abre uma pergunta.</p>
-        <pre>&lt;script&gt;
-    agente.see('set', ['topDown', new (function () {
-        this.act = async function (args, resolve, reject) {
-            let agent = this.agent;
-            let r1 = await agent.see('passo1', args);
-            let r2 = await agent.see('passo2', r1);
-            let r3;
-            if (await agent.see('teste', r2)) {
-                r3 = await agent.see('alternativa1', r2);
-            }
-            else {
-                r3 = await agent.see('alternativa2', r2);
-            }
-            resolve(r3);
-        };
-    })()]);
-&lt;/script&gt;
-&lt;button onclick="agente.see('topDown', 'mundo');"&gt;CleverEditing&lt;/button&gt;
+        <pre><span>&lt;script&gt;</span>
+<span>    agente.see('set', ['topDown', new (function () {</span>
+<span>        this.act = async function (args, resolve, reject) {</span>
+<span>            let agent = this.agent;</span>
+<span>            let r1 = await agent.see('passo1', args);</span>
+<span>            let r2 = await agent.see('passo2', r1);</span>
+<span>            let r3;</span>
+<span>            if (await agent.see('teste', r2)) {</span>
+<span>                r3 = await agent.see('alternativa1', r2);</span>
+<span>            }</span>
+<span>            else {</span>
+<span>                r3 = await agent.see('alternativa2', r2);</span>
+<span>            }</span>
+<span>            alert(r3);</span>
+<span>            resolve(r3);</span>
+<span>        };</span>
+<span>    })()]);</span>
+<span>&lt;/script&gt;</span>
+<span>&lt;button onclick="agente.see('topDown', 'mundo');"&gt;CleverEditing&lt;/button&gt;</span>
         </pre>
         <script>
     agente.see('set', ['topDown', new (function () {
@@ -65,10 +67,15 @@ agente.see('set', ['ola', new (function () {
             else {
                 r3 = await agent.see('alternativa2', r2);
             }
+            alert(r3);
             resolve(r3);
         };
     })()]);</script>
         <button onclick="agente.see('topDown', 'args');">CleverEditing</button>
+        
+        <h3>Shut up and gimme the code!</h3>
+        <p>O <a href="https://github.com/macaroots/LEAjs.git" target="_blank" rel="noopener">código-fonte</a> está disponível de acordo com os termos da <a rel="license noopener" target="_blank" href="https://github.com/macaroots/LEAjs/blob/main/LICENSE">GNU Affero General Public License v3.0</a></p>
+        
         <h2>Framework MInD (Model for Intelligence Development)</h2>
         <p>O objetivo do framework MInD é estabelecer uma base para aplicações inteligentes. Nosso projeto começa tentando entender o que é inteligência, procurando encontrar sua essência, sua abstração máxima.</p>
         <p>Uma das abordagens para descrição da inteligência artificial (IA) é baseada em <b>agentes inteligentes</b>. De acordo com Russell (), um <b>agente</b> é um ente que percebe o ambiente a partir de sensores e age alterando o ambiente através de seus atuadores, ilustrado na Figura 1. O "?" talvez represente bem a unidade de decisão do agente, uma vez que o ambiente só "enxerga" o corpo do agente e pode somente imaginar que existe uma unidade de decisão fazendo as escolhas. A unidade de decisão de um agente pode ser distribuída, talvez seja puramente mecânica ou química, ou pode não ter decisão nenhuma. Qualquer que seja a forma dessa unidade de decisão, este projeto irá chamá-la de <b>mente</b>. Apesar de acreditar na teoria de uma mente corpórea (), onde corpo e mente são uma coisa só, um pensamento analítico força a identificação de duas tarefas: a) interagir com o ambiente, papel do corpo (sensores e atuadores); e b) processar informações e tomar decisões, papel da mente. Veremos que a falta de uma distinção clara entre corpo e mente não acaba aqui e tem consequências práticas na implementação do código.</p>
@@ -79,11 +86,11 @@ agente.see('set', ['ola', new (function () {
                 <figcaption>Um agente percebe e age.</figcaption>
             </figure>
             <figure>
-                <img src="_img/uml_agent.png">
+                <img src="_img/uml_agent2.png">
                 <figcaption>Diagrama UML de sequência de interação com um agente.</figcaption>
             </figure>
         </div>
-        <p>Espera-se que a sensações percebidas pelo agente disparem ações através de seus atuadores para modificar o ambiente, mas já não podemos garantir que o agente fará algo. Agir ou não é escolha do agente. </p>
+        <p>Espera-se que as sensações percebidas pelo agente disparem ações através de seus atuadores para modificar o ambiente, mas já não podemos garantir que o agente fará algo. Agir ou não é escolha do agente. </p>
         <p>Encontramos inteligência nos mais variados ambientes, com variados sensores e atuadores. É claro que a mente depende de um corpo, mas nada disso faz parte da essência da inteligência, portanto, são descritos em Java como <abbr title="Plain Old Java Objects">POJO</abbr>s e estão representados no diagrama como atores porque não pertencem ao escopo do framework MInD. 
         A única função do agente é "perceber" as sensações adquiridas pelos sensores.</p>
         
@@ -104,7 +111,7 @@ agente.see('set', ['ola', new (function () {
         <p>O teste abaixo verifica se o agente é inteligente, ou seja, é capaz de adquirir e aplicar conhecimento.</p>
         <code><pre>let agent = new NaiveMind('Joe').body;
 
-// Sum should fail, agent knows nothing
+// The sum should fail, the agent knows nothing.
 assert.equal(await agent.see('sum', [1, 2]), null);
 
 // Teaching new action
@@ -118,7 +125,7 @@ await agent.see('set', ['sum', new (function sum () {
     };
 })()]);      
 
-// Sum should succeed
+// The sum should succeed, the agent learned!
 assert.equal(await agent.see('sum', [1, 2]), 3);</pre></code>
 
         <h4>Ações Naive</h4>
@@ -137,10 +144,10 @@ assert.equal(await agent.see('sum', [1, 2]), 3);</pre></code>
         </ul>
         
         <h2>Framework LEA</h2>
-        <p>A utilização de agentes como objetos não é muito interessante, sendo difícil perceber onde está a inteligência. Se a definição de inteligência for "a capacidade de adquirir e aplicar conhecimento", isso acabou de ficar demonstrado. Não tem nada na definição sobre a forma que o agente irá adquirir esse conhecimento. Se isso é inteligência, não impressionou muito. Eu espereva mais da inteligência. Mas agentes não devem ser usados como objetos (Costalima, 2014). Agentes devem ter um corpo que os permitam aprender a partir de observações do ambiente. NaiveAgents são reativos. A autonomia depende de um corpo.</p>
+        <p>A utilização de agentes como objetos não é muito interessante, sendo difícil perceber onde está a inteligência. Se a definição de inteligência for "a capacidade de adquirir e aplicar conhecimento", isso acabou de ficar demonstrado. Não tem nada na definição sobre a forma que o agente irá adquirir esse conhecimento. Mas o resultado, não impressionou muito. Eu espereva mais da inteligência. Costalima <i>et al</i> (2014) alertam que agentes não devem ser usados como objetos. Agentes devem ter um corpo que os permitam aprender a partir de observações do ambiente. NaiveMinds representam mentes, que dependem de sensores para perceber o ambiente.</p>
         
-        <h3>CEED (Clever Editing)</h3>
-        <p>Adicionando um pouco de autonomia aos agentes, CEED oferece um treinamento básico que dá acesso a duas fontes de conhecimento. Pegando o gancho quando o agente percebe que não sabe algo, é-lhe ensinado que ao invés de ficar parado, deve estudar em um banco de dados ou perguntar ao usuário. Para entender a resposta do usuário, o agente deve ser treinado na língua que a resposta for escrita. Alguns protótipos foram desenvolvidos em PHP, Java, Javascript e Python. Cada protótipo foi treinado em sua língua nativa e em ações do ciclo básico para Clever Editing, a saber:</p>
+        <h3>Ceed (Clever Editing)</h3>
+        <p>Ceed oferece um treinamento básico que dá acesso a duas fontes de conhecimento. Pegando o gancho quando o agente percebe que não sabe algo ('dontKnow'), é-lhe ensinado que ao invés de ficar parado, deve estudar ('study'), lendo ('read') nos bancos de dados cadastrados ou perguntar ('ask') ao usuário. Um agente inteligente deve ser capaz de entender ('understand') a resposta do usuário escrita em qualquer língua, sendo necessário treinamento específico para cada língua. Foram desenvolvidos protótipos em PHP, Java, Javascript e Python. Cada protótipo foi treinado em sua língua nativa e em ações do ciclo básico para Clever Editing, a saber:</p>
         <h4>Ações Ciclo Ceed</h4>
         <ul>
             <li>dontKnow</li>
@@ -171,10 +178,10 @@ assert.equal(await agent.see('sum', [1, 2]), 3);</pre></code>
         </ul>
         <p>A edição ao vivo costuma recarregar o resultado para dar o efeito de programação em tempo real. Conceito complementar, a edição esperta (Clever Editing) desenvolve aplicações vivas, treinando agentes reativos codificados em tempo de execução. Entre as vantagens, podemos citar:</p>
         <ul>
-            <li>Codificação interativa: cada vez que um agente se depara com uma função que ele não sabe, é aberta uma caixa de diálogo para definição da função. Dessa forma, é possível descrever os algoritmos em alto nível e definir os detalhes de implementação à medida que forem surgindo. Usando TDD, vamos começar com os testes e passá-los para agentes destreinados, que serão codificados em tempo de execução à medida que os desafios forem aparecendo.</li>
-            <li>Edição ao vivo: uma vez que os agentes podem ser treinados em tempo de execução, é possível editar partes do software, o comportamento de um botão, por exemplo, sem a necessidade de reiniciar o software.</li>
-            <li>Visualização e granularidade do código: agentes podem abrir ou fechar o código de funções individualmente.</li>
-            <li>Compartilhamento e colaboração: com a granularidade do código, usuários podem compartilhar funcionalidades e colaborar em software de outros usuários.</li>
+            <li><b>Edição ao vivo</b>: uma vez que os agentes podem ser treinados em tempo de execução, é possível editar partes do software, o comportamento de um botão, por exemplo, sem a necessidade de reiniciar o software.</li>
+            <li><b>Edição assistida por agentes</b>: cada vez que um agente se depara com uma função que ele não sabe, é aberta uma caixa de diálogo para definição da função. Dessa forma, é possível descrever os algoritmos em alto nível e definir os detalhes de implementação à medida que forem surgindo. Usando TDD, vamos começar com os testes e passá-los para agentes destreinados, que serão codificados em tempo de execução à medida que os desafios forem aparecendo.</li>
+            <li><b>Visualização e granularidade do código</b>: agentes podem abrir ou fechar o código de funções individualmente.</li>
+            <li><b>Compartilhamento e colaboração</b>: com a granularidade do código, usuários podem compartilhar funcionalidades e colaborar em software de outros usuários.</li>
         </ul>
         
         <h3>Plataforma LEA</h3>

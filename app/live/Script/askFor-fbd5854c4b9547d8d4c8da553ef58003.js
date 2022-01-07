@@ -20,10 +20,7 @@ new (function askFor () {
     		        return false;
     		    }
     		    
-    	        script.see('get', 'parent').then(function (parent) {
-        		    parent.see('show');
-        		});
-                body.show();
+    	        script.see('show');
                 
     		    editor.removeAllListeners('change');
     		    
