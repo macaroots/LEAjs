@@ -370,7 +370,7 @@ function Act(mind) {
 	this.mind = mind;
 	let este = this;
 	este.log = false;
-	this.act = function(args, resolve, reject) {
+	this.act = async function(args, resolve, reject) {
 		try {
 			let action = args[0];
 			let target = args[1];
@@ -380,7 +380,7 @@ function Act(mind) {
 			if (este.log) {
 				console.log('Act!', mind.toString(), action);
 			}
-			action.act(target, resolve, reject);
+			await action.act(target, resolve, reject);
 		}
 		catch (e) {
 			// TODO acho que é algo como o de baixo, mas tem que evitar repetição
