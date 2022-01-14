@@ -1,56 +1,103 @@
 # LEA - Live Environment for Agents
-Multi-agent web framework
+LEA é um ambiente/framework nas nuvens para dar suporte à edição ao vivo de sistemas multi-agente/web.
 
-Ceeds oferecem habilidades básicas para NaiveAgents seguirem o ciclo de Clever Editing. Na prática, Ceeds são objetos dinâmicos que podem ler/escrever comportamentos em um banco de dados e perguntar ao usuário por métodos faltando. Ceeds conseguem viver sozinhos em um computador.
 
-LEA é um ambiente nas nuvens para dar suporte ao desenvolvimento de agentes.
+# TL;DR;
+Ceeds são sensores com apenas um método: ```see(acao, argumento)```, capaz de solicitar ações ao agente; devolve uma Promise.
 
-## Problema da definição de métodos no servidor (ask)
-Os Ceeds do cliente conseguem perguntar ao usuário diretamente através do DOM. Os Ceeds do servidor não tem acesso ao DOM, portanto, devem enviar suas perguntas a um agente centralizador de perguntas do lado do servidor, um QuestionQueuer, talvez? Um agente Script no cliente poderia solicitar essas informações via Socket.io.
+A ação ```agent.see('set', [key, value])``` permite definir novas chaves e entre elas novas ações a serem executadas pelo agente. O comportamento ensinado para o agente caso ele não conheça a ação é perguntar a quem tiver ouvindo.
+
+## Hello, world!
+
+A Linha 3 chama o agente e se necessário cria um novo agente com o treinamento inicial para CleverEditing. As Linhas de 4 a 8 definem uma nova ação através da ação 'set', associando a chave 'ola' a uma ação. Um clique no botão "Olá, mundo!" (Linha 11) dispara a ação 'ola' definida. Um clique no botão "Nova ação" (Linha 12) dispara uma pergunta, já que a ação 'novaAcao' nunca foi definida.
+
+```html
+<script type="module">
+    import {Ceed} from  '//localhost/_js/ceed/ceed.js';
+    let agente = await Ceed('NovoAgente');
+    agente.see('set', ['ola', new class {
+        act(args, resolve, reject) {
+            alert(this.agent + ' - Olá, ' + args);
+        }
+    }()]);
+    window.agente = agente;
+</script>
+<button onclick="agente.see('ola', 'mundo');">Olá, mundo!</button>
+<button onclick="agente.see('novaAcao', 'args');">Nova ação</button>
+```
+
+Olá, mundo! Nova ação
+
+## Edição assistida por agentes - CleverEditing
+A edição assistida por agentes (CleverEditing) permite descrever o algoritmo numa abordagem top-down interativa. Cada ação desconhecida o agente abre uma pergunta.
+
+```html
+<script>
+    agente.see('set', ['topDown', new (function () {
+        this.act = async function (args, resolve, reject) {
+            let agent = this.agent;
+            let r1 = await agent.see('passo1', args);
+            let r2 = await agent.see('passo2', r1);
+            let r3;
+            if (await agent.see('teste', r2)) {
+                r3 = await agent.see('alternativa1', r2);
+            }
+            else {
+                r3 = await agent.see('alternativa2', r2);
+            }
+            alert(r3);
+            resolve(r3);
+        };
+    })()]);
+</script>
+<button onclick="agente.see('topDown', 'mundo');">CleverEditing</button>
+```
 
 ## Iniciando o servidor
 Importando e iniciando o agente.
-```
+```javascript
 import {Ceed} from './public/_js/ceed/ceed.js';
 import {} from './lib/lea.js';
 
-const lea = await Ceed('LEA');
+const lea = await Ceed('Front');
 ```
 
-Iniciando o servidor apenas com a biblioteca local.
+Adicionando biblioteca em MySQL.
+```javascript
+await lea.see('initBrain', {
+	host: 'localhost',
+	database: 'mind',
+	user: 'root',
+	password: ''
+});
 ```
+
+Adicionando biblioteca HTTP
+```javascript
+await lea.see('initHttpBrain', {
+	host: 'http://localhost/brain/',
+	protocol: 'http'
+});
+```
+
+Adicionando biblioteca do Sistemas de Arquivos.
+```javascript
+import {FileBrain} from './public/_js/ceed/file_brain.js';
+await lea.see('addLibrary', new FileBrain('./live'));
+```
+
+Iniciando o servidor.
+```javascript
 lea.see('listen', {
 	hostname: '127.0.0.1', 
 	port: 3000
 });
 ```
 
-Iniciando o servidor com biblioteca em MySQL.
+# Instruções de uso
+## Clonar repositório:
 ```
-lea.see('initBrain', {
-	host: 'localhost',
-	database: 'mind',
-	user: 'root',
-	password: ''
-}).then(() => {
-	lea.see('listen', {
-		hostname: '127.0.0.1', 
-		port: 3000
-	});
-});
-```
-
-Iniciando o servidor com biblioteca HTTP
-```
-lea.see('initHttpBrain', {
-	host: 'http://localhost/brain/',
-	protocol: 'http'
-}).then(() => {
-	lea.see('listen', {
-		hostname: '127.0.0.1', 
-		port: 3000
-	});
-});
+git clone https://github.com/macaroots/exemplo_node.git
 ```
 
 ## Executar
