@@ -4,19 +4,20 @@
 </header>
 <main>
     <section>
-        <p>LEA é uma plataforma multi-agente/web para edição ao vivo baseado no framework MInD.</p>
+        <p>LEA é um ambiente nas nuvens para edição ao vivo de sistemas multi-agente/web baseado no framework MInD.</p>
         
         <h2>TL;DR;</h2>
         
         <p><b>Ceed</b>s são sensores com apenas um método: <code>see(acao, argumento)</code>, capaz de solicitar ações ao agente; devolve uma Promise.</p>
-        <p>A ação 'set'([key, value]) permite definir novas ações. Caso o agente não conheça a ação, ele deve perguntar a quem tiver ouvindo.</p>
-        <p>Segue um 'Hello, world!'. As Linhas 2 e 3 importa a biblioteca e chama um novo agente. As Linhas de 4 a 8 definem uma nova ação através da ação 'set', associando a chave 'ola' a uma ação. Um clique no botão "Olá, mundo!" (Linha 11) dispara a ação 'ola' definida. Um clique no botão "Nova ação" (Linha 12) dispara uma pergunta, já que a ação 'novaAcao' nunca foi definida.</p>
+        <p>A ação <code>agent.see('set', [key, value])</code> permite definir novas chaves e entre elas novas ações a serem executadas pelo agente. O comportamento ensinado para o agente caso ele não conheça a ação é perguntar a quem tiver ouvindo.</p>
+        <h3>Hello, world!</h3>
+        <p>A Linha 3 chama o agente e se necessário cria um novo agente com o treinamento inicial para CleverEditing. As Linhas de 4 a 8 definem uma nova ação através da ação 'set', associando a chave 'ola' a uma ação. Um clique no botão "Olá, mundo!" (Linha 11) dispara a ação 'ola' definida. Um clique no botão "Nova ação" (Linha 12) dispara uma pergunta, já que a ação 'novaAcao' nunca foi definida.</p>
         <pre><span>&lt;script type="module"&gt;</span>
 <span>    import {Ceed} from  '//localhost/_js/ceed/ceed.js';</span>
 <span>    let agente = await Ceed('NovoAgente');</span>
 <span>    agente.see('set', ['ola', new class {</span>
 <span>        act(args, resolve, reject) {</span>
-<span>            alert('Olá, ' + args);</span>
+<span>            alert(this.agent + ' - Olá, ' + args);</span>
 <span>        };</span>
 <span>    }()]);</span>
 <span>    window.agente = agente;</span>
@@ -27,13 +28,16 @@
 let agente = await Ceed('NovoAgente');
 agente.see('set', ['ola', new class {
     act(args, resolve, reject) {
-        alert(this.agent + 'Olá, ' + args);
+        alert(this.agent + ' - Olá, ' + args);
     };
 }()]);
 window.agente = agente;</script>
         <button onclick="agente.see('ola', 'mundo');">Olá, mundo!</button>
         <button onclick="agente.see('novaAcao', 'args');">Nova ação</button>
-        <p>A <b>edição assistida por agentes</b> permite descrever o algoritmo numa abordagem top-down interativa. Cada ação desconhecida o agente abre uma pergunta.</p>
+        
+        
+        <h3>Edição assistida por agentes (CleverEditing)</h3>
+        <p>A <b>edição assistida por agentes</b> permite descrever o algoritmo numa abordagem top-down interativa. Para cada ação desconhecida o agente abre uma pergunta.</p>
         <pre><span>&lt;script&gt;</span>
 <span>    agente.see('set', ['topDown', new (function () {</span>
 <span>        this.act = async function (args, resolve, reject) {</span>
@@ -55,7 +59,7 @@ window.agente = agente;</script>
 <span>&lt;button onclick="agente.see('topDown', 'mundo');"&gt;CleverEditing&lt;/button&gt;</span>
         </pre>
         <script>
-    agente.see('set', ['topDown', new (function () {
+    window.agente.see('set', ['topDown', new (function () {
         this.act = async function (args, resolve, reject) {
             let agent = this.agent;
             let r1 = await agent.see('passo1', args);
