@@ -1,0 +1,150 @@
+<!-- LEA - Live Environment for Agents
+   - by Renato Lenz Costalima
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<header>
+    <div class="logo">TIIA</div>
+    <h1>Banco de dados e SGBDs</h1>
+</header>
+<nav>
+    <ul>
+        <li>
+            <a href="#bd">Banco de dados</a>
+            <ul>
+                <li><a href="#definicao">O que é?</a></li>
+                <li><a href="#estruturas">Estrutura física x estrutura lógica x visão de usuário</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#sgbd">SGBD</a>
+            <ul>
+                <li><a href="#arquitetura">Arquitetura: cliente-servidor</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#relacional">Banco de dados relacional</a>
+            <ul>
+                <li><a href="#er">Modelo ER</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#mysql">MySQL</a>
+            <ul>
+                <li><a href="#backup">Backup lógico</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<!--
+ LEA - Live Environment for Agents
+ by Renato Lenz Costalima
+ This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
+ Permissions beyond the scope of this license may be available at macaroots@gmail.com. -->
+<main>
+    <section>
+        <h1 id="bd"><a target="_blank" href="https://lmgtfy.com/?q=Banco+dados">Banco de dados</a></h1>
+        <h2 id="definicao">O que é?</h2>
+        
+        <p>A escrita foi uma grande revolução que permitiu passar o conhecimento para gerações posteriores. Mais do que simplesmente armazenar informações, um <b>banco de dados armazena informações de forma estruturada</b> para que seja possível encontrar as informações mais rapidamente. Procure, por exemplo, onde nasceu "Carla Lima Silva" nos 3 exemplos abaixo.</p>
+        
+        <div id="exemplos">
+            <p>Ana Costa Sousa, filha de Carla Costa e André Sousa, natural de Recife-PE. André Santos Sousa, filho de Carla Santos e André Sousa, natural de Recife-PE. Bela Alves Alves, filha de Bela Alves e Beto Alves, natural de Recife-CE. Beto Costa Silva, filho de Dani Costa e Beto Silva, natural de Camocim-PE. Carla Lima Silva, filha de Carla Lima e Carlos Silva, natural de Aracati-RN. Carlos Silva Lima, filho de Bela Silva e André Lima, natural de Aracati-PE. Dani Ferreira Alves, filha de Bela Ferreira e Beto Alves, natural de Fortaleza-PE. Davi Costa Costa, filho de Carla Costa e Carlos Costa, natural de Paracuru-RN. </p>
+            
+            <div id="topicos"><div>Nome: Ana Costa Sousa<br>Mãe: Carla Costa<br>Pai: André Sousa<br>Naturalidade: Recife-PE</div><div>Nome: André Santos Sousa<br>Mãe: Carla Santos<br>Pai: André Sousa<br>Naturalidade: Recife-PE</div><div>Nome: Bela Alves Alves<br>Mãe: Bela Alves<br>Pai: Beto Alves<br>Naturalidade: Recife-CE</div><div>Nome: Beto Costa Silva<br>Mãe: Dani Costa<br>Pai: Beto Silva<br>Naturalidade: Camocim-PE</div><div>Nome: Carla Lima Silva<br>Mãe: Carla Lima<br>Pai: Carlos Silva<br>Naturalidade: Aracati-RN</div><div>Nome: Carlos Silva Lima<br>Mãe: Bela Silva<br>Pai: André Lima<br>Naturalidade: Aracati-PE</div><div>Nome: Dani Ferreira Alves<br>Mãe: Bela Ferreira<br>Pai: Beto Alves<br>Naturalidade: Fortaleza-PE</div><div>Nome: Davi Costa Costa<br>Mãe: Carla Costa<br>Pai: Carlos Costa<br>Naturalidade: Paracuru-RN</div></div>
+            
+            <table><tbody><tr><th>Nome</th><th>Mãe</th><th>Pai</th><th>Naturalidade</th></tr><tr><td>Ana Costa Sousa</td><td>Carla Costa</td><td>André Sousa</td><td>Recife-PE</td></tr><tr><td>André Santos Sousa</td><td>Carla Santos</td><td>André Sousa</td><td>Recife-PE</td></tr><tr><td>Bela Alves Alves</td><td>Bela Alves</td><td>Beto Alves</td><td>Recife-CE</td></tr><tr><td>Beto Costa Silva</td><td>Dani Costa</td><td>Beto Silva</td><td>Camocim-PE</td></tr><tr><td>Carla Lima Silva</td><td>Carla Lima</td><td>Carlos Silva</td><td>Aracati-RN</td></tr><tr><td>Carlos Silva Lima</td><td>Bela Silva</td><td>André Lima</td><td>Aracati-PE</td></tr><tr><td>Dani Ferreira Alves</td><td>Bela Ferreira</td><td>Beto Alves</td><td>Fortaleza-PE</td></tr><tr><td>Davi Costa Costa</td><td>Carla Costa</td><td>Carlos Costa</td><td>Paracuru-RN</td></tr></tbody></table>
+        </div>
+        
+        <p>Existem várias formas de organizar as informações. Qual foi a forma mais fácil?</p>
+        
+        <h2 id="estruturas"><a target="_blank" href="https://lmgtfy.com/?q=Estrutura+f%C3%ADsica+x+estrutura+l%C3%B3gica+x+vis%C3%A3o+de+usu%C3%A1rio">Estrutura física x estrutura lógica x visão de usuário</a></h2>
+        
+        <p>Entre as formas de organizar dados mais intuitivas, está o uso de tabelas. Softwares de planilha eletrônica são ferramentas poderosas para esse fim. Utilizando sua planilha eletrônica favorita, escreva uma tabela para armazenar dados sobre notas de estudantes. A tabela deve ter as colunas nome, nota1, nota2, média, situação. A média e a situação são cálculos que dependem das notas 1 e 2. A não ser que o cálculo seja muito demorado, armazenar resultados de cálculos pode deixar o seu banco inconsistente. Se após anotadas média e situação, as notas forem alteradas, haverá uma preocupação de corrigir todos as outras colunas que dependem delas, ao invés de uma operação única.</p>
+        
+        <p>É claro que os usuários querem ver a média e situação, mas esses dados serão calculados a cada visualização. Vemos logo a separação entre a visão de usuário, a experiência do usuário, e a estrutura lógica, quais dados estão persistidos e como eles estão relacionados. Agora salve esse arquivo em diferentes formatos: xlsx, ods, xml, csv. Os 4 arquivos representam a mesma tabela, portanto a mesma estrutura lógica. Abra os 4 arquivos usando o bloco de notas. Dessa forma é possível ver a estrutura física, isto é, a forma como os dados foram de fato armazenados, os bytes que cada formato de arquivo utilizou para representar a tabela.</p>
+        
+        <p>Agora tente fazer um programa em python para persistir as informações dessa tabela em um arquivo. Um formato simples de fazer isso é escrever como texto e separar as informações por vírgula (CSV, <i>Comma-separated Values</i>). Isso pode funcionar durante um tempo, mas não daria certo para armazenar o nome "Alexandre, o grande", por exemplo. Nesse caso, poderíamos trocar a vírgula por um ponto-e-vírgula, mas o problema se repetiria para diferentes informações. Armazenar os números na forma de texto, também não é a forma mais eficiente de armazenar números, apesar de permitir a legibilidade dos arquivos por humanos. Esses são alguns dos problemas de implementar a estrutura física de um banco de dados e a primeira motivação de um SGBD.</p>
+        
+        <h1 id="sgbd"><a target="_blank" href="https://lmgtfy.com/?q=SGBD">SGBD</a></h1>
+        
+        <p>SGBD <i>stands for</i> Sistema Gerenciador de Banco de Dados. O SGBD é um programa intermediário entre os programas e o banco de dados. Seu objetivo é, obviamente, gerenciar o banco. Isso é necessário por 3 motivos principais:</p>
+        
+        <ul>
+            <li><b>Abstrair a estrutura física</b> - permitindo que o programador se concentre apenas na estrutura lógica e não precise implementar detalhes de persistência.</li>
+            <li><b>Garantir a integridade</b> - o SGBD garante que os dados estejam organizados de acordo com a estrutura definida, sendo possível adicionar restrições para tipos de dados e chaves estrangeiras.</li>
+            <li><b>Gerenciar concorrência de acesso</b> - imagine a dificuldade de várias pessoas tentando escrever em um papel ao mesmo tempo.</li>
+        </ul>
+        
+        <h2 id="arquitetura">Arquitetura: cliente-servidor</h2>
+        
+        <p>Antes da existência de SGBDs, os <b>programadores</b> escreviam programas e tinham que escrever também a parte da persistência dos dados, de forma que cada programador definia também o banco de dados para cada aplicação. Os <b>usuários</b> deve acessar os dados somente através do programa.</p>
+        
+        <p>Os SGBDs intermediam o acesso ao banco de dados na arquitetura <b>Cliente-Servidor</b>. Isso quer dizer que primeiro deve ser iniciado um processo de servidor, que fica escutando uma porta do computador. Os programas clientes "ligam" para o servidor e solicitam acesso aos dados. Os <b>DBAs</b> (<i>Database Administrators</i>, Administradores de Banco de Dados) são os profissionais especialistas em definir a estrutura dos dados através de DDLs (<i>Data Definition Languages</i>, Linguagens de Definição de Dados), enquanto os programadores implementam acesso aos dados através de DMLs (<i>Data Manipulation Languages</i>, Linguagens de Manipulação de Dados).</p>
+        
+        <h1 id="relacional"><a target="_blank" href="https://lmgtfy.com/?q=Banco+dados+relacional">Banco de dados relacional</a></h1>
+        
+        <p>Os bancos de dados relacionais são assim chamados porque descrevem os dados através das relações entre conjuntos. Essa não é a única forma de organização possível. Existem ainda bancos de dados hierárquico; em rede; e orientado a objetos. Os dados são agrupados em conjuntos através dos atributos que os descrevem. Pessoas tem nome, idade, endereço. Produtos tem nome, preço, descrição. Fabricante tem nome, endereço, contato. Frequentemente, os conjuntos estarão relacionados entre si. Produtos foram feitos por fabricantes. Pessoas compram produtos.</p>
+        
+        <p>Cada tabela armazena informações sobre um conceito, por exemplo, clientes, produtos, vendas, lojas etc. Cada coluna da tabela contém informações a respeito de um atributo do conceito, como nome, preço etc. Uma tabela pode ser imaginada como um formulário onde cada coluna é uma pergunta sobre o conceito a ser descrito. Cada linha contém um registro, ou seja, um conjunto de respostas para cada pergunta do formulário. É claro que existem várias informações a respeito de uma pessoa além de nome, idade e endereço. O DBA deve abstrair as informações relevantes para o contexto onde os dados serão usados. Um aplicativo de emprego vai precisar de informações sobre as qualificações da pessoa, enquanto um aplicativo de mergulho deve considerar o peso.</p>
+        
+        <h2 id="er"><a target="_blank" href="https://lmgtfy.com/?q=Modelo+Entidade+Relacionamento">Modelo Entidade-Relacionamento</a></h2>
+        
+        <p>As tabelas de um banco de dados não permitem enxergar facilmente os relacionamentos entre elas. Para ajudar na visualização desses relacionamentos e planejar o banco de dados, podemos utilizar o modelo Entidade-Relacionamento (MER). O MER é uma representação gráfica onde destacam-se as Entidades (as tabelas), seus atributos (as colunas) e os relacionamentos entre elas. Os relacionamentos apresentam <a target="_blank" href="https://lmgtfy.com/?q=cardinalidade">cardinalidades</a> que podem ser:
+        </p>
+        <ul>
+            <li>Um para um</li>
+            <li>Um para muitos</li>
+            <li>Muitos para muitos</li>
+        </ul>
+        
+        <h1 id="mysql"><a href="https://dev.mysql.com/doc/refman/8.0/en/programs.html" target="_blank">MySQL</a></h1>
+        
+        <h2 id="backup"><a href="https://dev.mysql.com/doc/mysql-backup-excerpt/5.7/en/backup-and-recovery.html" target="_blank">Backup e recuperação</a></h2>
+        
+        <h3>Backup físico</h3>
+        <ul>
+            <li>Cópia física, copia os arquivos.</li>
+            <li>Mais rápido e compacto.</li>
+            <li>Deve parar o servidor ou travar (<i>lock</i>).</li>
+            <li>A máquina de destino deve ser igual à de origem.</li>
+            <li>Ferramentas:
+                <ul>
+                    <li>mysqlbackup do MySQL Enterprise Backup para InnoDB</li>
+                    <li>Comandos do sistema operacional (cp, scp, tar, rsync) para MyISAM</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Backup lógico</h3>
+        <ul>
+            <li>Cópia lógica, descreve a estrutura e os dados na forma de comandos SQL.</li>
+            <li>Mais lento e maior, permite a granularidade da informação.</li>
+            <li>Deve estar com o servidor rodando.</li>
+            <li>A máquina de destino pode ser qualquer uma que tenha um servidor MySQL.</li>
+            mysql client.
+            <li>Ferramentas de exportação:
+                <ul>
+                    <li>mysqldump</li>
+                    <li>SELECT ... INTO OUTFILE</li>
+                </ul>
+            </li>
+            <li>Ferramentas de importação:
+                <ul>
+                    <li>Arquivos SQL
+                        <ul>
+                            <li>mysql</li>
+                        </ul>
+                    </li>
+                    <li>Arquivo de texto delimitado
+                        <ul>
+                            <li>LOAD DATA</li>
+                            <li>mysqlimport</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+
+    </section>
+</main>
