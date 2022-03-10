@@ -9,13 +9,13 @@ new (function onSubmit() {
 	    else {
 	        acao = 'edit';
 	    }
-		const dados = $(form).serialize();
-		let url = await agent.see('getUrl');
+		const dados = new FormData(form);//$(form).serialize();
+		let url = await agente.see('getUrl');
     	let r = await fetch(url + acao, {
     		method: 'POST',
-    		headers: {
-    			'Content-Type': 'application/x-www-form-urlencoded'
-    		},
+    // 		headers: {
+    // 			'Content-Type': 'multipart/form-data'
+    // 		},
     		body: dados
     	});
 		var mensagem = document.getElementById('mensagem');
