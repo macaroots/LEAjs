@@ -36,8 +36,8 @@ new (function Listen() {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         
-        let io = (await import('socket.io')).default;
-        let sio = io(server);
+        let ioServer = (await import('socket.io')).Server;
+        let sio = new ioServer(server);
         agent.io = sio;
         sio.on('connection', (socket) => {
             agent.see('onSocketConnection', socket);
