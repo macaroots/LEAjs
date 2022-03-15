@@ -1,0 +1,31 @@
+.Tabs {
+}
+.Tabs > label {
+    display: inline-block;
+    padding: 0.5em 1em;
+    border-radius: 5px 5px 0px 0px;
+    border: 1px var(--color) solid;
+}
+
+.Tabs > section {
+    display: none;
+    padding: 1em;
+    border: 1px var(--color) solid;
+}
+.Tabs > input {
+    display: none;
+}
+.Tabs #bt-tab1:checked ~ #tab1,
+.Tabs #bt-tab2:checked ~ #tab2,
+.Tabs #bt-tab3:checked ~ #tab3,
+.Tabs #bt-tab4:checked ~ #tab4,
+.Tabs #bt-tab5:checked ~ #tab5,
+.Tabs #bt-tab6:checked ~ #tab6,
+.Tabs #bt-tab7:checked ~ #tab7
+{
+    display: block;
+}
+.Tabs > input:checked + label {
+    color: var(--bg-color);
+    background: var(--color);
+}
