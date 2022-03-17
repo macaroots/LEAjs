@@ -27,6 +27,7 @@
     height: var(--largura);
     width: var(--largura);
     border-radius: calc(var(--largura)*0.1);
+    z-index: 100;
 }
 #auth, #license, .Page {
     background: var(--bg-color);
@@ -44,7 +45,6 @@ body {
     display: flex;
     flex-direction: column;
     /*grid-template-columns: 32ch 1fr;*/
-    
     grid-template-rows: 8rem 1fr;
 }
 header {
@@ -52,6 +52,7 @@ header {
     display: flex;
     gap: 1em;
     place-items: center;
+    z-index: 100;
 }
 nav {
     grid-column: 1 / 3;
@@ -142,6 +143,20 @@ img {
     max-width: 100%;
 }
 
+@media(max-width: 600px) {
+    header h1 { 
+        margin: 0;
+        margin-left: calc(var(--largura) + 0.5em);
+    }
+    .logo {
+        position: fixed;
+        top: 16px;
+    }
+    nav {
+        position: sticky;
+        top: 4px;
+    }
+}
 
 @media(min-width: 600px) {
     .Page {
