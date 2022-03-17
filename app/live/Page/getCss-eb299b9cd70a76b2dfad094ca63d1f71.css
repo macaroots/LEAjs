@@ -40,7 +40,6 @@ body {
     max-width: 960px;
     margin: auto;
     padding: 1em;
-    height: calc(100vh - 16px);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -144,8 +143,8 @@ img {
 }
 
 
-@media(max-width: 600px) {
+@media(min-width: 600px) {
     .Page {
-        height: 100%;
+        height: calc(100vh - 16px);
     }
 }
