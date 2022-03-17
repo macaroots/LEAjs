@@ -143,3 +143,9 @@ img {
     max-width: 100%;
 }
 
+
+@media(max-width: 600px) {
+    .Page {
+        height: 100%;
+    }
+}
