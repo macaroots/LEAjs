@@ -150,11 +150,14 @@ img {
     }
     .logo {
         position: fixed;
-        top: 16px;
+        top: 1rem;
     }
     nav {
         position: sticky;
-        top: 4px;
+        top: 0.25rem;
+    }
+    #btEdit {
+        top: 1.5rem;
     }
 }
 
