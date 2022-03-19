@@ -115,16 +115,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .Page nav {
-    width: calc(75% - 10px);
+    width: 100%;
 }
 
+/* Se tiver o aside, fica menor */
+.Page nav:nth-last-child(3), .Page main:nth-last-child(2) {
+    width: calc(75% - 10px);
+}
 .Page main {
 
     margin: 0 auto;
     margin-right: 10px;
     background: #fff;
 
-    width: calc(75% - 10px);
+    width: 100%;
 
     box-sizing: border-box;
 
@@ -207,7 +211,7 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
     font-weight: bolder;
     display: block;
-    width: 100%;
+    white-space: nowrap;
 }
 
 .Page nav ul li ul {
@@ -215,8 +219,8 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
     left: 0;
     top: 50px;
-    max-width: 200px;
-    width: 200px;
+    /*max-width: 200px;*/
+    /*width: 200px;*/
     z-index: 9;
     box-shadow: 1px 1px #bbb;
     height: auto;

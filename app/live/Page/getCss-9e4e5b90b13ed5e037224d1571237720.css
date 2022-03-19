@@ -186,10 +186,14 @@ h1, h2, h3, h4, h5, h6 {
 	display: block;
 }
 
+/* Se tiver o aside, fica menor */
+.Page main:nth-last-child(2) {
+    width: calc(75% - 260px);
+}
 .Page main {
     background: #fff;
     display: inline-block;
-    width: calc(75% - 260px);
+    width: 75%;
     /* float: left; */
     /* clear: both; */
     border-radius: 30px;
