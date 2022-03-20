@@ -14,8 +14,8 @@ new (function Listen() {
         const app = express();
         const server = http.createServer(app);
         // TODO não deixa ligar vários servidores
-        agent.app = app;
-        agent.server = server;
+        agent.see('set', ['expressApp', app]);
+        agent.see('set', ['httpServer', server]);
         
         // Setting up the public directory
         app.use(express.static(options.dir));
@@ -32,13 +32,15 @@ new (function Listen() {
         /**/
         
         // Setting up POST parser
-        let bodyParser = (await import('body-parser')).default;
-        app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded({ extended: true }));
+        // let bodyParser = (await import('body-parser')).default;
+        // app.use(express.json());
+        app.use(express.urlencoded({ extended: true }));
+        let upload = (await import('express-fileupload')).default;
+        app.use(upload());
         
-        let ioServer = (await import('socket.io')).Server;
-        let sio = new ioServer(server);
-        agent.io = sio;
+        let IoServer = (await import('socket.io')).Server;
+        let sio = new IoServer(server);
+        agent.see('set', ['ioServer', sio]);
         sio.on('connection', (socket) => {
             agent.see('onSocketConnection', socket);
         });
