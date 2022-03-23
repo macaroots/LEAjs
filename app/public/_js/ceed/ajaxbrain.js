@@ -7,6 +7,7 @@
  */
 import {HTTPAgent} from './agent.js';
 export function AjaxBrain(endereco) {
+    const self = this;
 	if (endereco == null) {
 		this.endereco = '/LEA/ce/brain/';
 	}
@@ -15,6 +16,7 @@ export function AjaxBrain(endereco) {
 	}
 
 	this.agent = new HTTPAgent(this.endereco);
+    this.cached = false;
 	let responses = {};
 	this.responses = responses;
 	
@@ -28,15 +30,18 @@ export function AjaxBrain(endereco) {
                     info: symbol
                 };
             }
-            /*/
+            
             // cache simples
-            let text = JSON.stringify(symbol);
-            let oldResponse = responses[text];
-            if (oldResponse) {
-                callback(oldResponse);
-                return;
+            let text;
+            if (self.cached) {
+                text = JSON.stringify(symbol);
+                let oldResponse = responses[text];
+                if (oldResponse) {
+                    resolve(oldResponse);
+                    return;
+                }
             }
-            /**/
+            
             $.post(this.endereco + "gets", {
                 impl: symbol.impl,
                 id: symbol.id,
@@ -45,7 +50,9 @@ export function AjaxBrain(endereco) {
                 busca: symbol.busca,
                 ordem: symbol.ordem
             }, function (response) {
-                //responses[text] = response;
+                if (self.cached) {
+                    responses[text] = response;
+                }
                 resolve(response);
             });
         });
@@ -63,7 +70,7 @@ export function AjaxBrain(endereco) {
             });
         });
 	};
-	this.tie = function (no, callback) {
+	this.tie = function (no) {
 		return new Promise((resolve, reject) => {
             $.post(this.endereco + "tie", {
                 a: no.a,
@@ -83,19 +90,23 @@ export function AjaxBrain(endereco) {
         });
 	};
 	this.reason = function (no) {
-		return new Promise((resolve, reject) => {
-            /*/
+        return new Promise((resolve, reject) => {
             // cache simples
-            let text = JSON.stringify(no);
-            let oldResponse = responses[text];
-            if (oldResponse) {
-                callback(oldResponse);
-                return;
+            let text;
+            if (self.cached) {
+                text = JSON.stringify(no);
+                let oldResponse = responses[text];
+                if (oldResponse) {
+                    resolve(oldResponse);
+                    return;
+                }
             }
-            /**/
+            
             no = this.getClearLink(no);
             $.get(this.endereco + "reason", no, function (response) {
-                //responses[text] = response;
+                if (self.cached) {
+                    responses[text] = response;
+                }
                 resolve(response);
             });
         });
