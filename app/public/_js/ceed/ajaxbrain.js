@@ -19,7 +19,15 @@ export function AjaxBrain(endereco) {
     this.cached = false;
 	let responses = {};
 	this.responses = responses;
-	
+    this.setCache = function (text, response) {
+//         responses[text] = response;
+        localStorage.setItem(text, JSON.stringify(response));
+    }
+    this.getCache = function (text) {
+//         return responses[text];
+        return JSON.parse(localStorage.getItem(text));
+    }
+    
 	this.get = function (symbol) {
 		return new Promise((resolve, reject) => {
             if (symbol == null) {
@@ -35,7 +43,7 @@ export function AjaxBrain(endereco) {
             let text;
             if (self.cached) {
                 text = JSON.stringify(symbol);
-                let oldResponse = responses[text];
+                let oldResponse = self.getCache(text);
                 if (oldResponse) {
                     resolve(oldResponse);
                     return;
@@ -51,7 +59,7 @@ export function AjaxBrain(endereco) {
                 ordem: symbol.ordem
             }, function (response) {
                 if (self.cached) {
-                    responses[text] = response;
+                    self.setCache(text, response);
                 }
                 resolve(response);
             });
@@ -95,7 +103,7 @@ export function AjaxBrain(endereco) {
             let text;
             if (self.cached) {
                 text = JSON.stringify(no);
-                let oldResponse = responses[text];
+                let oldResponse = self.getCache(text);
                 if (oldResponse) {
                     resolve(oldResponse);
                     return;
@@ -105,7 +113,7 @@ export function AjaxBrain(endereco) {
             no = this.getClearLink(no);
             $.get(this.endereco + "reason", no, function (response) {
                 if (self.cached) {
-                    responses[text] = response;
+                    self.setCache(text, response);
                 }
                 resolve(response);
             });
