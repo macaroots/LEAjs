@@ -54,7 +54,7 @@
 }
 .info {
     width: 100%!important;
-    max-width: 70ch;
+    max-width: 80ch;
 }
 
 .selected {
@@ -69,4 +69,16 @@
 
 .changed {
     border-color: red !important;
+}
+
+@media(max-width: 600px) {
+    .dividido {
+        width: inherit;
+        margin-bottom: 50vh;
+    }
+    .CE {
+        width: 100%;
+        top: 50vh;
+        bottom: 0.5em;
+    }
 }
