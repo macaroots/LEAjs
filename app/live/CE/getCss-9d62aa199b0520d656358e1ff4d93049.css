@@ -1,0 +1,72 @@
+#auth {
+    position: fixed;
+    top: 8px;
+    right: 8px;
+}
+.dividido {
+    /*width: 52%;*/
+    margin-bottom: 50vh;
+}
+[accesskey]::after {
+    content: " [" attr(accesskey) "]";
+}
+.CE {
+    border: 1px solid;
+    position: fixed;
+    width: 100%;
+    top: 50vh;
+    right: 0px;
+    bottom: 1em;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.CE > form {
+    text-align: right;
+}
+.CE > * {
+    order: 2;
+}
+.Tools {
+    order: 1;
+    margin: 8px;
+}
+.answers {
+    min-height: 1.0em;
+    max-height: 4.5em;
+    overflow: auto;
+}
+
+.questions {
+    display: flex;
+    overflow: auto;
+}
+
+.questions label {
+    border-width: 1px;
+    border-style: solid;
+    padding: 8px;
+    margin: 2px;
+    background: white;
+}
+.Script input[name=type], #version {
+    width: 105px;
+}
+.info {
+    width: 100%!important;
+    max-width: 90ch;
+}
+
+.selected {
+    border-style: solid;
+    border-color: blue;
+    border-width: 2px !important;
+}
+
+.learned {
+    border-color: green !important;
+}
+
+.changed {
+    border-color: red !important;
+}
