@@ -27,29 +27,43 @@ new (function renderReason () {
                 }
     	    }
     	    
-    	    var loadSymbol = function (e) {
-    	        var li = this;
-    	        var id = li.innerHTML.split(' - ')[0];
+    	    let loadSymbol = function (e) {
+    	        let li = this;
+    	        let id = li.innerHTML.split(' - ')[0];
     	        li.innerHTML += 'ing...';
     	        fetch('/brain/gets?id=' + id).then(async function (r) {
     	            let symbols = await r.json();
-    	            var symbol = symbols[0];
+    	            let symbol = symbols[0];
     	            $(li).unbind();
     	            li.innerHTML = '';
-    	            var form = $('<form>').appendTo(li);
+    	            let form = $('<form>').appendTo(li);
     	            form.text(symbol.id + ' - ');
-    	            var txType = $('<input>');
+    	            let txType = $('<input>');
     	            txType.val(symbol.type);
     	            txType.appendTo(form);
-    	            var txInfo = $('<textarea rows="15" cols="50">');
+    	            let txInfo = $('<textarea rows="15" cols="50">');
     	            txInfo.appendTo(form).val(symbol.info);
-    	            var btSet = $('<button>set</button>');
+    	            let btSet = $('<button>set</button>');
     	            form.submit(function (e) {
-    	                var symbol = new Symbol(id, txType.val(), txInfo.val());
+    	                let symbol = new Symbol(id, txType.val(), txInfo.val());
     	                agent.see('setClick', symbol);
     	                return false;
     	            })
     	            btSet.appendTo(form);
+    	            let label = $('<label>compare</label>');
+    	            label.appendTo(form);
+    	            let btCompare = $('<input type="checkbox" name="compare">');
+    	            btCompare.click(function (e) {
+    	                agent.see('compareClick', e);
+    	                return true;
+    	            })
+    	            btCompare.appendTo(label);
+    	            let btClearCompare = $('<button>clear compare</button>');
+    	            btClearCompare.click(function (e) {
+    	                agent.see('clearCompare', e);
+    	                return false;
+    	            })
+    	            btClearCompare.appendTo(form);
     	        });
     	        e.stopPropagation();
     	        return false;
