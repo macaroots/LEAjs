@@ -1,0 +1,284 @@
+/** 
+ * LEA - Live Environment for Agents
+ * 
+ * Copyright Renato Lenz Costalima
+ * Released under the AGPL-3.0 License
+ * https://github.com/macaroots/LEAjs/blob/main/LICENSE
+ */
+@import url('https://fonts.googleapis.com/css?family=Barrio');
+@import url('https://fonts.googleapis.com/css?family=Nova Square');
+@import url('https://fonts.googleapis.com/css?family=Tenor Sans');
+@import url('https://fonts.googleapis.com/css?family=Graduate');
+  
+:root {
+    --largura: 220px;
+    --hue: 0deg;
+    --saturation: 60%;
+    --light: 33%;
+    --color: hsl(var(--hue), var(--saturation), var(--light));
+    --bg-color: white;
+    /**/--fonte-logo: Barrio;/**/
+    /**/--fonte-titulo: Nova Square;/**/
+    /**/--fonte-texto: Tenor Sans;/**/
+}
+body, .Page button {
+    margin: 0;
+    font-family: var(--fonte-texto);
+}
+.Page {
+    height: 100vh;
+    overflow: auto;
+    scroll-snap-type: y mandatory;
+    font-size: 2rem;
+}
+#auth, #license {
+    display: none;
+}
+.logo {
+    /**/font-family: var(--fonte-logo)!important;
+    background: var(--color);
+    color: var(--bg-color);/**/
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    font-weight: normal;
+    font-size: calc(var(--largura)*0.75);
+    line-height: var(--largura);
+    height: var(--largura);
+    width: var(--largura);
+    text-align: center;
+    overflow: hidden;
+    border-radius: calc(var(--largura)*0.1);
+    margin: auto;
+}
+a {
+    color: var(--color);
+}
+.Page header, .Page section {
+    height: 100vh;
+    scroll-snap-align: start;
+    overflow: hidden;
+    margin: 0;
+    /*text-align: center;*/
+    display: flex;
+    flex-direction: column;
+}
+
+section main, section > article {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
+}
+
+.grupo {
+    /*display: grid;*/
+    /*grid-template-columns: 1fr 1fr 1fr;*/
+    gap: 3rem;
+    display: flex;
+    text-align: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.grupo article {
+    /*width: 100%;*/
+    max-width: 25ch;
+    flex: 1 0 30%;
+    border: 2px solid var(--color);
+    padding: 1em;
+    border-radius: 20px;
+    justify-content: center;
+    display: flex;
+    flex-flow: column;
+}
+header {
+    padding: 0 1em;
+}
+header h1 {
+    text-align: center;
+    padding-bottom: 10rem;
+}
+#pitch p {
+    margin-top: 3em;
+    text-align: center;
+}
+#problema-web .grupo article {
+    /*grid-template-columns: 1fr 1fr;*/
+    max-width: 15ch;
+    /*margin: 3rem auto;*/
+    /*gap: 12rem;*/
+    /*justify-content: space-between;*/
+}
+#problema-web .grupo {
+    margin-top: 3rem;
+}
+#problema-web .grupo article:last-of-type {
+    color: var(--bg-color);
+    background-color: var(--color);
+}
+#beneficios h1 {
+    margin: 0;
+}
+#negocio .grupo {
+    justify-content: space-between;
+}
+#negocio .grupo article:last-of-type {
+  /*flex-grow: 1;*/
+    max-width: none;
+}
+#competidores .grupo article {
+    width: 50ch;
+}
+#competidores img {
+    width: 160px;
+    margin: auto;
+}
+p {
+    margin-top: 0rem;
+}
+#competidores p {
+    margin-top: inherit;
+}
+#competidores article:first-of-type p:last-of-type {
+    visibility: hidden;
+}
+#vantagens .grupo {
+    display: grid;
+}
+#vantagens .grupo article {
+    /*display: grid;*/
+    max-width: none;
+}
+#vantagens details {
+    position: relative;
+    margin-top: -1em;
+    margin-bottom: 1em;
+}
+.Page button {
+    padding: 0.5em 1em;
+    vertical-align: middle;
+    font-size: 0.70em;
+    background: var(--color);
+    color: var(--bg-color);
+    border-radius: 10px;
+    border: none;
+}
+.Page button:hover {
+    --color: hsl(var(--hue), var(--saturation), 45%);
+}
+img {
+    width: 90%;
+    max-width: 800px;
+    align-self: center;
+}
+#vantagens img {
+    position: absolute;
+    top: -500px;
+    left: 20%;
+    width: 1024px;
+}
+#revolucao img {
+    margin-top: 6rem;
+    max-width: 1300px;
+}
+#time .grupo article {
+    width: 50ch;
+    padding-top: 0;
+}
+#time ul  {
+    margin-bottom: 0;
+}
+#time img  {
+    max-height: 160px;
+    margin: 0.5em;
+    width: auto;
+}
+#time .grupo article span {
+    color: var(--color);
+}
+#time .grupo article li {
+    text-align: left;
+}
+#time main > article {
+    display: flex;
+    margin-top: 1em;
+}
+#time main > article * {
+    flex-grow: 1;
+}
+#time main > article img {
+    display: none;
+}
+
+
+.Page section > p {
+    /*padding: 1rem;*/
+}
+.Page h1 {
+    font-family: var(--fonte-titulo);
+}
+.Page section > h1 {
+    margin: 0;
+    padding: 3rem;
+    color: var(--bg-color);
+    background: var(--color);
+}
+section > main > img, section > article > img { 
+    margin: 3rem;
+}
+li {
+    line-height: 1.5;
+}
+
+/*Tabs*/
+.Tabs {
+    /*display: grid;*/
+    /*grid-template-columns: 20ch 1fr;*/
+    /*width: 100%;*/
+    display: flex;
+    flex-flow: column wrap;
+    height: 620px;
+}
+.Tabs h1 {
+    margin-bottom: 0.25em;
+}
+.Tabs h1:last-of-type {
+    margin-top: 0.25em;
+}
+.Tabs > label {
+    /*grid-area: lado;*/
+    display: inline-block;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    /*border: 1px var(--color) solid;*/
+    max-width: 16ch;
+}
+
+.Tabs > article {
+    /*grid-column: 2;*/
+    /*grid-row: 1/ 9;*/
+    /*grid-area: main;*/
+    display: none;
+    padding: 1em;
+    text-align: center;
+    width: 1024px;
+}
+.Tabs > input {
+    display: none;
+}
+.Tabs #bt-tab1:checked ~ #tab1,
+.Tabs #bt-tab2:checked ~ #tab2,
+.Tabs #bt-tab3:checked ~ #tab3,
+.Tabs #bt-tab4:checked ~ #tab4,
+.Tabs #bt-tab5:checked ~ #tab5,
+.Tabs #bt-tab6:checked ~ #tab6,
+.Tabs #bt-tab7:checked ~ #tab7
+{
+    display: block;
+}
+.Tabs > input:checked + label {
+    color: var(--bg-color);
+    background: var(--color);
+}
