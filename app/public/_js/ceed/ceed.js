@@ -48,6 +48,8 @@ function Live() {
 		// TODO publish/subscribe?
 		skills['addListener'] = new AddListener();
 		skills['notify'] = new Notify();
+		skills['subscribe'] = new AddListener();
+		skills['publish'] = new Notify();
         
 		skills['help'] = new Help();
 		
@@ -446,12 +448,12 @@ function AddListener() {
 }
 function Notify() {
 	this.act = async function (args, resolve, reject) {
-		let event = args[0];
+		let [event, info] = args;
 		let agent = this.agent;
 		try {
 			let capitalized = event.charAt(0).toUpperCase() + event.slice(1);
 			for (let observer of agent.observers[event]) {
-				observer.see('on' + capitalized, args[1]);
+				observer.see('on' + capitalized, info);
 			}
 		} catch {}
 		resolve();
