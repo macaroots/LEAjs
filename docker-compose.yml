@@ -6,11 +6,14 @@ services:
     env_file: .env
     #environment:
       #- MYSQL_HOST=db
-    #ports:
-      #- "80:3000"
+    ports:
+      - "443:3000"
     volumes:
       - ./app:/home/node/app
       - node_modules:/home/node/app/node_modules
+      - ./selfsigned.crt:/home/node/app/server.cert
+      - ./selfsigned.key:/home/node/app/server.key
+      - ./dhparam.pem:/home/node/app/dhparam-2048.pem
     #links:
       #- db
     #depends_on:
@@ -43,24 +46,24 @@ services:
       #- test_db_data:/var/lib/mysql
       #- ./mind_v2.sql:/docker-entrypoint-initdb.d/dump.sql
       
-  web:
-    image: nginx:mainline-alpine
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - web-root:/var/www/html
-      - ./nginx:/etc/nginx/conf.d
-      #- certbot-etc:/etc/letsencrypt
-      #- certbot-var:/var/lib/letsencrypt
-      - ./selfsigned.crt:/etc/letsencrypt/live/tiia.com.br/fullchain.pem
-      - ./selfsigned.key:/etc/letsencrypt/live/tiia.com.br/privkey.pem
-      - ./dhparam.pem:/etc/ssl/certs/dhparam-2048.pem
-    links:
-      - lea
-    depends_on:
-      - lea
+  # web:
+  #   image: nginx:mainline-alpine
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - web-root:/var/www/html
+  #     - ./nginx:/etc/nginx/conf.d
+  #     #- certbot-etc:/etc/letsencrypt
+  #     #- certbot-var:/var/lib/letsencrypt
+  #     - ./selfsigned.crt:/etc/letsencrypt/live/tiia.com.br/fullchain.pem
+  #     - ./selfsigned.key:/etc/letsencrypt/live/tiia.com.br/privkey.pem
+  #     - ./dhparam.pem:/etc/ssl/certs/dhparam-2048.pem
+  #   links:
+  #     - lea
+  #   depends_on:
+  #     - lea
 
   #certbot:
     #image: certbot/certbot
