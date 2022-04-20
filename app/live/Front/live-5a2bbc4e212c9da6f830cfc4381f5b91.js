@@ -13,19 +13,14 @@ new (function Live() {
             lea.see('study', 'onSocketSee'),
             lea.see('study', 'checkPermission'),
             // concentra perguntas
+            lea.see('study', 'onNewAgent'),
             lea.see('study', 'onQuestion'),
             lea.see('study', 'onAnswer')
         ]);
 		
-		// todos os agentes a partir de agora perguntam pro LEA
-		// TODO efeito colateral!? talvez, all over the place.
 		let ceed = await Ceed();
-        /**/
-        // não mudaria o que tem dentro. mas adiciona burocracia.
+        ceed.see('addListener', ['newAgent', lea]);
         ceed.see('addListener', ['question', lea]);
-        /*/
-		ceed.skills['ask'] = new AskAgent('LEA');
-        /**/
 		ceed.skills['hear'] = new HearNotify();
 		resolve(true);
 	};
