@@ -8,12 +8,12 @@ new (function list() {
 		let url = await agent.see('listUrl');
 		let r = await fetch(url);
 		let rows = await r.json();
-	    await agent.see('study', 'itemView');
 	    let html = '';
-	    for (let row of rows) {
-            html += await agent.see('itemView', row);
-        }
 	    tbody.innerHTML = html;
+	    for (let row of rows) {
+	        let item = await agent.see('itemView', row);
+            tbody.append(item);
+        }
 			
 		resolve();
 	};
