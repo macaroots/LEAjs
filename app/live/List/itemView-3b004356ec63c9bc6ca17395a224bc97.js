@@ -10,6 +10,17 @@ new (function itemView () {
 		        html.querySelector('.' + p).textContent = bean[p];
 		    } catch {};
 		}
+		// Coloca url e id nos links
+		let url = await agent.see('getUrl');
+		for (let a of html.querySelectorAll('a')) {
+		    a.href = url + a.href;
+		    a.href += bean.id;
+		}
+		// Altera campos customizados
+	    try {
+            html.querySelector('.image').src = '/uploads/' + bean.image;
+            html.querySelector('.image').alt = bean.name;
+	    } catch {};
 		resolve(html);
 	};
 })();
