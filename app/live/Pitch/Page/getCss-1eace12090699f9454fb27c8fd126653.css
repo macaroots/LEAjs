@@ -125,7 +125,7 @@ header h1 {
     justify-content: space-between;
 }
 #negocio .grupo article:last-of-type {
-  /*flex-grow: 1;*/
+    flex-grow: 2;
     max-width: none;
 }
 #competidores .grupo article {
@@ -159,11 +159,12 @@ p {
 .Page button {
     padding: 0.5em 1em;
     vertical-align: middle;
-    font-size: 0.70em;
+    font-size: 1em;
     background: var(--color);
     color: var(--bg-color);
     border-radius: 10px;
     border: none;
+    font-size: 1em;
 }
 .Page button:hover {
     --color: hsl(var(--hue), var(--saturation), 45%);
