@@ -1,7 +1,7 @@
-.Page label {
+.Page form label {
     display: table-row;
 }
-.Page label  * {
+.Page form label  * {
     display: table-cell;
     padding-right: 1em;
     vertical-align: top;

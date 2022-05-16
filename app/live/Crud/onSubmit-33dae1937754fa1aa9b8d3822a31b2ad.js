@@ -7,7 +7,7 @@ new (function onSubmit() {
 	        acao = 'insert';
 	    }
 	    else {
-	        acao = 'update';
+	        acao = 'update?id=' + id;
 	    }
 		const dados = new FormData(form);//$(form).serialize();
 		let url = await agente.see('getUrl');
