@@ -11,7 +11,7 @@ new (function list() {
 	    let html = '';
 	    for (let row of rows) {
 	        let item = await agent.see('format', [
-	            await agent.see('itemView'), row
+	            await agent.see('itemView', row), row
 	        ]);
             html += item;
         }
