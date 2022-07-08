@@ -1,0 +1,21 @@
+<section>
+    <h1>Contato</h1>
+    <form onsubmit="event.preventDefault(); getAgent(this).see('onSubmit', this);">
+        <p>Críticas, dúvidas, sugestões? Tua opinião é muito importante!</p>
+        <p id="mensagem"></p>
+        <input name="id" value="0" type="hidden">
+        <label>
+            <span>
+               E-mail
+            </span>
+            <input name="email" type="email">
+        </label>
+        <label>
+            <span>
+               Mensagem
+            </span>
+            <textarea name="paragrafo" rows="10" cols="40"></textarea>
+        </label>
+        <input type="submit">
+    </form>
+</section>
