@@ -1,5 +1,4 @@
 <header>
-    <div class="logo">TIIA</div>
     <h1>LEA - Live Environment for Agents</h1>
 </header>
 <main>
@@ -104,7 +103,7 @@ window.agente = agente;</script>
        
         <h3>Interface IntelligentMind</h3>
         <p>De acordo com a definição de Russell, um interruptor, que percebe o ambiente quando é pressionado e age ligando a luz, pode ser considerado um agente. Fica claro para nós que o conceito de agência e até "fazer a coisa certa" (acender ou apagar a luz conforme solicitado) ainda não é a mesma coisa que inteligência.</p>
-        <p>Entre as inúmeras definições de inteligência, MInD considera essencial "a capacidade de <b>adquirir</b> e <b>aplicar</b> conhecimento". Além de perceber o ambiente, a interface Mind representa o que se espera de um agente inteligente: set(), definir novos conhecimentos; e get(), recuperar esse conhecimentos para que possam ser aplicados.</p>
+        <p>Entre as inúmeras definições de inteligência, MInD considera essencial "a capacidade de <b>adquirir</b> e <b>aplicar</b> conhecimento" (MIFFLIN, 2000). Além de perceber o ambiente, a interface Mind representa o que se espera de um agente inteligente: set(), definir novos conhecimentos; e get(), recuperar esse conhecimentos para que possam ser aplicados.</p>
         <h3>Interface Action</h3>
         <p>Uma ação age, <code>act()</code>. Permite que o agente realize operações.</p>
         
@@ -119,15 +118,15 @@ window.agente = agente;</script>
 assert.equal(await agent.see('sum', [1, 2]), null);
 
 // Teaching new action
-await agent.see('set', ['sum', new (function sum () {
-    this.act = function (args, resolve, reject) {
+await agent.see('set', ['sum', new class Sum {
+    act(args, resolve, reject) {
         let sum = 0;
         for (let n of args) {
             sum += n;
         }
         resolve(sum);
-    };
-})()]);      
+    }
+}()]);
 
 // The sum should succeed, the agent learned!
 assert.equal(await agent.see('sum', [1, 2]), 3);</pre></code>
@@ -231,10 +230,10 @@ assert.equal(await agent.see('sum', [1, 2]), 3);</pre></code>
         <p>Para criar uma nova página na plataforma LEA, basta acessar o endereço desejado. Os agentes vão estar lá para te ajudar a editar teu site ao vivo!</p>
         <p>A plataforma LEA dá suporte à criação e interação com agentes inteligentes com o objetivo de ajudar a edição de páginas web. As páginas web em si, são descritas utilizando as mesmas tecnologias atuais (por enquanto: HTML, CSS, Javascript, Java, JSP).</p>
         <p>Cada tecnologia em sua área, os agentes vem pra somar. Um NaiveAgent é, na prática, um objeto dinâmico, cujos atributos e métodos são definidos em tempo de execução. O código abaixo exemplifica como é possível criar um agente com o método <code>LEA.getAgent()</code>. A partir daí, o método <code>see()</code> solicita que o agente execute uma "ação", que é o equivalente a um método. Se a ação não tiver sido definida ainda, o agente abrirá uma caixa de diálogo. Pode-se definir e recuperar variáveis através das ações "set" e "get", respectivamente.</p>
-        <pre>let agente1 = LEA.getAgent('agente1');
-agente1.see('metodo1');
-agente1.see('set', ['a', 1]);
-agente1.see('get', 'a', function (a) { console.log(a); });</pre>
+        <pre>let agente = await Ceed('Agente1');
+agente.see('metodo1');
+agente.see('set', ['a', 1]);
+console.log(await agente.see('get', 'a'));</pre>
         <p>Agentes podem interagir com o DOM. Qualquer evento pode ser direcionado para um agente, por exemplo, o código:</p>
         <pre>&lt;button onclick="getAgent(this).see('nomeFuncao', 'args');"&gt;Clique&lt;/button&gt;</pre>
         <button onclick="getAgent(this).see('nomeFuncao', 'args');">Clique</button>
