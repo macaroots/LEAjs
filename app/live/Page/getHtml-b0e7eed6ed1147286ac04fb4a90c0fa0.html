@@ -1,0 +1,73 @@
+<!-- LEA - Live Environment for Agents
+   - by Renato Lenz Costalima
+   - This Source Code Form is subject to the terms of the 
+   - GNU Affero General Public License v3.0. -->
+<header>
+    <a href="/"><div class="logo">TIIA</div></a>
+    <h1>LEA - Live Environment for Agents</h1>
+</header>
+<nav>
+    <ul>
+        <li>
+            <a href="#">Início</a>
+            <ul>
+                <li><a href="#secao0">O que é inteligência?</a></li>
+                <li><a href="#secao1">“Zero-time configuration”</a></li>
+                <li><a href="#secao2">Edição ao vivo</a></li>
+                <li><a href="#secao6">Clever Editing</a></li>
+                <li><a href="#secao3">Componentes e Temas</a></li>
+                <li><a href="#secao4">Hospedagem</a></li>
+                <li><a href="#secao5">Repositório vivo</a></li>
+            </ul>
+        </li>
+        <li><a href="/docs">Sobre</a></li>
+        <li><a href="/contato">Contato</a></li>
+    </ul>
+</nav>
+<main>
+    <section id="secao0">
+        <h1>O que é inteligência?</h1>
+        <p>Bem-vinda à <a href="/docs">minha tentativa de descrição da inteligência artificial</a>!</p>
+    </section>
+    <section id="secao1">
+        <h1>“Zero-time configuration”</h1>
+        <p>Seus ambientes já estão configurados. Já pode começar a trabalhar.</p>
+    </section>
+    
+    <section id="secao2">
+        <h1>Edição ao vivo</h1>
+        <p>
+            Use o <b>editor à direita</b> para alterar:
+        </p>
+        <ul>
+            <li>Estrutura e conteúdo - HTML (<label class="question">Page <input value="getHtml" size="10"></label>)</li>
+            <li>Interação com usuário - Javascript (<label class="question">Page <input value="onLoad" size="10"></label>)</li>
+            <li>Visual - CSS (<label class="question">Page <input value="getCss" size="10"></label>).</li>
+        </ul>
+        
+        <p>Desculpe, isto é um protótipo. Se as letras não estiverem aparecendo, alterne entre as <label class="question">Agent <input value="abas" size="10"></label> do editor.</p>
+        
+    </section>
+    <section id="secao6">
+        <h1>Edição assistida por agentes (Clever Editing)</h1>
+        <p>Este é um software inteligente, que não foi construído no antigo processo "editar-salvar-atualizar". Agentes devem ser treinados em tempo de execução e precisam poder falhar sem a necessidade de reiniciar o sistema, literalmente matando o processo e o agente.</p>
+        <p>Experimente a <b>edição assistida por agentes</b>, direcionando eventos do DOM para um agente, por exemplo:</p>
+        <pre>&lt;button onclick="getAgent(this).see('novaAcao', 'args');"&gt;Nova ação&lt;/button&gt;</pre>
+        <button onclick="getAgent(this).see('novaAcao', 'args');">Nova ação</button>
+    </section>
+    
+    <section id="secao3">
+        <h1>Componentes e Temas</h1>
+        <p>Explore nossos templates. Crie seus próprios componentes e temas.</p>
+    </section>
+    
+    <section id="secao4">
+        <h1>Hospedagem</h1>
+        <p>Faça o <a href="/auth">login</a> e coloque seus projetos no ar gratuitamente. Começe a pagar somente quando seu site fizer sucesso. <a href="mailto: macaroots@gmail.com">Veja condições e termos.</a></p>
+    </section>
+    
+    <section id="secao5">
+        <h1>Repositório vivo</h1>
+        <p>Explore o código-fonte de programas em execução. Descubra e altere o código por trás de cada botão sem necessidade de reiniciar.</p>
+    </section>
+</main>
