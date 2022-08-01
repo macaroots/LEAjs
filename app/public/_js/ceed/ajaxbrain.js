@@ -21,11 +21,11 @@ export function AjaxBrain(endereco) {
 	this.responses = responses;
     this.setCache = function (text, response) {
 //         responses[text] = response;
-        localStorage.setItem(text, JSON.stringify(response));
+        sessionStorage.setItem(text, JSON.stringify(response));
     }
     this.getCache = function (text) {
 //         return responses[text];
-        return JSON.parse(localStorage.getItem(text));
+        return JSON.parse(sessionStorage.getItem(text));
     }
     
 	this.get = function (symbol) {
