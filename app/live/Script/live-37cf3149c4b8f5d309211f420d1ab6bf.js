@@ -3,17 +3,17 @@ new (function live () {
 console.log('SCRIPT LIVE', this.agent.toString());
 		let agent = this.agent;
 		await agent.see('addName', 'Script Element');
-		let config = function () { 
-			ace.config.set('modePath', 'https://pagecdn.io/lib/ace/1.4.12/');
-			ace.config.set('workerPath', 'https://pagecdn.io/lib/ace/1.4.12/');
-			ace.config.set('themePath', 'https://pagecdn.io/lib/ace/1.4.12/');
+		let config = function (url='https://cdnjs.cloudflare.com/ajax/libs/ace/1.8.1/') { 
+			ace.config.set('modePath', url);
+			ace.config.set('workerPath', url);
+			ace.config.set('themePath', url);
 			
 			resolve(true);
 		};
 	    let loadAce = new Promise((resolve, reject) => {
 			$.ajax({
 				type: "GET",
-				url: 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.5.0/ace.min.js',
+				url: 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.8.1/ace.min.js',
 				dataType: "script",
 				cache: true,
 				success: config,
@@ -21,7 +21,7 @@ console.log('SCRIPT LIVE', this.agent.toString());
                     console.log("Couldn't load ace. Trying another source..."); 
                     $.ajax({
         				type: "GET",
-        				url: 'https://pagecdn.io/lib/ace/1.4.12/ace.min.js',
+        				url: 'https://tiia.com.br/_js/lib/ace.js',
         				dataType: "script",
         				cache: true,
         				success: config
