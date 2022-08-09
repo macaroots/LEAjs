@@ -8,7 +8,11 @@ new (function seeClick() {
     		var selectedAgent = form.find('select option:selected')[0].agent;
 			selectedAgent.see(action, target).then(function (answer) {
 			    window._ = answer;
-				body.find('.answers').append('<div class="' + action + '">' + JSON.stringify(answer) + '</div>');
+			    try {
+    				body.find('.answers').append('<div class="' + action + '">' + JSON.stringify(answer) + '</div>');
+			    } catch {
+    				body.find('.answers').append('<div class="' + action + '">' + answer + '</div>');
+			    }
 			});
 		});
 		resolve();
