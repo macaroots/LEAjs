@@ -23,17 +23,17 @@
   },
   "homepage": "https://github.com/macaroots/LEAjs#readme",
   "dependencies": {
-    "ejs": "^3.1.6",
-    "express": "^4.17.1",
-    "express-fileupload": "^1.2.1",
-    "express-session": "^1.17.2",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "express-fileupload": "^1.4.0",
+    "express-session": "^1.17.3",
     "express-subdomain": "^1.0.5",
-    "google-auth-library": "^7.10.0",
+    "google-auth-library": "^7.14.1",
     "https": "^1.0.0",
     "mocha": "^9.2.2",
     "mysql": "^2.18.1",
     "requirejs": "^2.3.6",
-    "socket.io": "^4.2.0",
-    "socket.io-client": "^4.4.0"
+    "socket.io": "^4.5.2",
+    "socket.io-client": "^4.5.2"
   }
 }
