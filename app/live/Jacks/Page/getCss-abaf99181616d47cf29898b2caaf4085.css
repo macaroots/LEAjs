@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css?family=Barrio');
+
+:root {
+    --largura: 64px;
+    --hue: 203deg;
+    --color: hsl(var(--hue), 100%, 20%);
+    --bg-color: white;
+    --fonte-logo: Barrio;
+    --fonte-titulo: Nova Square;
+    --fonte-texto: Tenor Sans;
+    counter-reset: secao;
+    counter-reset: h3counter;
+    counter-reset: h4counter;
+    counter-reset: figura;
+}
+.logo {
+    /**/font-family: var(--fonte-logo);
+    background: var(--color);
+    color: var(--bg-color);/**/
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    justify-content: center;
+    font-weight: normal;
+    font-size: calc(var(--largura)*0.75);
+    line-height: var(--largura);
+    height: var(--largura);
+    width: var(--largura);
+    border-radius: calc(var(--largura)*0.1);
+    z-index: 100;
+}
+#auth, #license, .Page {
+    background: var(--bg-color);
+    padding: 0.5em;
+    border-radius: 5px;
+}
+body {
+    background: var(--color);
+}
+.Page {
+    max-width: 960px;
+    margin: auto;
+    padding: 1em;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    /*grid-template-columns: 32ch 1fr;*/
+    grid-template-rows: 8rem 1fr;
+}
+.Page * {
+    margin-left: 0;
+}
+header {
+    grid-column: 1 / 3;
+    display: flex;
+    gap: 1em;
+    place-items: center;
+    z-index: 100;
+}
+nav {
+    grid-column: 1 / 3;
+}
+nav ul {
+    background: var(--color);
+    padding-left: var(--largura);
+}
+nav > ul li {
+    display: inline-block;
+    padding: 1em 0;
+}
+nav ul li:hover {
+    background: hsl(var(--hue), 100%, 35%);
+}
+nav ul ul {
+    position: absolute;
+    background: var(--bg-color);
+    margin-top: 1em;
+    padding: 0;
+    border: 1px solid var(--color);
+    display: none;
+}
+nav li:hover ul {
+    display: block;
+}
+nav ul ul li {
+    display: block;
+}
+nav a {
+    color: var(--bg-color);
+    padding: 1em;
+}
+nav ul ul a {
+    color: var(--color);
+}
+nav ul ul li:hover a {
+    color: var(--bg-color);
+}
+main {
+    width: 100%;
+    height: 78vh;
+}
+.jack {
+    position: sticky;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color);
+}
+a:hover {
+    text-decoration: underline;
+}
+
+@media(max-width: 600px) {
+    :root {
+        --largura: 2.5rem;
+    }
+    header { 
+        margin-left: -0.5rem!important;
+    }
+    header h1 { 
+        margin: 0;
+        margin-left: calc(var(--largura) + 0.25em)!important;
+    }
+    .logo {
+        position: fixed;
+        top: 1rem;
+    }
+    .Page nav {
+        position: sticky;
+        top: 0.25rem;
+    }
+	#auth {
+	    z-index: 100;
+        border: 1px solid var(--color);
+	}
+	body {
+	    display: flex;
+	    flex-direction: column;
+	}
+    .Page {
+        width: 100%;
+    }
+    #license {
+        width: calc(100% - 16px);
+        position: static;
+        order: 2;
+        margin-top: 0.5rem;
+    }
+    #btEdit {
+        bottom: 7rem;
+    }
+}
+
+@media(min-width: 600px) {
+    .Page {
+        height: calc(100vh - 16px);
+    }
+}

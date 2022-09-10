@@ -8,7 +8,7 @@ new class init {
 		agent.x = 100;
 		agent.body = $('#ball');
 		if (agent.body.length == 0) {
-		    agent.body = $('<canvas id="ball" width="50" height="50" style="position: absolute;" />').appendTo('body');
+		    agent.body = $('<canvas id="ball" width="50" height="50" style="position: relative;" />').appendTo('main');
             var ctx = agent.body[0].getContext("2d");
             ctx.beginPath();
             ctx.arc(25, 25, 25, 0, 2 * Math.PI);
