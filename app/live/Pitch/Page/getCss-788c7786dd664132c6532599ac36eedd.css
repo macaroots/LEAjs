@@ -51,6 +51,19 @@ body, .Page button {
     overflow: hidden;
     border-radius: calc(var(--largura)*0.1);
     margin: auto;
+    transition: all .5s ease;
+}
+.dividido .logo.second-page {
+    position: fixed;
+    --largura: 172px;
+    right: 7em;
+    transition: all .5s ease;
+}
+.logo.second-page {
+    position: fixed;
+    --largura: 172px;
+    right: .5em;
+    transition: all .5s ease;
 }
 a {
     color: var(--color);
@@ -188,11 +201,11 @@ img {
     width: 50ch;
     padding-top: 0;
 }
-#time ul  {
+#time ul, #time h1  {
     margin-bottom: 0;
 }
 #time img  {
-    max-height: 160px;
+    max-height: 200px;
     margin: 0.5em;
     width: auto;
 }
@@ -254,7 +267,7 @@ li {
     padding: 0.5em 1em;
     border-radius: 5px;
     /*border: 1px var(--color) solid;*/
-    max-width: 16ch;
+    max-width: 22ch;
 }
 
 .Tabs > article {
@@ -265,6 +278,9 @@ li {
     padding: 1em;
     text-align: center;
     width: 1024px;
+}
+.Tabs > article img {
+    border: 1px solid;
 }
 .Tabs > input {
     display: none;
