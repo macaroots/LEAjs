@@ -119,15 +119,18 @@ export function AjaxBrain(endereco) {
             });
         });
 	};
-	this.getClearLink = function (no) {
-		var n = {};
-		n.a = this.getClearSymbol(no.a);
-		n.r = this.getClearSymbol(no.r);
-		n.b = this.getClearSymbol(no.b);
-		if (no.ordem != null) {
-			n.ordem = no.ordem;
+	this.getClearLink = function (link) {
+        if (!link) {
+            link = {};
+        }
+		var l = {};
+		l.a = this.getClearSymbol(link.a);
+		l.r = this.getClearSymbol(link.r);
+		l.b = this.getClearSymbol(link.b);
+		if (link.ordem != null) {
+			l.ordem = link.ordem;
 		}
-		return n;
+		return l;
 	};
 	this.getClearSymbol = function (s) {
 		var symbol = {};
