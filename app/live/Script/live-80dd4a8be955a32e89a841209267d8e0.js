@@ -21,10 +21,10 @@ console.log('SCRIPT LIVE', this.agent.toString());
                     console.log("Couldn't load ace. Trying another source..."); 
                     $.ajax({
         				type: "GET",
-        				url: 'https://tiia.com.br/_js/lib/ace.min.js',
+        				url: '/_js/lib/ace.min.js',
         				dataType: "script",
         				cache: true,
-        				success: config
+        				success: () => config('/_js/lib/ace/')
                     });
                 }     
 			});
