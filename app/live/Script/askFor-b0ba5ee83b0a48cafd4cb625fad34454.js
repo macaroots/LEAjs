@@ -87,7 +87,7 @@ new (function askFor () {
     						    let representation = representations[representations.length - 1];
     							type = representation.type;
     							info = representation.info;
-    							info = info.replace(new RegExp('agent', 'g'), await name);
+    							info = info.replace(new RegExp('{agent}', 'g'), await name);
     							info = info.replace(new RegExp('EmptyAction', 'g'), key);
                                 question[0]._type = type;
     							txType.val(type);
