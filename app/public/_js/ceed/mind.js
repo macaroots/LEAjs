@@ -30,10 +30,14 @@ Futuros
 import {CeedAgent} from './ceed.js';
 import {Symbol, Link} from './brain.js';
 import {JSBrain} from './jsbrain.js';
-export function NaiveMind(name, brain) {
+export function NaiveMind(name='unnamed', brain) {
     const self = this;
 	this.setName = function(name) {
-		name = name.replace(new RegExp('\\.', 'g'), '_');
+		try {
+			name = name.replace(new RegExp('\\.', 'g'), '_');
+		} catch {
+			name = '';
+		}
 		let names = name.split(' ').map(function (name) {
 			return name.charAt(0).toUpperCase() + name.slice(1);
 		});
