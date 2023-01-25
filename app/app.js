@@ -13,12 +13,15 @@ await ceed.see('addLibrary', library);
 
 const lea = await Ceed('Front');
 try {
-/*/
+    // Add HTTP Brain
+    /*/
     await lea.see('initHttpBrain', {
         host: process.env.BRAIN_HOST || 'http://localhost/brain',
         protocol: process.env.BRAIN_PROTOCOL || 'http'
     });
-/* /
+    /**/
+    // Add MySQL Brain
+    /*/
     await lea.see('initBrain', {
         host: process.env.MYSQL_HOST || 'localhost',
         database: process.env.MYSQL_DATABASE || 'leajs',
@@ -26,12 +29,9 @@ try {
         password: process.env.MYSQL_PASSWORD || 'admin',
         // debug: true
     });
-/**/
+    /**/
 
-    await lea.see('listen', {
-        hostname: process.env.HOSTNAME || '127.0.0.1', 
-        port: process.env.PORT || 3000
-    });
+    await lea.see('listen');
 } catch(e) {
 	console.error('ERROR LEA APP', e);
 }

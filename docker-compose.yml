@@ -7,12 +7,12 @@ services:
     #environment:
       #- MYSQL_HOST=db
     ports:
-      - "443:3000"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./app:/home/node/app
       - node_modules:/home/node/app/node_modules
-      - ./selfsigned.crt:/home/node/app/server.cert
-      - ./selfsigned.key:/home/node/app/server.key
+      - ./certs:/var/lib/leajs/certs
     #links:
       #- db
     #depends_on:
@@ -76,9 +76,7 @@ services:
     #depends_on:
       #- web
     #command: certonly --webroot --webroot-path=/var/www/html --email macaroots@gmail.com --agree-tos --no-eff-email --staging -d tiia.com.br -d www.tiia.com.br
-
-
-    
+   
 volumes:
   node_modules:
   #app:
