@@ -47,13 +47,14 @@ new (function Listen() {
             server = nonSecureServer;
         }
         else {
-            protocol = 'https';
             console.log('Secure server created successfully!');
             console.log('Redirecting HTTP requests to HTTPS');
             nonSecureServer = http.createServer(function (req, res) {
                 res.writeHead(301, {"Location": "https://" + req.headers['host'] + req.url});
                 res.end();
-            }).listen(options.http_port);
+            }).listen(options.http_port, () => {
+                console.log(`Non-secure Server running at http://${options.hostname}:${options.http_port}/`);
+            });
         }
 
         agent.see('set', ['httpServer', server]);
