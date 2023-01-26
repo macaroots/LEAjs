@@ -359,7 +359,7 @@ function Error(mind) {
 			let e = args[1];
 			let action = args[0][0];
 			let target = args[0][1];
-			console.trace(mind + " - ERROR:" + action.name + "(" + target + ") - ", typeof(e), ':', e);
+			console.trace(mind.toString(), e);
 		} catch (e) {
 			console.error('CRITICAL ERROR', e);
             reject(e)
