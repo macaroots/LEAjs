@@ -518,6 +518,7 @@ function GetAgent() {
 		// Talvez o próprio agente devesse lidar com o nome
 		// só que o Ceed precisa anotar já o nome em maiúsculo
 		try {
+			fullname = fullname.toString();
 			fullname = fullname.charAt(0).toUpperCase() + fullname.slice(1);
 		} catch {
 			fullname = 'Ceed';
