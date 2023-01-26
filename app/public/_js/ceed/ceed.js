@@ -517,7 +517,11 @@ function GetAgent() {
 	this.act = async function (fullname, callback) {
 		// Talvez o próprio agente devesse lidar com o nome
 		// só que o Ceed precisa anotar já o nome em maiúsculo
-		var fullname = fullname.charAt(0).toUpperCase() + fullname.slice(1);
+		try {
+			fullname = fullname.charAt(0).toUpperCase() + fullname.slice(1);
+		} catch {
+			fullname = 'Ceed';
+		}
 		
 		const ceed = this.agent;
 		if (!ceed.agents) {
