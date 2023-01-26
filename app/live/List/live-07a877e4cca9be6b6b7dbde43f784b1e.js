@@ -3,6 +3,6 @@ new (function live() {
 		var agent = this.agent;
 	    await agent.see('addName', 'List Element');
         await agent.see('study', 'itemView');
-	    agent.see('Element.live', args, resolve);
+	    agent.see('Element.live', args).then(resolve).catch(reject);
 	};
 })();
