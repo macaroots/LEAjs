@@ -157,15 +157,13 @@ pre {
     counter-reset: line;
 }
 @media(max-width: 600px) {
-    :root {
-        --largura: 2.5rem;
-    }
     header { 
         margin-left: -0.5rem!important;
     }
     header h1 { 
         margin: 0;
-        margin-left: calc(var(--largura) + 0.25em)!important;
+        margin-top: calc(var(--largura) + 0.25em);
+        text-align: center;
     }
     .logo {
         position: fixed;
