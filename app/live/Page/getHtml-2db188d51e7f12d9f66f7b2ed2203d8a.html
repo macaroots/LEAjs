@@ -9,15 +9,15 @@
 <nav>
     <ul>
         <li>
-            <a href="#inicio">Início</a>
+            <a href="#">Início</a>
             <ul>
                 <li><a href="#secao0">O que é inteligência?</a></li>
-                <li><a href="#secao6">Clever Editing</a></li>
-                <li><a href="#secao5">Repositório vivo</a></li>
                 <li><a href="#secao1">“Zero-time configuration”</a></li>
                 <li><a href="#secao2">Edição ao vivo</a></li>
+                <li><a href="#secao6">Clever Editing</a></li>
                 <li><a href="#secao3">Componentes e Temas</a></li>
                 <li><a href="#secao4">Hospedagem</a></li>
+                <li><a href="#secao5">Repositório vivo</a></li>
             </ul>
         </li>
         <li><a href="/docs">Sobre</a></li>
@@ -25,9 +25,32 @@
     </ul>
 </nav>
 <main>
-    <section id="inicio">
-        <h1>Crie, Edite, Compartilhe seu site inteligente</h1>
-        <p>Você quer criar um site, um componente ou um tema? Que tal treinar um software inteligente? Pare de desenvolver programas, comece a treinar agentes inteligentes!</p>
+    <section>
+        <h1>TODO</h1>
+        <ul>
+            <li>cadastro de usuário
+                <ul>
+                    <li>criar usuário no linux</li>
+                    <li>configurar pasta dentro do live</li>
+                    <li>configurar quota (50 MB) somar duas pastas ou colocar a live dentro da public</li>
+                </ul>
+            </li>
+            <li>login de usuário</li>
+            <li>server side rendering com custom tags HTML. Webcomponents.</li>
+            <li>upload de arquivos na pasta /public/usuario/uploads</li>
+            <li>configurar permissões de acesso leitura e escrita por terceiros no Brain</li>
+            <li>fazer a função help preencher as opções do datalist para agentes e ações
+                <ul>
+                    <li>ao escolher um agente, limitar as opções de ação</li>
+                </ul>
+            </li>
+            <li></li>
+        </ul>
+    </section>
+    <section>
+        <h1>Crie, Treine, Compartilhe seu Agente Inteligente</h1>
+        <p>Você quer criar um site, um componente ou um tema? Que tal treinar um software inteligente?</p>
+        <p>Pare de desenvolver programas, comece a treinar agentes inteligentes!</p>
         <button onclick="getAgent(this).see('tour', 'args');">Fazer Tour</button>
         <button onclick="getAgent(this).see('edit', 'args');">Editar Página</button>
     </section>
