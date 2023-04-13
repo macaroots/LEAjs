@@ -9,8 +9,8 @@
     --fonte-titulo: Nova Square;
     --fonte-texto: Tenor Sans;
     counter-reset: secao;
-    counter-reset: h3counter;
-    counter-reset: h4counter;
+    counter-reset: subsecao;
+    counter-reset: subsubsecao;
     counter-reset: figura;
 }
 .logo {
@@ -99,24 +99,24 @@ main {
     overflow: auto;
     padding: 0 1rem;
 }
-h2 {
+main > section {
     counter-increment: secao;
     counter-reset: subsecao;
 }
-h2::before {
+main > section > h1::before {
     content: counter(secao) ' ';
 }
-h3 {
+main > section > section > h1 {
     counter-increment: subsecao;
     counter-reset: subsubsecao;
 }
-h3::before {
+main > section > section > h1::before {
     content: counter(secao) '.' counter(subsecao) ' ';
 }
-h4 {
+main > section > section > section > h1 {
     counter-increment: subsubsecao;
 }
-h4::before {
+main > section > section > section > h1::before {
     content: counter(secao) '.' counter(subsecao) '.' counter(subsubsecao) ' ';
 }
 p, li {
