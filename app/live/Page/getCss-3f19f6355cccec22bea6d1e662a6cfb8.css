@@ -216,7 +216,7 @@ body, html {
     position: relative;
 }
 
-.Page section, .Page aside  {
+.Page main > section, .Page aside  {
     padding: 50px 70px 40px 70px;
     min-height: 100vh;
     text-align: center;
@@ -234,12 +234,12 @@ REPETIR PARA CUSTOMIZAR OUTRAS SECTIONS
 
 */
 
-.Page section:nth-child(1) {
+.Page main > section:nth-child(odd) {
     background-color: #efefef;
     color: #000;
 }
 
-.Page section:nth-child(2) {
+.Page main > section:nth-child(even) {
     color: #000;
     background-color: #ccc;
 }
