@@ -103,7 +103,7 @@ new (function Listen() {
         });
 
         // Rotas
-        //await agent.see('subdomain');
+        await agent.see('subdomain');
         let router = await agent.see('getRouter');
         app.use('/', router);
 

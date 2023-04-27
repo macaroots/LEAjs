@@ -1,10 +1,14 @@
 new (function Http() {
 	this.act = async function (args, callback) {
 		let [req, res] = args;
-console.log(this.agent + ' - http', req.params, new Date());		
 	    let agentName = req.params.agent || 'index';
 	    let actionName = req.params.action || 'index';
-		
+		if (agentName != 'brain' && actionName != 'reason') {
+            console.log(new Date(), this.agent + ' - http', req.params);
+		}
+		try {
+		    agentName = req.vhost[0] + '/' + agentName.charAt(0).toUpperCase() + agentName.slice(1) + '/Controller ' + agentName;
+		} catch {}
 		res.locals.agentName = agentName;
 		res.locals.actionName = actionName;
 		
