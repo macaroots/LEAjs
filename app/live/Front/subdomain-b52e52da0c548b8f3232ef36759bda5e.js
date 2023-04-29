@@ -9,6 +9,8 @@ new class subdomain {
         var routerGessica = express.static('public_gessica');
          
         app.use(vhost('gessicapsicologa.com.br', routerGessica));
+        app.use(vhost('www.gessicapsicologa.com.br', routerGessica));
+        app.use(vhost('www.tiia.com.br', routerUsers));
         app.use(vhost('*.tiia.com.br', routerUsers));
         app.use(vhost('*.localhost', routerUsers));
         console.log('Setting subdomains');
