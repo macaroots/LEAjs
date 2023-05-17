@@ -5,8 +5,7 @@ new (function insert() {
 		
 		try {
 		    let bean = await agent.see('getBeanFromRequest', args);
-		    let host = (req.vhost) ? req.vhost[0] + '/Mailer ' : '';
-		    let mailer = await Ceed(host + 'Mailer');
+		    let mailer = await agent.see('getAgent', 'Mailer');
 		    await mailer.see('send', bean);
 		    res.send({ok: true});
 		}
