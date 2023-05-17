@@ -6,8 +6,8 @@ new (function insert() {
 		try {
 		    let bean = await agent.see('getBeanFromRequest', args);
 		    let mailer = await agent.see('getAgent', 'Mailer');
-		    await mailer.see('send', bean);
-		    res.send({ok: true});
+		    let response = await mailer.see('send', bean);
+		    res.send({ok: true, message: response});
 		}
 		catch (e) {
 		    res.status(400);

@@ -26,9 +26,9 @@ new class send {
             // Enviar o e-mail
             transporter.sendMail(mailOptions, function (error, info) {
               if (error) {
-                console.log(error);
+                reject(error);
               } else {
-                console.log("E-mail enviado: " + info.response);
+                resolve("E-mail enviado: " + info.response);
               }
             });
     
