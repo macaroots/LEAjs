@@ -279,7 +279,7 @@ body, .Page button {
     .Page button:hover {
         --color: hsl(var(--hue), var(--saturation), 45%);
     }
-    img {
+    .Page img {
         width: 90%;
         max-width: 800px;
         align-self: center;
