@@ -20,7 +20,7 @@ new class onUpdate {
     		resolve(await r.text());
 		}
 		else {
-		    reject(new Erro('Url em branco!'));
+		    reject(new Error('Url em branco!'));
 		}
 	};
 }();
