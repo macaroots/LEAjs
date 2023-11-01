@@ -1,7 +1,7 @@
 new class Form {
 	async act(id, resolve, reject) {
 	    let agent = this.agent;
-		let url = await agent.see('findUrl');
+		let url = await agent.see('getByIdUrl');
 	    let r = await fetch(url + '?id=' + id);
 	    let bean = await r.json();
 	    let body = (await agent.see('getBody'))[0];
