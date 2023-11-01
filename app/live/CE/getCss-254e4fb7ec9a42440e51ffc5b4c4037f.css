@@ -20,6 +20,7 @@
     display: flex;
     flex-direction: column;
     overflow: auto;
+    z-index: 2;
 }
 .CE > form {
     text-align: right;
@@ -35,6 +36,7 @@
     min-height: 1.0em;
     max-height: 4.5em;
     overflow: auto;
+    color: var(--bg-color);
 }
 
 .questions {
