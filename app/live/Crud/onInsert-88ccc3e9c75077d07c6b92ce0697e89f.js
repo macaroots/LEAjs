@@ -8,15 +8,20 @@ new (function onSubmit() {
 		const dados = new URLSearchParams(bean).toString();
         // const dados = new FormData(form);
 		let url = await agente.see('insertUrl');
-    	let r = await fetch(url, {
-    		method: 'POST',
-    		headers: {
-    // 			'Content-Type': 'multipart/form-data'
-    			'Content-Type': 'application/x-www-form-urlencoded'
-    		},
-    		body: dados
-    	});
-    		
-		resolve(await r.text());
+		if (url) {
+        	let r = await fetch(url, {
+        		method: 'POST',
+        		headers: {
+        // 			'Content-Type': 'multipart/form-data'
+        			'Content-Type': 'application/x-www-form-urlencoded'
+        		},
+        		body: dados
+        	});
+        		
+    		resolve(await r.text());
+		}
+		else {
+		    reject(new Error('Url em branco!'));
+		}
 	};
 })();
