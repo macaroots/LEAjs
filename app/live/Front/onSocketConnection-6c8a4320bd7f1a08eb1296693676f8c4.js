@@ -1,18 +1,19 @@
 new (function OnSocketConnection() {
 	this.act = async function(socket, resolve, reject) {
-	    let authorized = socket.request.client.authorized;
+	    let session = socket.request.session;
+		let lea = this.agent;
+	    let user = session.user;
 	    // Descomentar para autorizar por chave SSL
-	    /*/
-	    if (!authorized) {
+	    //let authorized = socket.request.client.authorized;
+	    /**/
+	    if (!user) {
 	        console.log('Socket connection not authorized!', socket.id);
 	        socket.disconnect();
 	        return resolve(false);
 	    }
 	    /**/
 	    
-	    let session = socket.request.session;
-		let lea = this.agent;
-		console.log('Socket connected:', socket.id, session, authorized);
+		console.log('Socket connected:', socket.id, session, user);
 		
 		socket.on('see', (agent, action, args, callback) => {
 			lea.see('onSocketSee', [agent, action, args, socket]).then(callback);
@@ -20,7 +21,9 @@ new (function OnSocketConnection() {
 		
 		
 		for (let name of await lea.see('getAgentsNames')) {
-			socket.emit('newAgent', name);
+		    if (name.toLowerCase().indexOf(user.toLowerCase() + '/') == 0) {
+    			socket.emit('newAgent', name);
+		    }
 		}
 		
 		//socket.join('/lea')
