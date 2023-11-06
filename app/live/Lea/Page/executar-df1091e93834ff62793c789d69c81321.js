@@ -14,8 +14,8 @@ new class executar {
 		
 	    let assert = {
 	        equal: function (atual, esperado) {
-    	        divResposta.innerText += `\nTest success: ${atual == esperado}`;
     	        divResposta.innerText += `\nAtual: ${atual}, Esperado: ${esperado}`;
+    	        divResposta.innerText += `\nTest success: ${atual == esperado}`;
     	    }
 	    };
 	    divResposta.innerText = 'Executando em ' + new Date() + '\n ';

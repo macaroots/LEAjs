@@ -141,7 +141,7 @@ body, .Page button {
         text-align: center;
         padding-bottom: 10rem;
     }
-    #inteligencia2 p:last-of-type {
+    #resposta_inteligencia {
         margin-top: 1em;
         text-align: center;
         font-size: 2em;
@@ -164,15 +164,6 @@ body, .Page button {
     /*    vertical-align: middle;*/
         /*margin: auto;*/
         max-width: 500px;
-    }
-    #agentes img:nth-child(1) {
-        /*width: 42%;*/
-    }
-    /*#agentes figcaption::before {*/
-    /*    counter-increment: figura;*/
-    /*    content: 'Figura ' counter(secao) '.' counter(figura) ': ';*/
-    /*}*/
-    #agentes img {
     }
     
     #teste_inteligencia {
@@ -228,6 +219,14 @@ body, .Page button {
         color: var(--bg-color);
         background-color: var(--color);
     }
+    
+    #ceed img {
+        margin: 0em 0em 1em 0em;
+    }
+    #ciclo_mind ul, #ceed ul {
+        margin: 0;
+    }
+    
     #beneficios h1 {
         margin: 0;
     }

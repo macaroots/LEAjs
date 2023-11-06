@@ -127,12 +127,13 @@ optional skill – it ́s a basic skill"
         </main>
     </section>
     
-    <section id="inteligencia1">
+    <section id="inteligencia2">
         <h1>O que é inteligência?</h1>
         <main>
             <p>Não é possível ver o pensamento, só conseguimos observar comportamentos:</p>
             <ul>
                 <li>Resolução de problemas</li>
+                <li>Autonomia</li>
                 <li>Linguagem</li>
                 <li>Emoções</li>
             </ul>
@@ -141,13 +142,14 @@ optional skill – it ́s a basic skill"
         </main>
     </section>
     
-    <section id="inteligencia2">
+    <section id="inteligencia3">
         <h1>O que é inteligência?</h1>
         <main>
             <p>Pergunta em aberto!</p>
             <p>100 pessoas, 100 definições.</p>
-            <p id="resposta_inteligencia">Pode ser a <a href="/docs" target="_blank">"a capacidade de adquirir e aplicar conhecimento"</a> (MIFFLIN, 2000).</p>
-            <p><b>Inteligência é aprender</b></p>
+            <p>Pode ser a <a href="/docs" target="_blank">"a capacidade de adquirir e aplicar conhecimento"</a> (MIFFLIN, 2000).</p>
+            <p id="resposta_inteligencia"><b>Inteligência é aprender</b></p>
+            <p>Qualquer outra habilidade necessária pode ser aprendida.</p>
         </main>
     </section>
     
@@ -191,35 +193,49 @@ optional skill – it ́s a basic skill"
         </main>
     </section>
     
+    <section id="ciclo_mind">
+        <h1>MInD - Model for Intelligence Development (Costalima <i>et al</i>, 2014)</h1>
+        <main>
+            <p>NaiveMind</p>
+            <ul>
+                <li>Agente reativo.</li>
+                <li>Capaz de aprender.</li>
+                <li>Ingênuo, sem senso crítico.</li>
+                <li><i>Strategy pattern</i>.</li>
+            </ul>
+            <img src="_img/mind_activity_diagram.png">
+        </main>
+    </section>
+    
     <section id="teste_inteligencia">
         <h1>Teste de inteligência</h1>
         <main>
             <p>O teste abaixo verifica se o agente é inteligente, ou seja, é capaz de adquirir e aplicar conhecimento.</p>
             <div class="lado-a-lado">
                 <div id="codigo_teste_inteligencia">(async () => {
-    let agent = new NaiveMind('Joe').body;
+    let agente = new NaiveMind('Joe').body;
     
     let resposta = document.querySelector(
         '#resposta_teste_inteligencia');
-    resposta.innerText += '\n' + agent;
+    resposta.innerText += '\n' + agente;
     
     // Teste falha, o agente não sabe de nada.
-    assert.equal(await agent.see('sum', [1, 2]), 3);
+    assert.equal(await agente.see('soma', [1, 2]), 3);
     
     // Ensinando uma nova ação
-    await agent.see('set', ['sum', new class Sum {
+    await agente.see('set', ['soma', new class soma {
         act(args, resolve, reject) {
             resposta.innerText += '\n\n' + this.agent;
-            let sum = 0;
+            let soma = 0;
             for (let n of args) {
-                sum += n;
+                soma += n;
             }
-            resolve(sum);
+            resolve(soma);
         }
     }()]);
     
     // Teste bem sucedido, o agente aprendeu!
-    assert.equal(await agent.see('sum', [1, 2]), 3);
+    assert.equal(await agente.see('soma', [1, 2]), 3);
 })()</div>
                 <button onclick="getAgent(this).see('executar', ['#codigo_teste_inteligencia', '#resposta_teste_inteligencia']);">Executar</button>
                 <p id="resposta_teste_inteligencia"></p>
@@ -236,28 +252,38 @@ optional skill – it ́s a basic skill"
             <ul>
                 <li>Se o agente falhar, é necessário reiniciar o programa, matar o processo.</li>
             </ul>
-    
-            <p>Como a inteligência afeta o desenvolvimento de software?</p>
         </main>
     </section>
     
     <section id="solucao">
         <!--<h1>Solução - 
         </h1>-->
-        <h1>Solução - LEA - Live Environment for Agents</h1>
+        <h1>Solução</h1>
         <article>
-            <p><i>MInD, Don't use agents as objects!</i></p>
             <p>Agentes precisam poder errar sem que matem seu processo por isso.</p>
             <img width="100%" src="/_img/ceed_cycle.png" />
             <ul>
-                <li>Ver e alterar programas em execução.</li>
+                <li>Ver e alterar código-fonte de programas em execução.</li>
                 <li>Desenvolvimento de software como treinamento de agentes em execução.</li>
             </ul>
         </article>
     </section>
     
+    <section id="ceed">
+        <h1>Ceed - Clever Editing</h1>
+        <main>
+            <ul>
+                <li>Treinamento em tempo de execução.</li>
+                <li>Ler/Escrever.</li>
+                <li>Interpretar (JS, HTML, CSS, string).</li>
+            </ul>
+            <img src="_img/ceed.png">
+            <p>"Sem registro, não há história. Sem história, não há progresso."<br>José Rubens Costa Lima</p>
+        </main>
+    </section>
+    
     <section id="beneficios">
-        <h1>Benefícios</h1>
+        <h1>LEA - Live Environment for Agents</h1>
         <main class="grupo">
             <article>
                 <h1>Ambientes<br> “zero-time configuration”</h1>
@@ -285,7 +311,7 @@ optional skill – it ́s a basic skill"
         <main class="grupo">
             <article>
                 <h1>Clever Editing - Edição Assistida por Agentes</h1>
-                <p>Abordagem top-down assistida por agentes: <button onclick="getAgent(this).see('novaAcao');">Nova ação</button></p>
+                <p>Abordagem top-down assistida por agentes: <button onclick="getAgent(this).see('tour');">Fazer tour</button></p>
                 
             </article>
             <article>
@@ -330,7 +356,7 @@ optional skill – it ́s a basic skill"
         <main>
             <p>Lado do servidor</p>
             <div class="lado-a-lado">
-            <button onClick="getAgent(this).see('ola_servidor');">fetch('novo_agente/ola_servidor')</button>
+            <button onClick="getAgent(this).see('ola_servidor');">fetch('/caninde2023/ola_servidor')</button>
             <div id="resposta_exemplo_servidor"></div>
             </div>
         </main>
