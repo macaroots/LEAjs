@@ -87,6 +87,9 @@ body, html {
 .Page {
     width: 100% !important;
 }
+.Page img {
+    width: 100%;
+}
 
 .Page header {
     height: 100vh;
