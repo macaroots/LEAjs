@@ -212,7 +212,7 @@ optional skill – it ́s a basic skill"
         <main>
             <p>O teste abaixo verifica se o agente é inteligente, ou seja, é capaz de adquirir e aplicar conhecimento.</p>
             <div class="lado-a-lado">
-                <div id="codigo_teste_inteligencia">(async () => {
+                <div class="codigo" id="codigo_teste_inteligencia">(async () => {
     let agente = new NaiveMind('Joe').body;
     
     let resposta = document.querySelector(
@@ -275,7 +275,7 @@ optional skill – it ́s a basic skill"
             <ul>
                 <li>Treinamento em tempo de execução.</li>
                 <li>Ler/Escrever.</li>
-                <li>Interpretar (JS, HTML, CSS, string).</li>
+                <li>Interpretar.</li>
             </ul>
             <img src="_img/ceed.png">
             <p>"Sem registro, não há história. Sem história, não há progresso."<br>José Rubens Costa Lima</p>
@@ -306,23 +306,43 @@ optional skill – it ́s a basic skill"
         </main>
     </section>
     
+    <section id="">
+        <h1>Vantagens competitivas - Ceed</h1>
+        <main>
+            <p>Clever Editing - Abordagem top-down assistida por agentes: <button onclick="getAgent(this).see('tour');">Fazer tour</button></p>
+
+            <div class="lado-a-lado">
+                <div class="codigo" id="codigo_ceed">(async () => {
+    let agente = await Ceed('Pizzaiolo');
+    
+    await agente.see('set', ['pizza', new (function () {
+        this.act = async function (args, resolve, reject) {
+            let agent = this.agent;
+            let pizza = '\nPizza do ' + agent;
+            pizza += '\n' + await agent.see('massa', args);
+            if (await agent.see('perguntarQueijo', args)) {
+                pizza += '\n' + await agent.see('queijo', args);
+            }
+            pizza += '\n' + await agent.see('recheio', args);
+            resolve(pizza);
+        };
+    })()]);
+    
+    let resposta = document.querySelector('#resposta_ceed');
+    resposta.innerText += await agente.see('pizza', 'atum');
+})();</div>
+                <button onclick="getAgent(this).see('executar', ['#codigo_ceed', '#resposta_ceed']);">Preparar pizza</button>
+                <p id="resposta_ceed"></p>
+            </div>
+        </main>
+    </section>
+    
     <section id="vantagens">
-        <h1>Vantagens competitivas</h1>
-        <main class="grupo">
-            <article>
-                <h1>Clever Editing - Edição Assistida por Agentes</h1>
-                <p>Abordagem top-down assistida por agentes: <button onclick="getAgent(this).see('tour');">Fazer tour</button></p>
-                
-            </article>
-            <article>
-                <h1>Repositórios vivos</h1>
-                <p>Projetos Open-Source disponibilizam o código-fonte em repositórios, como esse:</p>
-                <details>
-                    <summary>https://github.com/macaroots/LEAjs</summary>
-                    <img src="/_img/repositorio.png" alt="Repositório">
-                </details>
-                <p>Aqui você pode ver e alterar o código-fonte de programas já em execução!</p>
-            </article>
+        <h1>Vantagens competitivas - Repositórios vivos</h1>
+        <main>
+            <p>Projetos Open-Source disponibilizam o código-fonte em repositórios: <a href="https://github.com/macaroots/LEAjs" target="_blank">https://github.com/macaroots/LEAjs</a>.</p>
+            <img src="/_img/repositorio.png" alt="Repositório">
+            <p>Ceed/LEA permite ver e alterar o código-fonte de programas em execução!</p>
         </main>
     </section>
     

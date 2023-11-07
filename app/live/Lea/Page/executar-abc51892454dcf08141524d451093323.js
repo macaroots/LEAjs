@@ -9,7 +9,8 @@ new class executar {
 	    }
 	    
 		let [ idCodigo, idResposta ] = args;
-		let codigo = agent.editor.getValue(); // document.querySelector(idCodigo).innerText;
+		let divCodigo = document.querySelector(idCodigo);
+		let codigo = divCodigo.editor.getValue(); // document.querySelector(idCodigo).innerText;
 		let divResposta = document.querySelector(idResposta);
 		
 	    let assert = {

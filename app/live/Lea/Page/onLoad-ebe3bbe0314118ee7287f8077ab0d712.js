@@ -16,9 +16,12 @@ new class OnLoad {
 			ace.config.set('themePath', url);
 			
 			
-            agent.editor = ace.edit(document.querySelector('#codigo_teste_inteligencia'), {
-                mode: "ace/mode/javascript"
-            });
+			for (let div of document.querySelectorAll('.codigo')) {
+			    console.log(div);
+                div.editor = ace.edit(div, {
+                    mode: "ace/mode/javascript"
+                });
+			}
 			
 			resolve(true);
 		};
