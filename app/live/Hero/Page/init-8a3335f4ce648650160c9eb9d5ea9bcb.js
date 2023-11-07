@@ -8,14 +8,18 @@ new class init {
 	    
 	    agent.gravity = 0.5;
 	    agent.hero = await agent.see('getAgent', 'Hero');
+		await agent.hero.see('init');
 	    agent.objects.push(agent.hero);
+	    if (agent.animation) {
+	        cancelAnimationFrame(agent.animation);
+	    }
 	    
 	    function animate() {
 	        agent.see('animate', context);
-	        requestAnimationFrame(animate);
+	        agent.animation = requestAnimationFrame(animate);
 	    }
 	    animate();
-	    
+
 	    window.onkeydown = (event) =>  {
 	        agent.see('onKeyDown', event);
 	    };
