@@ -436,9 +436,13 @@ body, .Page button {
         max-width: 1350px;
     }
     
-    #ceed img, 
     #ciclo_mind img {
         margin: 0em 0em 1em 0em;
+        max-width: 750px;
+    }
+ 
+    #ceed img {
+        margin: -2em 0em 1em 0em;
         max-width: 750px;
     }
 }
