@@ -1,0 +1,21 @@
+<canvas></canvas>
+<div class="controls">
+    <button>left</button>
+    <button>jump</button>
+    <button>right</button>
+    <button>down</button>
+</div>
+<p>Segure Ctrl e clique no botão para ver o código-fonte.</p>
+<p>Dica: experimente o controle de versões ao vivo. (Resposta errada: v3, Resposta certa: v4)</p>
+<span>Resposta certa:</span>
+<code><pre>
+new class right {
+	act(args, resolve, reject) {
+		const agent = this.agent;
+		agent.x += 5;
+		resolve();
+	}
+}();
+</pre>
+</code>
+<img id="sprite" src="/_img/hero/hero.png" style="display: none;">
