@@ -7,8 +7,13 @@ new class OnLoad {
 		
 		let controls = document.querySelectorAll('.controls button');
 		for (let control of controls) {
-		    control.onclick = () => {
-		        agent.hero.see(control.innerText);
+		    control.onclick = (event) => {
+		        if (event.ctrlKey) {
+		            agent.hero.see('ask', control.innerText);
+		        }
+		        else {
+    		        agent.hero.see(control.innerText);
+		        }
 		    };
 		}
 		

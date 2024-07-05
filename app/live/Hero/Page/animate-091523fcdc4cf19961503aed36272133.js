@@ -19,7 +19,7 @@ new class animate {
 	    }
         if (await this.agent.see('checkVictory')) {
             alert('Você venceu!');
-            this.agent.hero.see('live');
+            this.agent.hero.see('init');
         }
 	    
 		resolve();
