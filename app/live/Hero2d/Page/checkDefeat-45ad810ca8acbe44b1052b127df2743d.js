@@ -1,7 +1,6 @@
-new class left {
+new class checkDefeat {
 	act(args, resolve, reject) {
 		const agent = this.agent;
-		agent.x -= 5;
-		resolve();
+		resolve(agent.game.hero.x <= 0);
 	}
 }();

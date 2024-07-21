@@ -1,18 +1,24 @@
 new class init {
 	async act(args, resolve, reject) {
 	    const agent = this.agent;
+	    
+	    if (agent.animation) {
+	        cancelAnimationFrame(agent.animation);
+	    }
+	    
 	    const canvas = document.querySelector('canvas');
 	    const context = canvas.getContext('2d');
 	    agent.canvas = canvas;
 	    agent.objects = [];
 	    
-	    agent.gravity = 0.5;
+	    let level = args || 1;
+	    agent.level = level;
+	    agent.map = await agent.see('getAgent', 'Map' + level);
+	    agent.map.game = agent;
+	    
 	    agent.hero = await agent.see('getAgent', 'Hero');
 		await agent.hero.see('init');
 	    agent.objects.push(agent.hero);
-	    if (agent.animation) {
-	        cancelAnimationFrame(agent.animation);
-	    }
 	    
 	    function animate() {
 	        agent.see('animate', context);

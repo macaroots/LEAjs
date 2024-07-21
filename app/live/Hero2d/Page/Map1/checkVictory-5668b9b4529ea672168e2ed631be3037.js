@@ -1,6 +1,6 @@
 new class checkVictory {
 	act(args, resolve, reject) {
 		const agent = this.agent;
-		resolve(agent.hero.x >= agent.canvas.width);
+		resolve(agent.game.hero.x >= 270);
 	}
 }();
