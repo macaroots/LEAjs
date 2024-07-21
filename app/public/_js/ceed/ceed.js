@@ -345,7 +345,8 @@ function AskFor() {
 						let representation = representations[representations.length - 1];
 						type = representation.type;
 						info = representation.info;
-						info = info.replace(new RegExp('EmptyAction', 'g'), key);
+						let actionName = key.charAt(0).toUpperCase() + key.slice(1) + 'Action';
+						info = info.replace(new RegExp('EmptyAction', 'g'), actionName);
 					}
 					a.type.val(type);
 					a.info.val(info);

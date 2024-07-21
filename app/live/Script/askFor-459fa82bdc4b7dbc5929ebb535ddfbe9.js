@@ -88,7 +88,10 @@ new (function askFor () {
     							type = representation.type;
     							info = representation.info;
     							info = info.replace(new RegExp('{agent}', 'g'), await name);
-    							info = info.replace(new RegExp('EmptyAction', 'g'), key);
+    							
+        						let actionName = key.charAt(0).toUpperCase() + key.slice(1) + 'Action';
+        						info = info.replace(new RegExp('EmptyAction', 'g'), actionName);
+        						
                                 question[0]._type = type;
     							txType.val(type);
     							session.setValue(info, -1);
