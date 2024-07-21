@@ -224,5 +224,5 @@ pre {
 }
 #controls label {
     transform: translateY(1em);
-    grid-area: 1 / 4;
+    grid-area: 1 / 4 / 4 / 5;
 }
