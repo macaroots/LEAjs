@@ -226,3 +226,18 @@ pre {
     transform: translateY(1em);
     grid-area: 1 / 4 / 4 / 5;
 }
+
+@media(max-width: 845px) {
+    .dividido .dg.main {
+        position: static;
+    }
+}
+@media(min-width: 390px) {
+    .dg.main {
+        position: absolute;
+        right: 15px;
+    }
+    .Page {
+        position: relative;
+    }
+}

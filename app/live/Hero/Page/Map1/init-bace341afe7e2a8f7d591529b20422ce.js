@@ -32,8 +32,9 @@ new class InitAction {
         // Configuração do dat.GUI
         if (agent.parent.gui) {
             agent.parent.gui.destroy();
+            agent.parent.gui.domElement.remove();
         }
-        const gui = new dat.GUI();
+        const gui = new dat.GUI({autoPlace: false});
         agent.parent.gui = gui;
         const folder = gui.addFolder('Hero Position');
         const heroPosition = {
@@ -48,6 +49,8 @@ new class InitAction {
             hero.position.y = value;
         })*/;
         folder.open();
+        
+        canvas.parentElement.insertBefore(gui.domElement, canvas);
         
         document.querySelector('#title').innerText = await agent.see('getTitle');
         document.querySelector('#mission').innerText = await agent.see('getMission');
