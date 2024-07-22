@@ -232,6 +232,11 @@ pre {
         position: static;
     }
 }
+@media(min-width: 390px) and (max-width: 600px) {
+    .dividido .dg.main {
+        position: absolute;
+    }
+}
 @media(min-width: 390px) {
     .dg.main {
         position: absolute;
