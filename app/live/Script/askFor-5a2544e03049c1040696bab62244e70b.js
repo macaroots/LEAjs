@@ -45,7 +45,8 @@ new (function askFor () {
         		
 		        question[0].session = session;
 		        let selectQuestion = function (event) {
-                    editor.setSession(question[0].session);
+                    editor.setSession(question[0].session); 
+                    editor.focus();
 		            questions.find('.selected').removeClass('selected');
 		            question.addClass('selected');
 		            txType.val(question[0]._type);
