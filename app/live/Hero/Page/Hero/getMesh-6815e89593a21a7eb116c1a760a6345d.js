@@ -21,6 +21,7 @@ new class GetMeshAction {
 //             head.rotation.x = Math.PI;
 //             mesh.add(head);
     
+            mesh.agent = agent;
             agent.mesh = mesh;
 		}
 		resolve(mesh);

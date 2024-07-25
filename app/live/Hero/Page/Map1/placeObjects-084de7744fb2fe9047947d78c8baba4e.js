@@ -11,12 +11,16 @@ new class PlaceObjectsAction {
         agent.exit = await agent.see('getAgent', 'Exit');
         let exit = await agent.exit.see('getMesh')
         agent.lava = await agent.see('getAgent', 'Lava');
-        let lava = await agent.lava.see('getMesh')
+        let lava1 = await agent.lava.see('newMesh')
+        let lava2 = await agent.lava.see('newMesh')
         exit.position.x = 8;
         scene.add(exit)
-        lava.position.x = -8;
-        scene.add(lava)
-        agent.objects = [agent.exit, agent.lava];
+        lava1.position.x = -8;
+        lava2.position.y = 5;
+        lava2.rotation.z = Math.PI / 2;
+        scene.add(lava1)
+        scene.add(lava2)
+        agent.objects = [exit, lava1, lava2];
         
 		resolve();
 	}

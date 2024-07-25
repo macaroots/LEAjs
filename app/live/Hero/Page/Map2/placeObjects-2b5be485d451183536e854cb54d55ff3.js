@@ -13,7 +13,7 @@ new class PlaceObjectsAction {
         lava.position.y = 5;
         lava.rotation.z = Math.PI / 2;
         scene.add(lava)
-        agent.objects = [agent.exit, agent.lava];
+        agent.objects = [exit, lava];
         
 		resolve();
 	}

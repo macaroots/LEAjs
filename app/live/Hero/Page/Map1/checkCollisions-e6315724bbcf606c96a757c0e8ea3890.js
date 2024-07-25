@@ -4,10 +4,9 @@ new class CheckCollisionsAction {
 		
 		const hero = agent.parent.hero.mesh;
 
-		for (let a of agent.objects) {
-		    let mesh = await a.see('getMesh');
+		for (let mesh of agent.objects) {
     		if (this.isBoxInside(hero, mesh)) {
-    		    a.see('collide', hero);
+    		    await mesh.agent.see('collide', hero);
     		}
 		}
 		
