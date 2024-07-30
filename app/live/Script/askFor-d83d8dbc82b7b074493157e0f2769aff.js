@@ -12,7 +12,18 @@ new (function askFor () {
 		    asker = args[0];
 		    key = args[1];
 		}
+		
 	    script.see('getBody').then(function (body) {
+	        try {
+    	        console.log(key);
+    	        let l = [...body[0].querySelectorAll('.questions label')].filter(q => q._key == key)[0].click();
+    	        return
+	        } catch (e) {
+    	        console.log(e);
+	            
+	        }
+	        
+	        
     		script.see('get', 'editor').then(async function (editor) {
     		    if (editor == null) {
     		        console.warn('Editor missing!');
