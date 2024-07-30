@@ -156,14 +156,25 @@ pre {
     box-shadow: inset 0 0 10px #000;
     counter-reset: line;
 }
+
+.Page form label {
+    display: table-row;
+}
+.Page form label  * {
+    display: table-cell;
+    padding-right: 1em;
+    vertical-align: top;
+}
+
 @media(max-width: 600px) {
     header { 
         margin-left: -0.5rem!important;
     }
     header h1 { 
         margin: 0;
-        margin-top: calc(var(--largura) + 0.25em);
+        margin-top: calc(var(--largura) - 1.125em);
         text-align: center;
+        width: 100%;
     }
     .logo {
         position: fixed;
@@ -198,51 +209,5 @@ pre {
 @media(min-width: 600px) {
     .Page {
         height: calc(100vh - 16px);
-    }
-}
-
-#controls {
-    display: grid;
-    gap: 1ch;
-    grid-template-columns: 8ch 8ch 8ch 1fr;
-    margin-top: 1ch;
-}
-
-#controls button:nth-child(2) {
-    grid-area: 2 / 3 / 1 / 2;
-}
-#controls button:nth-child(1) {
-    transform: translateY(-1em);
-    grid-area: 2 / 1 / 3 / 2;
-}
-#controls button:nth-child(3) {
-    transform: translateY(-1em);
-    grid-area: 2 / 3 / 3 / 4;
-}
-#controls button:nth-child(4) {
-    grid-area: 2 / 3 / 2 / 2;
-}
-#controls label {
-    transform: translateY(1em);
-    grid-area: 1 / 4 / 4 / 5;
-}
-
-@media(max-width: 845px) {
-    .dividido .dg.main {
-        position: static;
-    }
-}
-@media(min-width: 390px) and (max-width: 600px) {
-    .dividido .dg.main {
-        position: absolute;
-    }
-}
-@media(min-width: 390px) {
-    .dg.main {
-        position: absolute;
-        right: 15px;
-    }
-    .Page {
-        position: relative;
     }
 }
