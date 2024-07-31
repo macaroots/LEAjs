@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<title><%=req.params.agent%> LEA - Live Environment for Agents</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="LEA - Live Environment for Agents - is a cloud environment to support live editing of multi-agent/web systems. It is based on MInD multi-agent framemork." />
+	<link rel="manifest" href="/app.webmanifest">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="/_js/lib/jquery.min.js">\x3C/script>')</script>
+
+	<script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.122.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.122.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+	<script type="module">
+	import {Ceed, AskAgent} from  '<%=baseUrl%>_js/ceed/ceed.js';
+	import {SocketAgent} from  '<%=baseUrl%>_js/ceed/agent.js';
+	//import {SocketBrain} from  '<%=baseUrl%>_js/ceed/socket_brain.js';
+    import {AjaxBrain} from  '<%=baseUrl%>_js/ceed/ajaxbrain.js';
+	window.Ceed = Ceed;
+	window.SocketAgent = SocketAgent;
+	window.AskAgent = AskAgent;
+	window.baseUrl = '<%=baseUrl%>';
+
+	var pathname = window.location.pathname.split('/');
+	let paths = pathname.slice(1);
+	
+	let names = ['Page'];
+	// se não tiver nada, padrão é index
+	let controllerName = paths.shift() || 'Index';
+	let username = '<%=req.session.user%>' || controllerName;
+    paths.unshift(controllerName);
+    let path = '';
+    let separator = '';
+	for (let p of paths) {
+	    path += separator + p;
+	    separator = '/';
+	    names.unshift(path + '/Page');
+	    if (controllerName != username) {
+	        //names.unshift(username + '/' + path + '/Page');
+	    }
+	}
+    let fullName = names.join(' ');
+    
+	$(function() {
+		Ceed().then(async ceed => {
+		    let ask = new AskAgent('CE');
+			ceed.skills['ask'] = ask;
+			//await ceed.see('setLibrary', new SocketBrain(io()));
+			await ceed.see('setLibrary', new AjaxBrain('/brain/'));
+
+			await ceed.see('set', ['ask', ask]);
+			
+			let agent = await Ceed(fullName);
+			window.agent = agent;
+			agent.see('appendTo', 'body');
+			
+			let ce = await agent.see('getAgent', 'CE');
+			window.ce = ce;
+			await ce.see('study', 'appendTo');
+			//await ce.see('appendTo', 'body');
+			//ce.see('toggle');
+    		// agent.see('edit');
+    		
+			//ceed.see('connect');
+			//ceed.see('getSocketAgent', controllerName + 'Controller');
+		});
+	});
+	</script>
+	<style>
+    @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+	#auth {
+        position: sticky;
+        top: 0;
+        text-align: right;
+    }
+    
+    #license {
+        position: fixed;
+        bottom: 8px;
+        right: 8px;
+        text-align: right;
+        width: 445px;
+    }
+    
+    #btEdit {
+        z-index: 3;
+        position: fixed;
+        right: 8px;
+        bottom: 6rem;
+        color: var(--color);
+        background-color: var(--bg-color);
+        border: solid 0px;
+        border-radius: 100%;
+        width: fit-content;
+        height: fit-content;
+        padding: 0.5em;
+        cursor: pointer;
+        box-shadow: 0px 0px 5px 2px;
+    }
+    #btEdit:hover {
+        color: var(--bg-color);
+        background-color: var(--color);
+    }
+    #btEdit:active {
+        color: var(--bg-color);
+        background-color: hsl(var(--hue), 75%, 40%);;
+    }
+	</style>
+</head>
+<body>
+    <div id="auth">
+<% if (req.session.user) { %>
+        Bem vindo, <%=req.session.user%>! 
+        <a href="/auth/logout">logout</a>
+<% } else { %>
+        <a href="/auth">login</a>
+<% } %>
+    </div>
+    <nav id="btEdit" class="material-icons" onClick="agent.see('editClick', event);">edit</nav>
+    <div id="license">
+        <%-LICENSE%>
+    </div>
+</body>
+</html>

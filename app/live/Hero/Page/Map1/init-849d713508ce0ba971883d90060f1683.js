@@ -13,6 +13,9 @@ new class InitAction {
         const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth/canvas.clientHeight, 0.1, 1000);
         agent.scene = scene
 	    agent.camera = camera;
+	    
+        const controls = new THREE.OrbitControls( camera, renderer.domElement );
+        controls.update();
                 
         const color = 0xFFFFFF;
         const intensity = 2;
@@ -57,6 +60,8 @@ new class InitAction {
 
         function render(tFrame) {
             agent.see('update', tFrame)
+            
+            controls.update();
             
             heroPosition.x = hero.position.x;
             heroPosition.y = hero.position.y;
