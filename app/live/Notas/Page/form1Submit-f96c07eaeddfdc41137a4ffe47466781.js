@@ -7,8 +7,19 @@ new class Form1SubmitAction {
 		
 		let media = (nota1 + nota2) / 2;
 		
-		document.querySelector('#media1').innerText = media;
+		let divMedia = document.querySelector('#media1');
+		divMedia.innerText = media;
 		document.getElementById('formFinal').media1.value = media;
+		
+		if (media > 7) {
+		    divMedia.classList.add('aprovado');
+		    divMedia.classList.remove('reprovado');
+		}
+		else {
+		    divMedia.classList.add('reprovado');
+		    divMedia.classList.remove('aprovado');
+		}
+		
 		resolve();
 	}
 }();
