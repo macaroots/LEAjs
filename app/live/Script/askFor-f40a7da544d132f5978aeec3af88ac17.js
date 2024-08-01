@@ -16,7 +16,7 @@ new (function askFor () {
 	    script.see('getBody').then(function (body) {
 	        try {
     	        console.log(key);
-    	        let l = [...body[0].querySelectorAll('.questions label')].filter(q => q._key == key)[0].click();
+    	        let l = [...body[0].querySelectorAll('.questions label')].filter(q => q._key == key && q.agent == asker)[0].click();
     	        return
 	        } catch (e) {
     	        console.log(e);
