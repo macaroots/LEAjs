@@ -14,8 +14,8 @@ new class InitAction {
         agent.scene = scene
 	    agent.camera = camera;
 	    
-        const controls = new THREE.OrbitControls( camera, renderer.domElement );
-        controls.update();
+        // const controls = new THREE.OrbitControls( camera, renderer.domElement );
+        // controls.update();
                 
         const color = 0xFFFFFF;
         const intensity = 2;
@@ -61,7 +61,7 @@ new class InitAction {
         function render(tFrame) {
             agent.see('update', tFrame)
             
-            controls.update();
+            // controls.update();
             
             heroPosition.x = hero.position.x;
             heroPosition.y = hero.position.y;

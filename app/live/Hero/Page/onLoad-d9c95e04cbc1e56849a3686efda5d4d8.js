@@ -10,6 +10,7 @@ new class OnLoad {
 	    
 		let controls = document.querySelectorAll('#controls button');
 		for (let control of controls) {
+            agent.see('study', control.innerText);
 		    control.onclick = (event) => {
 	        	let alterar = document.querySelector('#alterar').checked;
 		        if (event.ctrlKey || alterar) {
