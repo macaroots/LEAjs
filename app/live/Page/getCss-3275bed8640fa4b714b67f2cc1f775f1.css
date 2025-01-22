@@ -103,20 +103,20 @@ main > section {
     counter-increment: secao;
     counter-reset: subsecao;
 }
-main > section > h1::before {
+main > section > h2::before {
     content: counter(secao) ' ';
 }
-main > section > section > h1 {
+main > section > section > h3 {
     counter-increment: subsecao;
     counter-reset: subsubsecao;
 }
-main > section > section > h1::before {
+main > section > section > h3::before {
     content: counter(secao) '.' counter(subsecao) ' ';
 }
-main > section > section > section > h1 {
+main > section > section > section > h4 {
     counter-increment: subsubsecao;
 }
-main > section > section > section > h1::before {
+main > section > section > section > h4::before {
     content: counter(secao) '.' counter(subsecao) '.' counter(subsubsecao) ' ';
 }
 p, li {

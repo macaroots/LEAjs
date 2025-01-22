@@ -12,12 +12,12 @@
             <a href="#">Início</a>
             <ul>
                 <li><a href="#secao0">O que é inteligência?</a></li>
+                <li><a href="#secao6">Clever Editing</a></li>
+                <li><a href="#secao5">Repositório vivo</a></li>
                 <li><a href="#secao1">“Zero-time configuration”</a></li>
                 <li><a href="#secao2">Edição ao vivo</a></li>
-                <li><a href="#secao6">Clever Editing</a></li>
                 <li><a href="#secao3">Componentes e Temas</a></li>
                 <li><a href="#secao4">Hospedagem</a></li>
-                <li><a href="#secao5">Repositório vivo</a></li>
             </ul>
         </li>
         <li><a href="/docs">Sobre</a></li>
@@ -26,18 +26,29 @@
 </nav>
 <main>
     <section>
-        <h1>Crie, Treine, Compartilhe seu Agente Inteligente</h1>
+        <h2>Crie, Treine, Compartilhe seu Agente Inteligente</h2>
         <p>Você quer criar um site, um componente ou um tema? Que tal treinar um software inteligente?</p>
-        <p>Pare de desenvolver programas, comece a treinar agentes inteligentes!</p>
-        <button onclick="getAgent(this).see('tour', 'args');">Fazer Tour</button>
-        <button onclick="getAgent(this).see('edit', 'args');">Editar Página (Treinar Agente)</button>
+        <section>
+            <h3>Experimente nossos agentes</h3>
+            <ul>
+                <li><a href="https://tiia.com.br/jacks">Jacks</a></li>
+                <li><a href="https://tiia.com.br/memoria">Memoria</a></li>
+                <li><a href="https://tiia.com.br/hero">Hero</a></li>
+                <li><a href="https://tiia.com.br/notas">Notas</a></li>
+            </ul>
+        </section>
+        <section>
+            <h3>Treine o seu próprio agente</h3>
+            <button onclick="getAgent(this).see('tour', 'args');">Fazer Tour</button>
+            <button onclick="getAgent(this).see('edit', 'args');">Editar Página (Treinar Agente)</button>
+        </section>
     </section>
     <section id="secao0">
-        <h1>O que é inteligência?</h1>
+        <h2>O que é inteligência?</h2>
         <p>Bem-vinda à <a href="/docs">minha tentativa de descrição da inteligência artificial</a>!</p>
     </section>
     <section id="secao6">
-        <h1>Clever Editing - Edição Assistida por Agentes</h1>
+        <h2>Clever Editing - Edição Assistida por Agentes</h2>
         <section>
             <p>Agentes devem ser treinados em tempo de execução e precisam poder falhar sem a necessidade de reiniciar o sistema, literalmente matando o processo e o agente.</p>
             <p>Experimente a <b>Clever Editing - Edição Assistida por Agentes</b>, direcionando eventos do DOM para um agente, por exemplo:</p>
@@ -45,7 +56,7 @@
             <button onclick="getAgent(this).see('novaAcao', 'args');">Nova ação</button>
         </section>
         <section>
-            <h1>Programação Top-Down Interativa</h1>
+            <h3>Programação Top-Down Interativa</h3>
             
             <p>A <b>edição assistida por agentes</b> permite descrever o algoritmo numa abordagem top-down interativa. Para cada ação desconhecida o agente abre uma pergunta.</p>
             <pre><span>&lt;script&gt;</span>
@@ -88,7 +99,7 @@
             <button onclick="getAgent(this).see('topDown', 'args');">CleverEditing</button>
         </section>
         <section id="secao5">
-            <h1>Repositório vivo</h1>
+            <h3>Repositório vivo</h3>
             <p>Projetos Open-Source disponibilizam o código-fonte em repositórios, como esse:</p>
             <details>
                 <summary>https://github.com/macaroots/LEAjs</summary>
@@ -100,15 +111,15 @@
         </section>
     </section>
     <section>
-        <h1>Ambiente de desenvolvimento nas nuvens</h1>
+        <h2>Ambiente de desenvolvimento nas nuvens</h2>
         <p>Você já deve estar acostumado com as funcionalidades básicas de um ambiente de desenvolvimento nas nuvens.</p>
         <section id="secao1">
-            <h1>“Zero-time configuration”</h1>
+            <h3>“Zero-time configuration”</h3>
             <p>Seus ambientes já estão configurados. Já pode começar a trabalhar.</p>
         </section>
         
         <section id="secao2">
-            <h1>Edição ao vivo</h1>
+            <h3>Edição ao vivo</h3>
             <p>
                 Use o <button onclick="getAgent(this).see('edit', 'args');">editor à direita</button> para alterar:
             </p>
@@ -122,12 +133,12 @@
         </section>
         
         <section id="secao3">
-            <h1>Componentes e Temas</h1>
+            <h3>Componentes e Temas</h3>
             <p>Explore nossos templates. Crie seus próprios componentes e temas.</p>
         </section>
         
         <section id="secao4">
-            <h1>Hospedagem</h1>
+            <h3>Hospedagem</h3>
             <p>Faça o <a href="/auth">login</a> e coloque seus projetos no ar gratuitamente. Começe a pagar somente quando seu site fizer sucesso. <a href="mailto: macaroots@gmail.com">Veja condições e termos.</a></p>
         </section>
     </section>
