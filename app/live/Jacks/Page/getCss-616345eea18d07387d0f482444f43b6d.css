@@ -101,6 +101,7 @@ main {
     grid-template-columns: repeat(10, 1fr [col-start]);
     grid-template-rows: repeat(10, 1fr [col-start]);
     display: grid;
+    touch-action: manipulation;
 }
 .jack {
     overflow: auto;
