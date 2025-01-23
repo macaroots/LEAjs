@@ -90,6 +90,13 @@ body, html {
 .Page img {
     width: 100%;
 }
+.Page a {
+    color: var(--bg-color);
+    text-decoration: none;
+}
+.Page a:hover {
+    text-decoration: underline;
+}
 
 .Page header {
     height: 100vh;
