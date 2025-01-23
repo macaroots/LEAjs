@@ -98,25 +98,26 @@ nav ul ul li:hover a {
 main {
     overflow: auto;
     padding: 0 1rem;
+    counter-reset: secao;
 }
-main > section {
+main h2 {
     counter-increment: secao;
     counter-reset: subsecao;
 }
-main > section > h2::before {
+main h2::before {
     content: counter(secao) ' ';
 }
-main > section > section > h3 {
+main h3 {
     counter-increment: subsecao;
     counter-reset: subsubsecao;
 }
-main > section > section > h3::before {
+main h3::before {
     content: counter(secao) '.' counter(subsecao) ' ';
 }
-main > section > section > section > h4 {
+main h4 {
     counter-increment: subsubsecao;
 }
-main > section > section > section > h4::before {
+main h4::before {
     content: counter(secao) '.' counter(subsecao) '.' counter(subsubsecao) ' ';
 }
 p, li {
