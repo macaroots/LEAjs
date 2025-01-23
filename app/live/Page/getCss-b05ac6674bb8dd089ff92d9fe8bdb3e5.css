@@ -87,8 +87,12 @@ h1, h2, h3, h4, h5, h6 {
     outline-color: var(--ternary-color-bg);
 }
 
-.Page p, .Page footer, .Page a {
-    
+.Page a {
+    color: var(--bg-color);
+    text-decoration: none;
+}
+.Page a:hover {
+    text-decoration: underline;
 }
 .Page img {
     width: 100%;
@@ -147,7 +151,7 @@ h1, h2, h3, h4, h5, h6 {
 
 }
 
-.Page main h1 {
+.Page h2, .Page h3 {
     color: var(--primary-color-fg);
 }
 
@@ -162,11 +166,11 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: -90px;
 }
 
-.Page section h1 {
+.Page h2 {
     font-size: 30px;
 }
 
-.Page section h1:after {
+.Page h2:after, .Page h3:after {
     display: block;
     content: '';
     width: 100%;
