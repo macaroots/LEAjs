@@ -212,7 +212,7 @@ h1, h2, h3, h4, h5, h6 {
 	padding-bottom: 50px;
 }
 
-.Page section h1 {
+.Page h2, .Page h3 {
     position: relative;
     padding-left: 25px;
     text-transform: uppercase;
@@ -221,7 +221,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-color-bg);
 }
 
-.Page section h1:before {
+.Page h2:before {
     content: "";
     position: absolute;
     z-index: 1;
@@ -236,7 +236,7 @@ h1, h2, h3, h4, h5, h6 {
                     0 0 0 4px white;
 }
 
-.Page section h1:after {
+.Page h2:after, .Page h3:after {
     content: "";
     position: absolute;
     width: 100%;
@@ -354,7 +354,7 @@ h1, h2, h3, h4, h5, h6 {
 		height: auto;
 	}
 
-	.Page header h1 {
+	.Page header h2 {
 		position: relative;
 		height: 100px;
 		line-height: 50px;
