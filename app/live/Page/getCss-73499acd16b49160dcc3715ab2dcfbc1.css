@@ -4,6 +4,7 @@
     --largura: 64px;
     --hue: 203deg;
     --color: hsl(var(--hue), 100%, 20%);
+    --color-hover: hsl(var(--hue), 100%, 35%);
     --bg-color: white;
     --fonte-logo: Barrio;
     --fonte-titulo: Nova Square;
@@ -69,7 +70,7 @@ nav > ul li {
     padding: 1em 0;
 }
 nav ul li:hover {
-    background: hsl(var(--hue), 100%, 35%);
+    background: var(--color-hover);
 }
 nav ul ul {
     position: absolute;
@@ -157,6 +158,25 @@ pre {
     box-shadow: inset 0 0 10px #000;
     counter-reset: line;
 }
+
+.Page button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 0;
+
+    transition: all .2s;
+
+    background: var(--color);
+    color: var(--bg-color);
+
+    cursor: pointer;
+    font-size: 1em;
+
+}
+.Page button:hover {
+    background: var(--color-hover);
+}
+
 
 .Page form label {
     display: table-row;
