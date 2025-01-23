@@ -222,7 +222,6 @@ body, html {
 .Page main > section, .Page aside  {
     padding: 50px 70px 40px 70px;
     min-height: 100vh;
-    text-align: center;
     box-sizing: border-box;
     background: #fff;
 }
@@ -254,16 +253,17 @@ REPETIR PARA CUSTOMIZAR OUTRAS SECTIONS
     position: relative;
 }
 
-.Page main h1 {
+.Page h2 {
     color: var(--primary-color-fg);
     font-family: 'Libre Baskerville', serif;
 }
 
-.Page section h1 {
+.Page h2 {
+    text-align: center;
     font-size: 40px;
 }
 
-.Page section h1:after {
+.Page h2:after {
     display: block;
     content: '';
     width: 100%;
