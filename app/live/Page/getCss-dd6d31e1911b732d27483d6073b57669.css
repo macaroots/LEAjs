@@ -257,6 +257,14 @@ h1, h2, h3, h4, h5, h6 {
     float: right;
 }
 
+.Page a {
+    color: var(--bg-color);
+    text-decoration: none;
+}
+.Page a:hover {
+    text-decoration: underline;
+}
+
 .Page button {
     padding: 10px;
     margin-bottom: 10px;
