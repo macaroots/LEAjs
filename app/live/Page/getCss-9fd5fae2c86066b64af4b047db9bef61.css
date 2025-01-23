@@ -145,3 +145,20 @@ img {
     max-width: 100%;
 }
 
+.Page button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 0;
+
+    transition: all .2s;
+
+    background: var(--color);
+    color: var(--bg-color);
+
+    cursor: pointer;
+    font-size: 1em;
+
+}
+.Page button:hover {
+    background: hsl(var(--hue), 75%, 40%);
+}
