@@ -96,6 +96,7 @@ nav li li a {
 main {
     margin-left: 2em;
     overflow: auto;
+    counter-reset: secao;
 }
 h2 {
     counter-increment: secao;
