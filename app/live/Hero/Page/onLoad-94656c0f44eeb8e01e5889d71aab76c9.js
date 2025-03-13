@@ -4,9 +4,9 @@ new class OnLoad {
         
         await agent.see('init');
         
-	    window.onkeydown = (event) =>  {
+	    /*window.onkeydown = (event) =>  {
 	        agent.see('onKeyDown', event);
-	    };
+	    };*/
 	    
 		let controls = document.querySelectorAll('#controls button');
 		for (let control of controls) {
