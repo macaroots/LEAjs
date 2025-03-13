@@ -32,40 +32,36 @@ new class InitAction {
         scene.add(hero);
         await agent.see('placeHero');
         
-        // Configuração do dat.GUI
-        if (agent.parent.gui) {
-            agent.parent.gui.destroy();
-            agent.parent.gui.domElement.remove();
-        }
-        const gui = new dat.GUI({autoPlace: false});
-        agent.parent.gui = gui;
-        const folder = gui.addFolder('Hero Position');
-        const heroPosition = {
+        const lastHeroPosition = {
             x: hero.position.x,
             y: hero.position.y
         };
-
-        folder.add(heroPosition, 'x', -7, 7)/*.onChange(value => {
-            hero.position.x = value;
-        })*/;
-        folder.add(heroPosition, 'y', -7, 7)/*.onChange(value => {
-            hero.position.y = value;
-        })*/;
-        folder.open();
-        
-        canvas.parentElement.insertBefore(gui.domElement, canvas);
         
         document.querySelector('#title').innerText = await agent.see('getTitle');
         document.querySelector('#mission').innerText = await agent.see('getMission');
 
-        function render(tFrame) {
+        let label;
+        async function updatePositionLabel() {
+            if (label) {
+                label.geometry.dispose();
+                label.material.dispose();
+                scene.remove( label );
+            }
+            label = await agent.see('createLabel', [`(${hero.position.x}, ${hero.position.y})`, new THREE.Vector3(-2.2, -1.2, 0), 0xffffff, scene]);
+        }
+        updatePositionLabel();
+
+        async function render(tFrame) {
+            if (lastHeroPosition.x != hero.position.x
+                || lastHeroPosition.y != hero.position.y) {
+                lastHeroPosition.x = hero.position.x;
+                lastHeroPosition.y = hero.position.y;
+                updatePositionLabel();
+            }
+            
             agent.see('update', tFrame)
             
             // controls.update();
-            
-            heroPosition.x = hero.position.x;
-            heroPosition.y = hero.position.y;
-            gui.updateDisplay();
             
             renderer.render(scene, camera);
             agent.parent.animation = requestAnimationFrame(render);
