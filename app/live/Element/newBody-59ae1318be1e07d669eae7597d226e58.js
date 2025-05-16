@@ -2,7 +2,7 @@ new (function newBody() {
 	this.act = function (tag, resolve, reject) {
 	    let agent = this.agent;
 		if (!tag) {
-			tag = '<div>';
+			tag = '<section>';
 		}
 		let body = $(tag);
 		// bind agent-div

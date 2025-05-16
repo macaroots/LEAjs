@@ -5,7 +5,7 @@ new (function appendTo () {
 		var tag;
 		var target;
 		if (typeof args == 'string') {
-			args = args.split(',');
+			args = [args];
 		}
 		target = args[0];
 		tag = args[1];
