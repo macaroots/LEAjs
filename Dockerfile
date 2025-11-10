@@ -1,4 +1,4 @@
-FROM node:15-alpine3.12 as base
+FROM node:25-slim as base
 
 WORKDIR /home/node/app
 COPY ./app/package.json .
