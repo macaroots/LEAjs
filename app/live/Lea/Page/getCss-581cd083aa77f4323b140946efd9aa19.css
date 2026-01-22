@@ -442,8 +442,12 @@ body, .Page button {
         max-width: 750px;
     }
  
+    #ceed button {
+        width: fit-content;
+        margin-top: 1em;
+    }
     #ceed img {
-        margin: -2em 0em 1em 0em;
+        margin: -7em 0em 1em 0em;
         max-width: 750px;
     }
 }
