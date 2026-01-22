@@ -426,7 +426,7 @@ body, .Page button {
         /*width: 100%;*/
         display: flex;
         flex-flow: column wrap;
-        height: 620px;
+        height: 21em;
     }
     .Tabs > article {
         width: 1024px;
