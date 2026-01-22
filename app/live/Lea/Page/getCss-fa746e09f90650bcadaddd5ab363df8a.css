@@ -224,7 +224,7 @@ body, .Page button {
         margin: 0;
     }
     
-    #beneficios h1 {
+    #beneficios article > h1 {
         margin: 0;
     }
     #negocio .grupo {
@@ -342,8 +342,9 @@ body, .Page button {
         font-family: var(--fonte-titulo);
     }
     .Page section > h1 {
-        margin: 0;
-        padding: 3rem;
+        margin: calc((var(--largura) - 1.9em - 4rem) / 2) 0 0 0;
+        padding: 2rem;
+        padding-right: var(--largura);
         color: var(--bg-color);
         background: var(--color);
     }
