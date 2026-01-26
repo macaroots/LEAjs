@@ -342,9 +342,7 @@ body, .Page button {
         font-family: var(--fonte-titulo);
     }
     .Page section > h1 {
-        margin: calc((var(--largura) - 8.75rem - 1em) / 2) 0 0 0;
         padding: 2rem;
-        padding-right: var(--largura);
         color: var(--bg-color);
         background: var(--color);
     }
@@ -420,6 +418,10 @@ body, .Page button {
 }
 
 @media (min-width: 600px) {
+    .Page section > h1 {
+        margin: calc((var(--largura) - 8.75rem - 1em) / 2) 0 0 0;
+        padding-right: var(--largura);
+    }
     .Tabs {
         /*display: grid;*/
         /*grid-template-columns: 20ch 1fr;*/
