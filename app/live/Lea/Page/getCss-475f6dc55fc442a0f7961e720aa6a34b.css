@@ -11,7 +11,7 @@
 @import url('https://fonts.googleapis.com/css?family=Graduate');
   
 :root {
-    --largura: 64px;
+    --largura: 4rem;
     --hue: 0deg;
     --saturation: 60%;
     --light: 33%;
@@ -62,7 +62,7 @@ body, .Page button {
 @media (min-width: 600px) {
  
     :root {
-        --largura: 220px;
+        --largura: 14rem;
     }
     .Page {
         height: 100vh;
@@ -79,13 +79,13 @@ body, .Page button {
 
     .dividido .logo.second-page {
         position: fixed;
-        --largura: 172px;
+        --largura: 10rem;
         right: 7em;
         transition: all .5s ease;
     }
     .logo.second-page {
         position: fixed;
-        --largura: 172px;
+        --largura: 10rem;
         right: .5em;
         transition: all .5s ease;
     }
@@ -139,7 +139,7 @@ body, .Page button {
     }
     header h1 {
         text-align: center;
-        padding-bottom: 10rem;
+        padding-bottom: 3rem;
     }
     #resposta_inteligencia {
         margin-top: 1em;
@@ -342,7 +342,7 @@ body, .Page button {
         font-family: var(--fonte-titulo);
     }
     .Page section > h1 {
-        margin: calc((var(--largura) - 1.9em - 4rem) / 2) 0 0 0;
+        margin: calc((var(--largura) - 8.75rem - 1em) / 2) 0 0 0;
         padding: 2rem;
         padding-right: var(--largura);
         color: var(--bg-color);
