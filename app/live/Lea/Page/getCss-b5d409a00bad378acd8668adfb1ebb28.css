@@ -95,6 +95,13 @@ body, .Page button {
         overflow: hidden;
         margin: 0;
     }
+    
+    .Page section > h1 {
+        font-size: 2em;
+    }
+    .Page article > h1 {
+        font-size: 1.5em;
+    }
 }    
     a {
         color: var(--color);
@@ -140,6 +147,7 @@ body, .Page button {
     header h1 {
         text-align: center;
         padding-bottom: 3rem;
+        font-size: 2.1em;
     }
     #resposta_inteligencia {
         margin-top: 1em;
