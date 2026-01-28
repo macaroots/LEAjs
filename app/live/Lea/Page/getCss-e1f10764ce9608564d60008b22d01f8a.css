@@ -422,8 +422,15 @@ body, .Page button {
 
 
 @media (max-width: 600px) {
+    :root {
+        --largura: 6rem;
+    }
+    .logo {
+        margin: 0.5em auto;
+    }
     .Page > header {
-        margin-top: 3em;
+        display: flex;
+        flex-direction: column;
     }
     section main, section > article, .Page section > h1 {
         padding: 1rem;
