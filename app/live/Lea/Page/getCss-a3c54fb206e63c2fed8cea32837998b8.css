@@ -107,7 +107,7 @@ body, .Page button {
         color: var(--color);
     }
     
-    .Page header, .Page section {
+    .Page section {
         /*text-align: center;*/
         display: flex;
         flex-direction: column;
@@ -141,13 +141,18 @@ body, .Page button {
         display: flex;
         flex-flow: column;
     }
-    header {
+    .Page header {
         padding: 0 1em;
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr;
     }
     header h1 {
         text-align: center;
-        padding-bottom: 3rem;
         font-size: 2.1em;
+        margin: 0;
+    }
+    .Page header .meta {
+        place-content: end;
     }
     #resposta_inteligencia {
         margin-top: 1em;
