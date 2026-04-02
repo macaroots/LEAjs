@@ -6,7 +6,7 @@ new (function onNewAgent() {
 			    console.warn('Missed newAgent', args);
 			    return;
 			}
-			var select = body.find('select');
+			var select = body.find('select[name="agent"]');
 			    
 			select.empty();
 			var agents = (await Ceed()).agents;

@@ -12,15 +12,16 @@ new (function askFor () {
 		    asker = args[0];
 		    key = args[1];
 		}
+        console.log('Asking', key, 'to', asker);
 		
 	    let body = await script.see('getBody');
         try {
-	        console.log(key);
-	        let l = [...body[0].querySelectorAll('.questions label')].filter(q => q._key == key && q.agent == asker)[0].click();
+	        let question = [...body[0].querySelectorAll('.questions label')].filter(q => q._key == key && q.agent == asker)[0];
+	        question.click();
+	        resolve(question);
 	        return
         } catch (e) {
-	        console.log(e);
-            
+	        console.log('New question');
         }
         
 		let editor = await script.see('get', 'editor');
@@ -38,12 +39,14 @@ new (function askFor () {
 		let totalVersions = body.find('.versions > .total');
         let questions = body.find('.questions');
         let question = $('<label>').prependTo(questions);
-        let txName = $('<span>').prependTo(question);
+        let txName = $('<select>').prependTo(question);
         question[0].agent = asker;
         question[0]._key = key;
-        let name = asker.see('getNames');
-        name.then(function (names) {
-            txName.html(names);
+        asker.see('getNames').then(function (names) {
+            names.split(' ').forEach(n => {
+                
+            $('<option>').text(n).appendTo(txName);
+            });
         });
         let keyInput = $('<input>').appendTo(question);
         keyInput.val(key);
