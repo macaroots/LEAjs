@@ -1,6 +1,6 @@
 new (function close() {
 	this.act = function (args, resolve, reject) {
-		this.agent.see('get', 'body', function (body) {
+		this.agent.see('get', 'body').then(function (body) {
 		    var questions = body.find('.questions');
 		    var question = questions.find('.selected');
 		    question.remove();
