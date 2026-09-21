@@ -332,6 +332,7 @@ function Get(mind) {
 		let mind = this.mind;
 		let body = mind.body;
 		if (body[key] != null) {
+			body[key].hits = body[key].hits + 1 || 1;
 			callback(body[key]);
 		}
 		else {
@@ -372,8 +373,8 @@ function Error(mind) {
 function Act(mind) {
 	// TODO é estranho a mente ter um corpo!
 	this.mind = mind;
-	let este = this;
-	este.log = false;
+	let self = this;
+	self.log = false;
 	this.act = async function(args, resolve, reject) {
 		try {
 			let action = args[0];
@@ -381,7 +382,7 @@ function Act(mind) {
 			action.mind = mind;
 			action.agent = mind.body;
 			// resolve.agent = mind.body;
-			if (este.log) {
+			if (self.log) {
 				console.log('Act!', mind.toString(), action);
 			}
 			await action.act(target, resolve, reject);
