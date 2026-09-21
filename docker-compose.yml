@@ -4,6 +4,7 @@ services:
   lea:
     build: .
     env_file: .env
+    user: "${UID}:${GID}"
     #environment:
       #- MYSQL_HOST=db
     ports:
