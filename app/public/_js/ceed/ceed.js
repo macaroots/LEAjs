@@ -52,6 +52,7 @@ function Live() {
 		skills['publish'] = new Notify();
         
 		skills['help'] = new Help();
+		skills['getSocialName'] = new GetSocialNameAction();
 		
 		agent.see('set', ['teach', new Teach()]).then(() => {
             agent.see('teach', agent).then(() => {
@@ -474,13 +475,13 @@ function NewAgent() {
 }
 function NewChildAgent() {
 	this.act = async function (name, callback) {
-		let ceed = this.agent;
+		let parent = this.agent;
 		
         var capitalized = name.charAt(0).toUpperCase() + name.slice(1);
         var firstName = capitalized.split(' ')[0];
-		let childName = (await ceed.see('getName')) + '/' + firstName + ' ' + name;
+		let childName = (await parent.see('getSocialName')) + '/' + firstName + ' ' + name;
 		Ceed(childName).then(function (agent) {
-			agent.see('set', ['parent', ceed]);
+			agent.see('set', ['parent', parent]);
 			callback(agent);
 		});
 	}
@@ -712,4 +713,10 @@ function Help() {
 		console.log('help', agents);
 		resolve(agents);
 	};
+}
+
+class GetSocialNameAction {
+	act(args, resolve, reject) {
+		resolve(this.agent.see('getName', 0));
+	}
 }
