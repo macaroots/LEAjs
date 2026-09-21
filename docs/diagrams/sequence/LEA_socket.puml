@@ -1,0 +1,41 @@
+@startuml LEA - Socket
+
+skinparam ActorBorderColor #Black
+hide footbox
+
+actor Programador
+
+box LEA
+    participant Front as "front: Ceed"
+    participant Ceed as "ceed: Ceed"
+    participant Agent as "agent: Ceed"
+end box
+
+autoactivate on
+Front -> Front: see('addBrain', brain)
+deactivate
+Front -> Ceed: see('addListener', ['question', front])
+deactivate
+Front -> Ceed: see('addListener', ['newAgent', front])
+deactivate
+Front -> Front: see('listen', port)
+deactivate
+
+Programador->Front: ws://lea
+Front->Front: see('onSocketConnection', socket)
+Front --> Programador: socket.emit('agents', agents)
+loop questions
+Front --> Programador: socket.emit('question', [agent, key])
+end
+Programador -> Front: socket.emit('see', [agent, action, args])
+Front -> Agent: see(action, args)
+alt agent knows action
+Agent --> Front: resolve(response)
+Front --> Programador: resolve(response)
+else
+Agent --> Ceed: ask(action)
+Ceed -> Front: notify('question', [agent, action]);
+Front --> Programador: socket.emit('question', [agent, key])
+end
+
+@enduml

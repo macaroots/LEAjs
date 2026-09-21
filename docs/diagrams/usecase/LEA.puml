@@ -31,12 +31,12 @@ rectangle LEA {
 }
 ' UploaderT
 programador -[$corProgramador]-> uc0 : programming language
-programador -[$corProgramador]-> uc1 : http://agent/action(req, res)
-programador -[$corProgramador]-> uc1 : ws://see(agent, action, args)
-programador -[$corProgramador]-> uc2 : http://questions(req, res)
-programador -[$corProgramador]-> uc3 : http://agent/questions(req, res)
-programador -[$corProgramador]-> uc4 : ws://localhost
-programador -[$corProgramador]-> uc5 : ws://localhost/agent
+programador -[$corProgramador]-> uc1 : https://agent/action(req, res)
+programador -[$corProgramador]-> uc1 : wss://see(agent, action, args)
+programador -[$corProgramador]-> uc2 : https://questions(req, res)
+programador -[$corProgramador]-> uc3 : https://agent/questions(req, res)
+programador -[$corProgramador]-> uc4 : wss://localhost
+programador -[$corProgramador]-> uc5 : wss://localhost/agent
 programador -[$corProgramador]-> uc6
 
 uc1 -[$corProgramador]-> agente

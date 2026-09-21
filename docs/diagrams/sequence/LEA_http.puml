@@ -1,0 +1,33 @@
+@startuml LEA - HTTP
+
+skinparam ActorBorderColor #Black
+hide footbox
+
+actor Programador
+
+box LEA
+    participant Front as "front: Ceed"
+    participant Ceed as "ceed: Ceed"
+    participant Agent as "controller: Ceed"
+end box
+
+autoactivate on
+Front -> Front: see('addBrain', brain)
+deactivate
+Front -> Ceed: see('addListener', ['question', front])
+deactivate
+Front -> Ceed: see('addListener', ['newAgent', front])
+deactivate
+Front -> Front: see('listen', port)
+deactivate
+
+Programador -> Front: http://lea/:agent/:action
+Front -> Front: see('http', [req, res])
+Front -> Ceed: see('getAgent', '{path}/Controller')
+Ceed --> Front: controller
+Front -> Agent: see(action, [req, res])
+Agent --> Front
+Front --> Programador: res.send(response)
+deactivate
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+
+actor Usuário
+
+node "PC" {
+
+    [CeedLocal]
+    database "BrainLocal"
+    
+    [Editor]
+    node "Browser" {
+        [CE]
+    }
+}
+
+cloud {
+    [LEA]
+
+    [Ceed]
+    database "Brain"
+}
+Usuário - [CE]
+Usuário - [Editor]
+[CE] <-- [CeedLocal] : wss://question
+[CE] --> [CeedLocal] : wss://see(agent, action, args)
+[CeedLocal] <-> BrainLocal
+[LEA] <-> [Ceed]
+[Ceed] <-> Brain
+
+
+@enduml
