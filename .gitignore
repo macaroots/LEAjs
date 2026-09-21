@@ -2,7 +2,13 @@ node_modules/
 db_data/
 .env
 test_agents/
+certs/
 
-selfsigned.crt
-selfsigned.key
-dhparam.pem
+public_gessica
+/app/live/*
+
+_img
+
+favicon.ico
+
+app/package-lock.json
