@@ -620,7 +620,7 @@ export const Ceed = (function () {
 	
 	return async function (names) {
 		if (!names) {
-			return ceed;
+			return await ceed;
 		}
 		else {
 			return (await ceed).see('getAgent', names);
