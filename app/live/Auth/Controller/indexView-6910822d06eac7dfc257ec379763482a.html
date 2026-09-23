@@ -12,10 +12,11 @@
 	
 	<script type="module">
 	import {Ceed, AskAgent} from  '<%=baseUrl%>_js/ceed/ceed.js';
-	import {SocketAgent} from  '<%=baseUrl%>_js/ceed/agent.js';
-	import {SocketBrain} from  '<%=baseUrl%>_js/ceed/socket_brain.js';
+	// import {SocketAgent} from  '<%=baseUrl%>_js/ceed/agent.js';
+	// import {SocketBrain} from  '<%=baseUrl%>_js/ceed/socket_brain.js';
+    import {AjaxBrain} from  '<%=baseUrl%>_js/ceed/ajaxbrain.js';
 	window.Ceed = Ceed;
-	window.SocketAgent = SocketAgent;
+	// window.SocketAgent = SocketAgent;
 	window.AskAgent = AskAgent;
 	window.baseUrl = '<%=baseUrl%>';
 
@@ -28,7 +29,8 @@
 		    let ask = new AskAgent('CE');
 			ceed.see('set', ['ask', ask]);
 			ceed.skills['ask'] = ask;
-			ceed.see('setLibrary', new SocketBrain(io()));
+			// ceed.see('setLibrary', new SocketBrain(io()));
+			ceed.see('setLibrary', new AjaxBrain('/brain/'));
 			
 			Ceed(agentName).then(async agent => {
 				window.agent = agent;
